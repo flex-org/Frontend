@@ -1,5 +1,5 @@
 "use client";
-const Error = ({ error, reset }) => {
+const Error = ({ error, reset }: { error: Error; reset: () => void }) => {
   return <div>error</div>;
 };
 
