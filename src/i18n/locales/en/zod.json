@@ -1,0 +1,21 @@
+{
+  "errors": {
+    "invalid_type": "Invalid data type",
+    "invalid_string": {
+      "email": "Invalid email address",
+      "url": "Invalid URL"
+    },
+    "too_small": {
+      "string": {
+        "exact": "Text must contain exactly {{minimum}} characters",
+        "inclusive": "Text must contain at least {{minimum}} characters",
+        "not_inclusive": "Text must contain more than {{minimum}} characters"
+      }
+    },
+    "too_big": {
+      "string": {
+        "inclusive": "Text must not exceed {{maximum}} characters"
+      }
+    }
+  }
+}

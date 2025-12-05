@@ -1,32 +1,39 @@
-//  Middleware for Multi-Tenancy
+// src/proxy.ts
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-export function proxy(request: NextRequest) {
-    const hostname = request.headers.get('host') || '';
+import acceptLanguage from 'accept-language';
+import { fallbackLng, languages, cookieName } from './i18n/settings';
 
-    // Extract subdomain (e.g., "teacher1" from "teacher1.platme.com")
-    const subdomain = hostname.split('.')[0];
+acceptLanguage.languages(languages);
 
-    // Skip middleware for localhost and www
-    if (hostname.includes('localhost') || subdomain === 'www') {
-        return NextResponse.next();
+export const config = {
+    matcher: ['/((?!api|_next/static|_next/image|assets|favicon.ico|sw.js).*)'],
+};
+
+export function proxy(req: NextRequest) {
+    const { pathname } = req.nextUrl;
+    const pathnameHasLocale = languages.some(
+        (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
+    );
+
+    if (pathnameHasLocale) {
+    } else {
+        let lng;
+        if (req.cookies.has(cookieName)) lng = acceptLanguage.get(req.cookies.get(cookieName)?.value);
+        if (!lng) lng = acceptLanguage.get(req.headers.get('Accept-Language'));
+        if (!lng) lng = fallbackLng;
+
+        return NextResponse.redirect(
+            new URL(`/${lng}${pathname.startsWith('/') ? '' : '/'}${pathname}`, req.url)
+        );
     }
+    const langInUrl = languages.find((loc) => pathname.startsWith(`/${loc}`));
 
-    // Add tenant ID to headers for server actions to use
     const response = NextResponse.next();
-    response.headers.set('x-tenant-id', subdomain);
+
+    if (langInUrl) {
+        response.cookies.set(cookieName, langInUrl);
+    }
 
     return response;
 }
-export const config = {
-    matcher: [
-        /*
-         * Match all request paths except for the ones starting with:
-         * - api (API routes)
-         * - _next/static (static files)
-         * - _next/image (image optimization files)
-         * - favicon.ico (favicon file)
-         */
-        '/((?!api|_next/static|_next/image|favicon.ico).*)',
-    ],
-};
