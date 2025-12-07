@@ -34,15 +34,9 @@ export function useTranslation(
 ) {
     const ret = useTranslationOrg(ns, options);
     const { i18n } = ret;
-
-    // 1. If we are running on the server (during SSR generation of client components),
-    // we strictly force the language.
     if (typeof window === 'undefined' && lng && i18n.resolvedLanguage !== lng) {
         i18n.changeLanguage(lng);
     }
-
-    // 2. On the client, we use useEffect to switch language.
-    // This prevents the "Side effect during render" error.
     const [activeLng, setActiveLng] = useState(i18n.resolvedLanguage);
 
     useEffect(() => {

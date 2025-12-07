@@ -12,5 +12,11 @@
     "nav-features": "Features",
     "nav-plans": "Plans",
     "nav-faqs": "FAQs",
-    "nav-contact-us": "Contact us"
+    "nav-contact-us": "Contact us",
+    "language": "Languages",
+    "dark-mode": "Dark Mode",
+    "light-mode": "Light Mode",
+    "nav-menu": "Menu",
+    "logged-out": "Logged out successfully",
+    "error-log-out": "Something went wrong"
 }

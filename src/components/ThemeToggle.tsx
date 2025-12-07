@@ -18,7 +18,9 @@ export function ThemeToggle() {
         setTheme(resolvedTheme === 'dark' ? 'light' : 'dark');
     };
     return (
-        <ToolTipComponent label={resolvedTheme === 'dark' ? 'light' : 'dark'}>
+        <ToolTipComponent
+            label={`switch to ${resolvedTheme === 'dark' ? 'light' : 'dark'}`}
+        >
             <Button
                 onClick={toggleTheme}
                 variant="outline"

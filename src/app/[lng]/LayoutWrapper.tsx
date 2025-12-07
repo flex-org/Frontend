@@ -1,4 +1,5 @@
 'use client';
+import { SessionProvider } from 'next-auth/react';
 import dynamic from 'next/dynamic';
 const ThemeProvider = dynamic(
     () =>
@@ -12,13 +13,15 @@ export default function LayoutWrapper({
     children: React.ReactNode;
 }>) {
     return (
-        <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-        >
-            {children}
-        </ThemeProvider>
+        <SessionProvider>
+            <ThemeProvider
+                attribute="class"
+                defaultTheme="system"
+                enableSystem
+                disableTransitionOnChange
+            >
+                {children}
+            </ThemeProvider>
+        </SessionProvider>
     );
 }

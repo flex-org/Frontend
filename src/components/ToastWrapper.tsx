@@ -8,7 +8,7 @@ const ToastWrapper = ({ lng }: { lng: string }) => {
         <div>
             <Toaster
                 closeButton={true}
-                position={lng === 'ar' ? 'top-left' : 'top-right'}
+                position={lng === 'ar' ? 'bottom-left' : 'bottom-right'}
                 dir={'auto'}
                 richColors
                 theme={resolvedTheme === 'light' ? 'light' : 'dark'}
