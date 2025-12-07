@@ -23,8 +23,8 @@ const FormSchema = z.object({
 });
 const VerifyEmail = ({ lng }: { lng: string }) => {
     const { t } = useTranslation(lng, 'onBoarding-auth');
-    const { email, token, clearUserData,user } = useAuthStore();
-    console.log(user,token);
+    const { email, token, clearUserData, user } = useAuthStore();
+    console.log(user, token);
     const [isPending, startTransition] = useTransition();
     const router = useRouter();
     const {
@@ -37,12 +37,12 @@ const VerifyEmail = ({ lng }: { lng: string }) => {
             pin: '',
         },
     });
-    const onSubmit =async (data: { pin: string }) => {
+    const onSubmit = async (data: { pin: string }) => {
         try {
             await verifyAccount(data, token);
             toast.success(t('success-verify'));
             clearUserData();
-            router.push('/signin');
+            router.push(`/${lng}/signin`);
         } catch (error) {
             toast.error(
                 error instanceof Error ? error.message : t('fail-verify'),

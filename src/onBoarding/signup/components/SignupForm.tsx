@@ -44,7 +44,7 @@ const SignupForm = ({ lng }: { lng: string }) => {
             toast.success(t('success-sign-up'));
             setEmail(data.email);
             setUserData(result.data?.user, result.data?.token);
-            router.push('/signup/verify');
+            router.push(`/${lng}/signup/verify`);
         } catch (error) {
             toast.error(
                 error instanceof Error ? error.message : t('failed-sign-up'),
@@ -63,7 +63,7 @@ const SignupForm = ({ lng }: { lng: string }) => {
                     {t('already-have')}
                     {'  '}
                     <Link
-                        href={'/signin'}
+                        href={`/${lng}/signin`}
                         className="transition-colors hover:text-green-600 hover:underline"
                     >
                         {t('login')}

@@ -36,7 +36,10 @@ export default auth((req) => {
     );
     if (isProtectedRoute && !isLoggedIn) {
         const signinUrl = new URL(`/${lng}/signin`, req.url);
-        signinUrl.searchParams.set('callbackUrl', pathname);
+        const callbackUrl = pathname.startsWith(`/${lng}`)
+            ? pathname
+            : `/${lng}${pathname}`;
+        signinUrl.searchParams.set('callbackUrl', callbackUrl);
         return NextResponse.redirect(signinUrl);
     }
     const response = NextResponse.next();

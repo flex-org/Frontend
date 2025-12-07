@@ -40,10 +40,12 @@ const SignInForm = ({ lng }: { lng: string }) => {
                 message: result.error,
             });
         } else {
-            toast.success(t('success-login'));
             const params = new URLSearchParams(window.location.search);
-            const callbackUrl = params.get('callbackUrl') || '/';
-            router.push(callbackUrl);
+            const callbackUrl = params.get('callbackUrl') || `/${lng}`;
+            const finalUrl = callbackUrl.startsWith(`/${lng}`)
+                ? callbackUrl
+                : `/${lng}${callbackUrl}`;
+            router.push(finalUrl);
         }
     };
     return (
@@ -54,7 +56,7 @@ const SignInForm = ({ lng }: { lng: string }) => {
                     {t('dont-have')}
                     {'  '}
                     <Link
-                        href={'/signup'}
+                        href={`/${lng}/signup`}
                         className="transition-colors hover:text-green-600 hover:underline"
                     >
                         {t('sign-up')}

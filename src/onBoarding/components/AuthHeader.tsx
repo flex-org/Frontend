@@ -9,7 +9,7 @@ const AuthHeader = ({ lng }: { lng: string }) => {
             <ToolTipComponent
                 label={lng === 'ar' ? 'الصفحة الرئيسية' : 'home page'}
             >
-                <Link href={'/'} aria-label="الصفحة الرئيسية">
+                <Link href={`/${lng}`} aria-label="الصفحة الرئيسية">
                     <Button
                         title={lng === 'ar' ? 'الصفحة الرئيسية' : 'home page'}
                         variant={'outline'}

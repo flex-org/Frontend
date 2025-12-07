@@ -19,7 +19,7 @@ const OnBoardingNavbar = async ({ lng }: { lng: string }) => {
         <nav className="sticky top-6 z-50 mx-auto w-full rounded-[20px] border border-gray-300 bg-white shadow-md backdrop-blur-2xl dark:border-gray-900 dark:bg-neutral-950">
             <div className="container mx-auto flex items-center justify-between px-6 py-3 md:px-12 md:py-4">
                 <div className="flex w-full max-w-lg items-center justify-between">
-                    <Link href={'/'} className="flex items-center gap-2">
+                    <Link href={`/${lng}/`} className="flex items-center gap-2">
                         <Github className="text-green-800 dark:text-green-300" />
                         <p className="text-xl font-bold text-green-800 dark:text-green-300">
                             {' '}
@@ -38,7 +38,7 @@ const OnBoardingNavbar = async ({ lng }: { lng: string }) => {
                     {isAuthenticated ? (
                         <LogoutButton lng={lng} />
                     ) : (
-                        <Link href={'/signin'} className="hidden lg:flex">
+                        <Link href={`/${lng}/signin`} className="hidden lg:flex">
                             <Button
                                 variant={null}
                                 size="sm"
