@@ -110,7 +110,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         async session({ session, token }) {
             session.user.id = token.id;
             session.user.phone = token.phone;
-            session.user.accessToken = token.accessToken;
+            // session.user.accessToken = token.accessToken;
             session.user.isAuthenticated = token.isAuthenticated;
             return session;
         },

@@ -15,9 +15,16 @@ export default auth((req) => {
         (locale) =>
             pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`,
     );
-    let lng = languages.find((loc) => pathname.startsWith(`/${loc}`)) as
-        | string
-        | null;
+    const getLanguageFromPath = (path: string): string | null => {
+        for (const lang of languages) {
+            if (path === `/${lang}` || path.startsWith(`/${lang}/`)) {
+                return lang;
+            }
+        }
+        return null;
+    };
+
+    let lng = getLanguageFromPath(pathname);
     if (!pathnameHasLocale) {
         if (req.cookies.has(cookieName))
             lng = acceptLanguage.get(req.cookies.get(cookieName)?.value);
@@ -31,9 +38,13 @@ export default auth((req) => {
         );
     }
     const protectedRoutes = ['/building'];
-    const isProtectedRoute = protectedRoutes.some((route) =>
-        pathname.includes(route),
-    );
+    const isProtectedRoute = protectedRoutes.some((route) => {
+        const routeWithLang = `/${lng}${route}`;
+        return (
+            pathname === routeWithLang ||
+            pathname.startsWith(`${routeWithLang}/`)
+        );
+    });
     if (isProtectedRoute && !isLoggedIn) {
         const signinUrl = new URL(`/${lng}/signin`, req.url);
         const callbackUrl = pathname.startsWith(`/${lng}`)

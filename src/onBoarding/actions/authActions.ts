@@ -49,7 +49,7 @@ export const verifyAccount = async (
         const response = await fetch(`${BASE_URL}/verify-email`, {
             next: {
                 tags: ['verify-email'],
-                // revalidate: 60,
+                revalidate: 0,
             },
             method: 'POST',
             headers: {
@@ -83,7 +83,7 @@ export const resendOtp = async (formData: string) => {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
             },
-            body: JSON.stringify({email:formData}),
+            body: JSON.stringify({ email: formData }),
         });
         if (!response.ok) {
             const errorData = await response.json();

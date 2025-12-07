@@ -11,27 +11,32 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useTranslation } from '@/i18n/client';
+import { memo, useCallback, useMemo } from 'react';
 
-function LanguageSwitcher({ currentLang }: { currentLang: string }) {
+const LanguageSwitcher = ({ currentLang }: { currentLang: string }) => {
     const { t } = useTranslation(currentLang, 'common');
     const router = useRouter();
     const pathname = usePathname();
-    const toggle = (lang: string) => {
-        const newLang = lang === 'en' ? 'ar' : 'en';
-        const segments = pathname.split('/');
-        segments[1] = newLang;
-        const newPath = segments.join('/');
-        router.push(newPath);
-    };
+    const toggle = useCallback(
+        (lang: string) => {
+            const newLang = lang === 'en' ? 'ar' : 'en';
+            const segments = pathname.split('/');
+            segments[1] = newLang;
+            const newPath = segments.join('/');
+            router.push(newPath);
+        },
+        [pathname, router],
+    );
+    const displayName = useMemo(() => {
+        return currentLang === 'en' ? 'English' : 'العربية';
+    }, [currentLang]);
 
     return (
         <DropdownMenu dir={currentLang === 'en' ? 'ltr' : 'rtl'}>
             <DropdownMenuTrigger asChild>
                 <Button size={'sm'} type="button" variant={'outline'}>
                     <Globe className="h-4 w-4" />
-                    <span className="hidden lg:inline">
-                        {currentLang === 'en' ? 'English' : 'العربية'}
-                    </span>
+                    <span className="hidden lg:inline">{displayName}</span>
                     <span className="inline lg:hidden">
                         {currentLang === 'en' ? 'En' : 'Ar'}
                     </span>
@@ -50,6 +55,5 @@ function LanguageSwitcher({ currentLang }: { currentLang: string }) {
             </DropdownMenuContent>
         </DropdownMenu>
     );
-}
-
-export default LanguageSwitcher;
+};
+export default memo(LanguageSwitcher);
