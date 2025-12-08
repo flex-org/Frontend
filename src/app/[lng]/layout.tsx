@@ -7,7 +7,7 @@ import ToastWrapper from '@/components/ToastWrapper';
 const cairo = Cairo({
     variable: '--font-cairo',
     subsets: ['latin', 'arabic'],
-    weight: ['200', '300', '400', '500', '600', '700', '800', '900', '1000'],
+    weight: ['400', '600', '700'],
 });
 
 export const metadata: Metadata = {
@@ -17,6 +17,10 @@ export const metadata: Metadata = {
     },
     description:
         "platme, it's a multi-tenancy educational platform, user can create his own platform and add his students",
+    // openGraph:{
+    //     title: 'Welcome - Platme',
+    //     description:""
+    // }
 };
 
 export async function generateStaticParams() {
@@ -34,6 +38,9 @@ export default async function RootLayout({
 
     return (
         <html lang={lng} dir={lng === 'ar' ? 'rtl' : 'ltr'}>
+            {/* <Head>
+                 <link rel="preconnect" href="https://example.com" crossOrigin="anonymous" />
+            </Head> */}
             <body className={`${cairo.variable} font-sans antialiased`}>
                 <LayoutWrapper>
                     <ToastWrapper lng={lng} />

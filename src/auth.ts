@@ -57,7 +57,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         }),
     ],
     callbacks: {
-        async signIn({ user, account, profile }) {
+        async signIn({ user, account }) {
             if (account?.provider === 'credentials') return true;
             if (
                 account?.provider === 'google' ||
