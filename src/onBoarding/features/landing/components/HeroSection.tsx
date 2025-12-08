@@ -1,4 +1,3 @@
-
 import { Button } from '@/components/ui/button';
 import { getTranslation } from '@/i18n/server';
 import { auth } from '@/auth';
@@ -29,12 +28,12 @@ const HeroSection = async ({ lng }: { lng: string }) => {
                                 {t('sign-up')}
                             </Button>
                         )}
-                        <Button size="lg" variant={'secondary'}>
+                        <Button size="lg" variant={'outline'}>
                             {t('try-for-free')}
                         </Button>
                     </div>
                 </div>
-             <HeroImage />
+                <HeroImage />
             </div>
         </div>
     );
