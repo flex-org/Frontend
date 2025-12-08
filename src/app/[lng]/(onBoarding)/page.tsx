@@ -1,5 +1,5 @@
 import OnBoardingNavbar from '@/onBoarding/components/OnBoardingNavbar';
-import HeroSection from '@/onBoarding/landing/components/HeroSection';
+import HeroSection from '@/onBoarding/components/landing/components/HeroSection';
 export default async function Home({
     params,
 }: {

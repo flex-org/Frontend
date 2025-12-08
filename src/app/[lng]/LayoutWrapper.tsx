@@ -1,6 +1,7 @@
 'use client';
 import { SessionProvider } from 'next-auth/react';
 import dynamic from 'next/dynamic';
+import WebVitalsLogger from './WebVitalsLogger';
 const ThemeProvider = dynamic(
     () =>
         import('@/components/theme-provider').then((mod) => mod.ThemeProvider),
@@ -20,6 +21,7 @@ export default function LayoutWrapper({
                 enableSystem
                 disableTransitionOnChange
             >
+                <WebVitalsLogger />
                 {children}
             </ThemeProvider>
         </SessionProvider>

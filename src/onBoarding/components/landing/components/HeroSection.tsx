@@ -1,8 +1,8 @@
-import Image from 'next/image';
-import AboNawaf from '../../../../public/images/onBoarding/abo-nawaf.webp';
+
 import { Button } from '@/components/ui/button';
 import { getTranslation } from '@/i18n/server';
 import { auth } from '@/auth';
+import HeroImage from './HeroImage';
 
 const HeroSection = async ({ lng }: { lng: string }) => {
     const { t } = await getTranslation(lng, 'onBoarding-landing');
@@ -34,17 +34,7 @@ const HeroSection = async ({ lng }: { lng: string }) => {
                         </Button>
                     </div>
                 </div>
-                <div className="col-span-1 hidden lg:block">
-                    <Image
-                        src={AboNawaf}
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        alt="landing-image"
-                        placeholder="blur"
-                        priority={true}
-                        className="object-cover"
-                        quality={75}
-                    />
-                </div>
+             <HeroImage />
             </div>
         </div>
     );
