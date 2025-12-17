@@ -37,7 +37,7 @@ export default auth((req) => {
             ),
         );
     }
-    const protectedRoutes = ['/building'];
+    const protectedRoutes = ['/gomaa', '/build'];
     const isProtectedRoute = protectedRoutes.some((route) => {
         const routeWithLang = `/${lng}${route}`;
         return (
