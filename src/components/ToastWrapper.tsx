@@ -10,6 +10,7 @@ const ToastWrapper = ({ lng }: { lng: string }) => {
                 closeButton={true}
                 position={lng === 'ar' ? 'bottom-left' : 'bottom-right'}
                 dir={'auto'}
+                className="font-[--font-cairo]"
                 richColors
                 theme={resolvedTheme === 'light' ? 'light' : 'dark'}
             />

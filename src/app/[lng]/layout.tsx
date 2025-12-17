@@ -98,7 +98,7 @@ export async function generateMetadata({
         ...commonMetadata,
         title: {
             template: '%s | Platme - Your Educational Platform',
-            default: 'Platme - Build Your Own Online Academy',
+            default: 'Platme - Build Your Own Online Platform',
         },
         description:
             'Platme is a premier multi-tenant educational platform (SaaS) designed for educators and institutions. Create your own branded Learning Management System (LMS), manage students, host virtual classrooms, and monetize your courses effortlessly. The ultimate white-label solution for online education.',
@@ -169,9 +169,7 @@ export default async function RootLayout({
                 <LayoutWrapper>
                     <ToastWrapper lng={lng} />
                     <div className="min-h-screen bg-[#f2f2f2] from-black to-green-950 dark:bg-linear-to-r">
-                        <main className="container mx-auto flex h-full w-full flex-col">
-                            {children}
-                        </main>
+                        <main className="container mx-auto px-2 sm:px-0">{children}</main>
                     </div>
                 </LayoutWrapper>
             </body>

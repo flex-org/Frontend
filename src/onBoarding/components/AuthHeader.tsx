@@ -11,7 +11,7 @@ const AuthHeader = ({ lng }: { lng: string }) => {
             >
                 <Link href={`/${lng}`} aria-label="الصفحة الرئيسية">
                     <Button
-                        title={lng === 'ar' ? 'الصفحة الرئيسية' : 'home page'}
+                        aria-label={lng === 'ar' ? 'الصفحة الرئيسية' : 'home page'}
                         variant={'outline'}
                     >
                         <ArrowLeft

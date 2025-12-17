@@ -47,10 +47,6 @@ export const verifyAccount = async (
 ) => {
     try {
         const response = await fetch(`${BASE_URL}/verify-email`, {
-            next: {
-                tags: ['verify-email'],
-                revalidate: 0,
-            },
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -58,6 +54,7 @@ export const verifyAccount = async (
                 Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({ otp: formData.pin }),
+            cache: 'no-store',
         });
         if (!response.ok) {
             const errorData = await response.json();
@@ -74,16 +71,13 @@ export const verifyAccount = async (
 export const resendOtp = async (formData: string) => {
     try {
         const response = await fetch(`${BASE_URL}/resend-otp`, {
-            next: {
-                tags: ['resend-otp'],
-                // revalidate: 60,
-            },
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
             },
             body: JSON.stringify({ email: formData }),
+            cache: 'no-store',
         });
         if (!response.ok) {
             const errorData = await response.json();
@@ -92,6 +86,7 @@ export const resendOtp = async (formData: string) => {
             throw new Error(errorMessage);
         }
         const data = await response.json();
+
         return data;
     } catch (error) {
         throw error;
@@ -119,20 +114,20 @@ export const login = async (data: LoginFormValues) => {
         throw error;
     }
 };
-export const loginWithGoogle = async () => {
-    try {
-        await signIn('google', { redirect: false });
-    } catch (error) {
-        throw error;
-    }
-};
-export const loginWithGithub = async () => {
-    try {
-        await signIn('github', { redirect: false });
-    } catch (error) {
-        throw error;
-    }
-};
+// export const loginWithGoogle = async () => {
+//     try {
+//         await signIn('google', { redirect: false });
+//     } catch (error) {
+//         throw error;
+//     }
+// };
+// export const loginWithGithub = async () => {
+//     try {
+//         await signIn('github', { redirect: false });
+//     } catch (error) {
+//         throw error;
+//     }
+// };
 
 export const logout = async () => {
     const session = await auth();

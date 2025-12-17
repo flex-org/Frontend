@@ -38,7 +38,7 @@ const LanguageSwitcher = ({ currentLang }: { currentLang: string }) => {
                     <Globe className="h-4 w-4" />
                     <span className="hidden lg:inline">{displayName}</span>
                     <span className="inline lg:hidden">
-                        {currentLang === 'en' ? 'En' : 'Ar'}
+                        {currentLang === 'en' ? 'English' : 'العربية'}
                     </span>
                     <ChevronDown />
                 </Button>
@@ -47,10 +47,10 @@ const LanguageSwitcher = ({ currentLang }: { currentLang: string }) => {
                 <DropdownMenuLabel>{t('pick-lang')}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => toggle('en')}>
-                    {t('arabic')}
+                    العربية
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => toggle('ar')}>
-                    {t('english')}
+                    English
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

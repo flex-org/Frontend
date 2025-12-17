@@ -120,13 +120,17 @@
     * {
         @apply border-border outline-ring/50;
     }
-
+    [data-sonner-toaster],
+    [data-sonner-toast] {
+        font-family: var(--font-sans) !important;
+    }
     body {
         @apply bg-background text-foreground;
         input::-ms-reveal,
         input::-ms-clear {
             display: none;
         }
+        font-family: var(--font-sans);
         input::-webkit-credentials-auto-fill-button {
             display: none !important;
         }

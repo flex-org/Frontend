@@ -1,11 +1,17 @@
+import OnBoardingNavbar from '@/onBoarding/components/OnBoardingNavbar';
+import { ReactNode } from 'react';
 
 export default async function OnBoardingLayout({
     children,
+    params,
 }: Readonly<{
-    children: React.ReactNode;
+    children: ReactNode;
+    params: Promise<{ lng: string }>;
 }>) {
+    const { lng } = await params;
     return (
         <div className="min-h-screen">
+            <OnBoardingNavbar lng={lng} />
             <main>{children}</main>
         </div>
     );

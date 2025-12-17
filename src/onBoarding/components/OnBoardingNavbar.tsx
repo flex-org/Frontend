@@ -14,7 +14,6 @@ const OnBoardingNavbar = async ({ lng }: { lng: string }) => {
     const { t } = await getTranslation(lng, 'common');
     const session = await auth();
     const isAuthenticated = session?.user.isAuthenticated;
-
     return (
         <nav className="sticky top-6 z-50 mx-auto w-full rounded-[20px] border border-gray-300 bg-white shadow-md backdrop-blur-2xl dark:border-gray-900 dark:bg-neutral-950">
             <div className="container mx-auto flex items-center justify-between px-6 py-3 md:px-12 md:py-4">
@@ -38,11 +37,14 @@ const OnBoardingNavbar = async ({ lng }: { lng: string }) => {
                     {isAuthenticated ? (
                         <LogoutButton lng={lng} />
                     ) : (
-                        <Link href={`/${lng}/signin`} className="hidden lg:flex">
+                        <Link
+                            href={`/${lng}/signin`}
+                            className="hidden lg:flex"
+                        >
                             <Button
                                 variant={null}
                                 size="sm"
-                                className="bg-green-800 text-white hover:bg-green-900"
+                                className="bg-green-800 text-white hover:bg-green-900 active:bg-green-950"
                             >
                                 <p className="hidden lg:block">{t('login')}</p>
                                 <LogIn className="block h-4 w-4" />

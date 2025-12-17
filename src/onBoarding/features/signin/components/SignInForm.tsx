@@ -4,42 +4,45 @@ import { Spinner } from '@/components/ui/spinner';
 import { useTranslation } from '@/i18n/client';
 import { login } from '@/onBoarding/actions/authActions';
 import FormField from '@/onBoarding/components/FormField';
-import { LoginFormValues, LoginSchema } from '@/onBoarding/schema';
+import { LoginFormValues, createLoginSchema } from '@/onBoarding/schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import GoogleIcon from '@/components/GoogleIcon';
-import GithubIcon from '@/components/GithubIcon';
 const SignInForm = ({ lng }: { lng: string }) => {
     const [show, setShow] = useState(false);
+    const { update } = useSession();
     const router = useRouter();
     const { t } = useTranslation(lng, 'onBoarding-auth');
-
+    const LoginSchema = createLoginSchema(t);
     const {
         register,
         handleSubmit,
-        formState: { errors, isSubmitting },
+        formState: { errors, isSubmitting, dirtyFields },
         setError,
     } = useForm<LoginFormValues>({
         resolver: zodResolver(LoginSchema),
+        mode: 'onChange',
+        reValidateMode: 'onChange',
         defaultValues: {
             email: '',
             password: '',
         },
     });
-
     const onSubmit = async (data: LoginFormValues) => {
         const result = await login(data);
-        if (result?.error) {
+        if (!result?.success) {
             toast.error(result.error || t('failed-login'));
             setError('root', {
                 message: result.error,
             });
         } else {
+            await update()
+            router.refresh();
             const params = new URLSearchParams(window.location.search);
             const callbackUrl = params.get('callbackUrl') || `/${lng}`;
             const finalUrl = callbackUrl.startsWith(`/${lng}`)
@@ -57,7 +60,7 @@ const SignInForm = ({ lng }: { lng: string }) => {
                     {'  '}
                     <Link
                         href={`/${lng}/signup`}
-                        className="transition-colors hover:text-green-600 hover:underline"
+                        className="text-green-500 transition-colors hover:text-green-600 hover:underline"
                     >
                         {t('sign-up')}
                     </Link>
@@ -105,7 +108,11 @@ const SignInForm = ({ lng }: { lng: string }) => {
                 <div className="flex w-full justify-end">
                     <Button
                         variant={null}
-                        disabled={isSubmitting}
+                        disabled={
+                            isSubmitting ||
+                            !dirtyFields.email ||
+                            !dirtyFields.password
+                        }
                         className="w-full bg-green-600 text-white hover:bg-green-700 hover:shadow-md"
                         type="submit"
                     >
@@ -113,7 +120,7 @@ const SignInForm = ({ lng }: { lng: string }) => {
                     </Button>
                 </div>
             </form>
-            <div className="relative h-px w-full bg-gray-700/40 dark:bg-gray-300/40">
+            {/* <div className="relative h-px w-full bg-gray-700/40 dark:bg-gray-300/40">
                 <div className="absolute -top-3 right-[50%] translate-x-[50%] bg-[#f2f2f2f2] text-start text-sm text-green-700 sm:-top-4 sm:text-xl dark:bg-black dark:text-green-300">
                     {t('another-login')}
                 </div>
@@ -127,7 +134,7 @@ const SignInForm = ({ lng }: { lng: string }) => {
                     <GithubIcon />
                     Github
                 </Button>
-            </form>
+            </form> */}
         </div>
     );
 };

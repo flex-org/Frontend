@@ -22,6 +22,7 @@ import { useTheme } from 'next-themes';
 import { useTranslation } from '@/i18n/client';
 import { usePathname, useRouter } from 'next/navigation';
 import LogoutButton from './LogoutButton';
+import Link from 'next/link';
 
 const MobileMenu = ({ lng }: { lng: string }) => {
     const { resolvedTheme, setTheme } = useTheme();
@@ -37,7 +38,6 @@ const MobileMenu = ({ lng }: { lng: string }) => {
         const newPath = segments.join('/');
         router.push(newPath);
     };
-
     return (
         <DropdownMenu dir={lng === 'en' ? 'ltr' : 'rtl'}>
             <DropdownMenuTrigger asChild>
@@ -92,26 +92,31 @@ const MobileMenu = ({ lng }: { lng: string }) => {
                         <DropdownMenuPortal>
                             <DropdownMenuSubContent>
                                 <DropdownMenuItem onClick={() => toggle('en')}>
-                                    {t('arabic')}
+                                    العربية
                                 </DropdownMenuItem>
                                 <DropdownMenuItem onClick={() => toggle('ar')}>
-                                    {t('english')}
+                                    English
                                 </DropdownMenuItem>
                             </DropdownMenuSubContent>
                         </DropdownMenuPortal>
                     </DropdownMenuSub>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                {isAuthenticated ? (
+                {isAuthenticated? (
                     <DropdownMenuItem>
                         <LogoutButton dropdown={true} lng={lng} />
                     </DropdownMenuItem>
                 ) : (
-                    <DropdownMenuItem className="bg-green-700 text-white transition-colors hover:bg-green-800">
-                        {t('login')}
-                        <DropdownMenuShortcut>
-                            <LogIn className="text-white" />
-                        </DropdownMenuShortcut>
+                    <DropdownMenuItem className="cursor-pointer bg-green-700 text-white transition-colors hover:bg-green-800">
+                        <Link
+                            href={`${lng}/signin`}
+                            className="flex items-center justify-between gap-2"
+                        >
+                            {t('login')}
+                            <DropdownMenuShortcut>
+                                <LogIn className="text-white" />
+                            </DropdownMenuShortcut>
+                        </Link>
                     </DropdownMenuItem>
                 )}
             </DropdownMenuContent>

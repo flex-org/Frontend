@@ -29,7 +29,7 @@ i18next
 
 export function useTranslation(
     lng: string,
-    ns?: string,
+    ns?: string | string[],
     options?: Record<string, unknown>,
 ) {
     const ret = useTranslationOrg(ns, options);

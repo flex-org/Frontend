@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import { getTranslation } from '@/i18n/server';
 import { auth } from '@/auth';
 import HeroImage from './HeroImage';
+import Link from 'next/link';
 
 const HeroSection = async ({ lng }: { lng: string }) => {
     const { t } = await getTranslation(lng, 'onBoarding-landing');
@@ -20,17 +21,21 @@ const HeroSection = async ({ lng }: { lng: string }) => {
                     </p>
                     <div className="mt-12 flex items-center gap-2">
                         {!isAuthenticated && (
-                            <Button
-                                variant={null}
-                                size="lg"
-                                className="bg-green-800 text-white hover:bg-green-900"
-                            >
-                                {t('sign-up')}
-                            </Button>
+                            <Link href={`${lng}/signin`}>
+                                <Button
+                                    variant={null}
+                                    size="lg"
+                                    className="bg-green-800 text-white hover:bg-green-900"
+                                >
+                                    {t('sign-up')}
+                                </Button>
+                            </Link>
                         )}
-                        <Button size="lg" variant={'outline'}>
-                            {t('try-for-free')}
-                        </Button>
+                        <Link href={`${lng}/plans`}>
+                            <Button size="lg" variant={'outline'}>
+                                {t('try-for-free')}
+                            </Button>
+                        </Link>
                     </div>
                 </div>
                 <HeroImage />

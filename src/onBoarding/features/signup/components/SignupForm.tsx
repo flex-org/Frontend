@@ -1,12 +1,10 @@
 'use client';
-import GithubIcon from '@/components/GithubIcon';
-import GoogleIcon from '@/components/GoogleIcon';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import { useTranslation } from '@/i18n/client';
 import { signup } from '@/onBoarding/actions/authActions';
 import FormField from '@/onBoarding/components/FormField';
-import { RegisterFormValues, registerSchema } from '@/onBoarding/schema';
+import { createRegisterSchema, RegisterFormValues } from '@/onBoarding/schema';
 import { useAuthStore } from '@/onBoarding/store/authStore';
 import { SignupFormValues } from '@/onBoarding/types';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -22,13 +20,16 @@ const SignupForm = ({ lng }: { lng: string }) => {
     const { setEmail, setUserData } = useAuthStore();
     const router = useRouter();
     const { t } = useTranslation(lng, 'onBoarding-auth');
+    const schema = createRegisterSchema(t);
     const {
         register,
         handleSubmit,
-        formState: { errors, isSubmitting },
+        formState: { errors, isSubmitting, dirtyFields },
         setError,
     } = useForm<RegisterFormValues>({
-        resolver: zodResolver(registerSchema),
+        resolver: zodResolver(schema),
+        mode: 'onChange',
+        reValidateMode: 'onChange',
         defaultValues: {
             name: '',
             email: '',
@@ -64,7 +65,7 @@ const SignupForm = ({ lng }: { lng: string }) => {
                     {'  '}
                     <Link
                         href={`/${lng}/signin`}
-                        className="transition-colors hover:text-green-600 hover:underline"
+                        className="text-green-500 transition-colors hover:text-green-600 hover:underline"
                     >
                         {t('login')}
                     </Link>
@@ -138,7 +139,14 @@ const SignupForm = ({ lng }: { lng: string }) => {
                 />
                 <div className="flex w-full justify-end">
                     <Button
-                        disabled={isSubmitting}
+                        disabled={
+                            isSubmitting ||
+                            !dirtyFields.email ||
+                            !dirtyFields.name ||
+                            !dirtyFields.password ||
+                            !dirtyFields.password_confirmation ||
+                            !dirtyFields.phone
+                        }
                         variant={null}
                         className="w-full bg-green-600 text-white hover:bg-green-700"
                         type="submit"
@@ -147,7 +155,7 @@ const SignupForm = ({ lng }: { lng: string }) => {
                     </Button>
                 </div>
             </form>
-            <div className="relative h-px w-full bg-gray-700/40 dark:bg-gray-300/40">
+            {/* <div className="relative h-px w-full bg-gray-700/40 dark:bg-gray-300/40">
                 <div className="absolute -top-3 right-[50%] translate-x-[50%] bg-[#f2f2f2f2] text-start text-sm text-green-700 sm:-top-4 sm:text-xl dark:bg-black dark:text-green-300">
                     {t('another-sign-up')}
                 </div>
@@ -161,7 +169,7 @@ const SignupForm = ({ lng }: { lng: string }) => {
                     <GithubIcon />
                     Github
                 </Button>
-            </form>
+            </form> */}
         </div>
     );
 };

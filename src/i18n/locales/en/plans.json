@@ -1,0 +1,16 @@
+{
+    "main-title": "Choose Your Starting Point",
+    "sub-title": "Build from scratch with our drag-and-drop editor, or let our AI create the perfect platform for you.",
+    "drag-drop-title": "Build By Yourself",
+    "drag-drop-description": "Take full control and drag-and-drop features to create your custom platform layout.",
+    "drag-drop-action": "Start Building",
+    "drag-drop-f1": "Drag and drop features",
+    "drag-drop-f2": "Real-time preview",
+    "drag-drop-f3": "Complete customization",
+    "ai-title": "Let AI Help You",
+    "ai-description": "Answer a few simple questions and let AI design the perfect platform for your needs.",
+    "ai-action": "Start With AI",
+    "ai-f1": "Step-by-step guidance",
+    "ai-f2": "Smart recommendations",
+    "ai-f3": "Personalized setup"
+}

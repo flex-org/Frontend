@@ -1,5 +1,18 @@
-import OnBoardingNavbar from '@/onBoarding/components/OnBoardingNavbar';
 import HeroSection from '@/onBoarding/features/landing/components/HeroSection';
+export const generateMetadata = async ({
+    params,
+}: {
+    params: Promise<{ lng: string }>;
+}) => {
+    const { lng } = await params;
+    return {
+        title: lng === 'ar' ? 'الصفحة الرئيسية' : 'Landing page',
+        description:
+            lng === 'ar'
+                ? 'بلاتمي (Platme) هي الحل الأمثل لإنشاء أكاديميتك الرقمية. منصة تعليمية متعددة المستأجرين (SaaS) تمنحك السيطرة الكاملة لإنشاء موقعك التعليمي، إدارة الطلاب، الفصول الافتراضية، وبيع الدورات أونلاين. انضم لأقوى نظام إدارة تعلم (LMS) في الشرق الأوسط وابدأ رحلتك الآن.'
+                : 'Platme is a premier multi-tenant educational platform (SaaS) designed for educators and institutions. Create your own branded Learning Management System (LMS), manage students, host virtual classrooms, and monetize your courses effortlessly. The ultimate white-label solution for online education.',
+    };
+};
 export default async function Home({
     params,
 }: {
@@ -7,8 +20,7 @@ export default async function Home({
 }) {
     const { lng } = await params;
     return (
-        <div className="min-h-screen">
-            <OnBoardingNavbar lng={lng} />
+        <div>
             <HeroSection lng={lng} />
         </div>
     );
