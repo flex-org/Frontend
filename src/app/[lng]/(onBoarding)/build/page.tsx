@@ -1,8 +1,23 @@
-import { Spinner } from '@/components/ui/spinner';
 import { getTranslation } from '@/i18n/server';
 import DragAndDropContent from '@/onBoarding/features/build/components/DragAndDropContent';
+import DragDropSkeleton from '@/onBoarding/skeletons/DragDropSkeleton';
 import { Suspense } from 'react';
 
+export const generateMetadata = async ({
+    params,
+}: {
+    params: Promise<{ lng: string }>;
+}) => {
+    const { lng } = await params;
+    return {
+        title:
+            lng === 'ar' ? 'تخصيص مزايا المنصة' : 'Customize Platform Features',
+        description:
+            lng === 'ar'
+                ? 'قم بتصميم أكاديميتك التعليمية بلمسة واحدة. اسحب وأفلت المميزات (Drag & Drop) التي تناسب طلابك، مثل الاختبارات، الفصول الافتراضية، ومنتدى النقاش، وخصص تجربة التعلم بالكامل عبر لوحة تحكم بلاتمي المتطورة.'
+                : 'Design your educational academy with a single touch. Drag and drop the features that suit your students, such as quizzes, virtual classrooms, and discussion forums. Fully customize the learning experience using Platme’s advanced dashboard.',
+    };
+};
 const Build = async ({ params }: { params: Promise<{ lng: string }> }) => {
     const { lng } = await params;
     const { t } = await getTranslation(lng, 'drag-drop');
@@ -17,7 +32,7 @@ const Build = async ({ params }: { params: Promise<{ lng: string }> }) => {
                         {t('sub-title')}
                     </p>
                 </div>
-                <Suspense fallback={<Spinner className="size-12" />}>
+                <Suspense fallback={<DragDropSkeleton />}>
                     <DragAndDropContent lng={lng} />
                 </Suspense>
             </div>

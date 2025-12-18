@@ -13,11 +13,12 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+
 const SignInForm = ({ lng }: { lng: string }) => {
     const [show, setShow] = useState(false);
     const { update } = useSession();
     const router = useRouter();
-    const { t } = useTranslation(lng, 'onBoarding-auth');
+    const { t } = useTranslation(lng, ['onBoarding-auth','zodValidation']);
     const LoginSchema = createLoginSchema(t);
     const {
         register,
@@ -67,7 +68,6 @@ const SignInForm = ({ lng }: { lng: string }) => {
                 </p>
             </div>
             <form
-                id="form-rhf-demo"
                 className="space-y-4"
                 onSubmit={handleSubmit(onSubmit)}
             >

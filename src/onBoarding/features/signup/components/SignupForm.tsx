@@ -19,7 +19,7 @@ const SignupForm = ({ lng }: { lng: string }) => {
     const [show, setShow] = useState(false);
     const { setEmail, setUserData } = useAuthStore();
     const router = useRouter();
-    const { t } = useTranslation(lng, 'onBoarding-auth');
+    const { t } = useTranslation(lng, ['onBoarding-auth', 'zodValidation']);
     const schema = createRegisterSchema(t);
     const {
         register,

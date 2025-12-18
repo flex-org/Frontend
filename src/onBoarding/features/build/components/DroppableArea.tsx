@@ -6,16 +6,24 @@ import FeatureItem from './FeatureItem';
 import ToolTipComponent from '@/components/ToolTipComponent';
 import { useGlobalStore } from '@/onBoarding/store/globalStore';
 import { useTranslation } from '@/i18n/client';
+import { Features } from '@/onBoarding/types';
 
-const DroppableArea = ({ lng }: { lng: string }) => {
+const DroppableArea = ({
+    lng,
+    onRemove,
+}: {
+    lng: string;
+    onRemove: (f: Features) => void;
+}) => {
     const { t } = useTranslation(lng, 'drag-drop');
     const { activeItems, setActiveItems } = useGlobalStore();
     const { setNodeRef, isOver } = useDroppable({
         id: 'droppable-area',
     });
-    const handleRemove = (id: number) => {
-        const FilteredItems = activeItems.filter((item) => item.id !== id);
-        setActiveItems(FilteredItems);
+    const handleRemove = (item: Features) => {
+        const filteredItems = activeItems.filter((i) => i.id !== item.id);
+        setActiveItems(filteredItems);
+        onRemove(item);
     };
     const style = {
         minHeight: '400px',
@@ -62,7 +70,6 @@ const DroppableArea = ({ lng }: { lng: string }) => {
             <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-3">
                 {activeItems.map((item) => (
                     <FeatureItem
-                        lng={lng}
                         key={item.id}
                         feature={item}
                         classNames="border p-2 border-green-900 dark:border-green-900 rounded-md relative"
@@ -71,7 +78,7 @@ const DroppableArea = ({ lng }: { lng: string }) => {
                             label={lng == 'ar' ? 'ازالة ' : 'remove '}
                         >
                             <div
-                                onClick={() => handleRemove(item.id)}
+                                onClick={() => handleRemove(item)}
                                 className={`absolute -top-2 ${lng === 'ar' ? '-left-1' : '-right-1'} cursor-pointer rounded-full bg-green-800 p-0.5`}
                             >
                                 <X className="size-3 text-white" />

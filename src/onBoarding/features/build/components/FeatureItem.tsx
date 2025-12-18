@@ -1,25 +1,22 @@
-import { CheckCircle, Grip } from 'lucide-react';
+import { Grip } from 'lucide-react';
 import { iconsMap } from '../constant';
 import { Features } from '@/onBoarding/types';
 import { cn } from '@/utils/cn';
 import { ReactNode } from 'react';
-import { useGlobalStore } from '@/onBoarding/store/globalStore';
 
 const FeatureItem = ({
     feature,
     classNames,
     children,
     DragBox,
-    lng,
 }: {
     feature: Features;
     classNames?: string;
     children?: ReactNode;
     DragBox?: boolean;
-    lng: string;
 }) => {
-    const { activeItems } = useGlobalStore();
-    const isSelected = activeItems.some((item) => item.id === feature.id);
+    // const { activeItems } = useGlobalStore();
+    // const isSelected = activeItems.some((item) => item.id === feature.id);
     return (
         <div className={cn('flex items-center gap-2', classNames)}>
             <div className="flex items-center gap-2">
@@ -36,13 +33,13 @@ const FeatureItem = ({
                     {feature.description}
                 </p>
             </div>
-            {isSelected && DragBox && (
+            {/* {isSelected && DragBox && (
                 <div
                     className={`absolute top-1 ${lng === 'ar' ? 'left-0' : 'right-0'}`}
                 >
                     <CheckCircle className="size-3 text-green-500" />
                 </div>
-            )}
+            )} */}
             {children}
         </div>
     );

@@ -35,7 +35,6 @@ const DraggableFeature = ({
         >
             <FeatureItem
                 DragBox={true}
-                lng={lng}
                 feature={feature}
                 classNames="relative"
             />
