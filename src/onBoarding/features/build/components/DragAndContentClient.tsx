@@ -86,13 +86,16 @@ const DragAndContentClient = ({
             </div>
             <DragOverlay dropAnimation={null}>
                 {activeFeature ? (
-                    // We render a styled version of the item here
-                    // Note: This one doesn't need 'useDraggable' hooks, just the UI
-                    <FeatureItem
-                        lng={lng}
-                        feature={activeFeature}
-                        classNames="opacity-50"
-                    />
+                    <div
+                        style={{
+                            opacity: 0.8, 
+                            cursor: 'grabbing',
+                            // transform: 'rotate(2deg)', // حركة احترافية زيادة
+                        }}
+                        className="shadow-xl"
+                    >
+                        <FeatureItem feature={activeFeature} lng={lng} />
+                    </div>
                 ) : null}
             </DragOverlay>
         </DndContext>

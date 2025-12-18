@@ -12,14 +12,14 @@ const DraggableFeature = ({
     feature: Features;
     lng: string;
 }) => {
-    const { attributes, listeners, setNodeRef, transform, isDragging } =
-        useDraggable({
-            id: feature.id,
-            data: feature,
-        });
+    const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
+        id: feature.id,
+        data: feature,
+    });
     // console.log(isDragging);
     const style = {
-        transform: CSS.Translate.toString(transform),
+        // transform: CSS.Translate.toString(transform),
+        opacity: isDragging ? 0.5 : 1,
         padding: '10px',
         marginBottom: '5px',
         cursor: 'grab',

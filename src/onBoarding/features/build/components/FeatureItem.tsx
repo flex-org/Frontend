@@ -20,7 +20,6 @@ const FeatureItem = ({
 }) => {
     const { activeItems } = useGlobalStore();
     const isSelected = activeItems.some((item) => item.id === feature.id);
-    console.log(isSelected);
     return (
         <div className={cn('flex items-center gap-2', classNames)}>
             <div className="flex items-center gap-2">
