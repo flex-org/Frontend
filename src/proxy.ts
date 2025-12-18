@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import acceptLanguage from 'accept-language';
 import NextAuth from 'next-auth';
-
 import { fallbackLng, languages, cookieName } from './i18n/settings';
 import { authConfig } from './auth.config';
 
@@ -37,7 +36,7 @@ export default auth((req) => {
             ),
         );
     }
-    const protectedRoutes = ['/gomaa', '/build'];
+    const protectedRoutes = ['/chat', '/build'];
     const isProtectedRoute = protectedRoutes.some((route) => {
         const routeWithLang = `/${lng}${route}`;
         return (

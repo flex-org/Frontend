@@ -1,5 +1,6 @@
 {
     "error-boundary-error": "Something went wrong",
+    "error-boundary-description": "We encountered an unexpected error while trying to load this content.",
     "error-boundary-try-again": "Try again",
     "error-boundary-go-home": "Go to home page",
     "error-boundary-warning-word": "warning",

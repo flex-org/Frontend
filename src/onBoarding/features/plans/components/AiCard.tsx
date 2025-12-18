@@ -20,21 +20,21 @@ const AiCard = async ({ lng }: { lng: string }) => {
     return (
         <Card className="flex h-screen max-h-96 w-full max-w-sm flex-col justify-center bg-green-800 text-white dark:bg-green-950">
             <CardHeader>
-                <div className="flex items-center justify-between">
-                    <CardTitle>{t('ai-title')}</CardTitle>
-                    <div className="rounded-md bg-gray-100 p-1 text-black">
+                <div className="mb-2 flex flex-col items-start gap-2 text-xl">
+                    <div className="rounded-md bg-gray-100 p-2 text-black">
                         <Bot />
                     </div>
+                    <CardTitle className="font-bold">{t('ai-title')}</CardTitle>
                 </div>
                 <CardDescription className="text-gray-300">
                     {t('ai-description')}
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                <Link href={`/${lng}/gomaa`}>
+                <Link href={`/${lng}/chat`}>
                     <Button
                         variant={null}
-                        className="w-full bg-gray-100 text-black hover:bg-gray-300 active:bg-gray-400"
+                        className="w-full bg-gray-100 font-bold text-black hover:bg-gray-300 active:bg-gray-400"
                     >
                         {t('ai-action')}
                     </Button>

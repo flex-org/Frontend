@@ -1,10 +1,11 @@
+import { Spinner } from '@/components/ui/spinner';
 import { getTranslation } from '@/i18n/server';
-import AiCard from '@/onBoarding/features/plans/components/AiCard';
-import DragAndDropCard from '@/onBoarding/features/plans/components/DragAndDropCard';
+import DragAndDropContent from '@/onBoarding/features/build/components/DragAndDropContent';
+import { Suspense } from 'react';
 
-const page = async ({ params }: { params: Promise<{ lng: string }> }) => {
+const Build = async ({ params }: { params: Promise<{ lng: string }> }) => {
     const { lng } = await params;
-    const { t } = await getTranslation(lng, 'plans');
+    const { t } = await getTranslation(lng, 'drag-drop');
     return (
         <div className="mt-24 px-2 sm:px-0">
             <div className="flex flex-col items-center justify-center space-y-6 sm:space-y-12">
@@ -16,13 +17,12 @@ const page = async ({ params }: { params: Promise<{ lng: string }> }) => {
                         {t('sub-title')}
                     </p>
                 </div>
-                <div className="flex w-full flex-col items-center justify-center gap-6 sm:flex-row">
-                    <DragAndDropCard lng={lng} />
-                    <AiCard lng={lng} />
-                </div>
+                <Suspense fallback={<Spinner className="size-12" />}>
+                    <DragAndDropContent lng={lng} />
+                </Suspense>
             </div>
         </div>
     );
 };
 
-export default page;
+export default Build;

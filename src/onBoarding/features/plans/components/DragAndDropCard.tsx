@@ -21,11 +21,13 @@ const DragAndDropCard = async ({ lng }: { lng: string }) => {
     return (
         <Card className="flex h-screen max-h-96 w-full max-w-sm flex-col justify-center">
             <CardHeader>
-                <div className="flex items-center justify-between">
-                    <CardTitle>{t('drag-drop-title')}</CardTitle>
-                    <div className="rounded-md bg-green-800 p-1 text-white">
+                <div className="mb-2 flex flex-col items-start gap-2 text-xl">
+                    <div className="rounded-md bg-green-800 p-2 text-white">
                         <Blocks />
                     </div>
+                    <CardTitle className="font-bold">
+                        {t('drag-drop-title')}
+                    </CardTitle>
                 </div>
                 <CardDescription>{t('drag-drop-description')}</CardDescription>
             </CardHeader>
@@ -33,7 +35,7 @@ const DragAndDropCard = async ({ lng }: { lng: string }) => {
                 <Link href={`/${lng}/build`}>
                     <Button
                         variant={null}
-                        className="w-full bg-green-800 text-white hover:bg-green-900 active:bg-green-950"
+                        className="w-full bg-green-800 font-bold text-white hover:bg-green-900 active:bg-green-950"
                     >
                         {t('drag-drop-action')}
                     </Button>

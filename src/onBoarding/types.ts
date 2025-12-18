@@ -45,3 +45,15 @@ export interface SignedUserData {
     user: SignedUpUser;
     token: string;
 }
+export interface Features {
+    id: number;
+    icon: string;
+    price: string;
+    active: number;
+    name: string;
+    description: string;
+}
+
+export interface DraggedFeatures extends Features {
+    instanceId: string;
+}

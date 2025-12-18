@@ -1,5 +1,6 @@
 {
     "error-boundary-error": "حدث خطأ ما",
+    "error-boundary-description": "لقد واجهنا خطأ غير متوقع اثناء عرض هذا المحتوي",
     "error-boundary-try-again": "حاول مجددا",
     "error-boundary-go-home": "الصفحة الرئيسية",
     "error-boundary-warning-word": "تحذير",
