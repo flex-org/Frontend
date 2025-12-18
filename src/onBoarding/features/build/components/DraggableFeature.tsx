@@ -1,7 +1,6 @@
 'use client';
 import { Features } from '@/onBoarding/types';
 import { useDraggable } from '@dnd-kit/core';
-import { CSS } from '@dnd-kit/utilities';
 import { memo } from 'react';
 import FeatureItem from './FeatureItem';
 
@@ -16,7 +15,6 @@ const DraggableFeature = ({
         id: feature.id,
         data: feature,
     });
-    // console.log(isDragging);
     const style = {
         // transform: CSS.Translate.toString(transform),
         opacity: isDragging ? 0.5 : 1,

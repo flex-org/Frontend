@@ -16,6 +16,7 @@ import { useGlobalStore } from '@/onBoarding/store/globalStore';
 import { useState } from 'react';
 import FeatureItem from './FeatureItem';
 import { toast } from 'sonner';
+import { useTranslation } from '@/i18n/client';
 
 const DragAndContentClient = ({
     features,
@@ -24,6 +25,7 @@ const DragAndContentClient = ({
     features: Features[];
     lng: string;
 }) => {
+    const { t } = useTranslation(lng, 'drag-drop');
     const { activeItems, addActiveItem } = useGlobalStore();
     const [activeFeature, setActiveFeature] = useState<Features | null>(null);
 
@@ -44,7 +46,7 @@ const DragAndContentClient = ({
         setActiveFeature(e.active.data.current as Features);
         activeItems.map((item) => {
             if (item.id === activeFeature?.id) {
-                toast.error('هذه الخاصية موجودة بالفعل');
+                toast.warning(t('feature-already-exist'));
                 return;
             }
         });
@@ -88,7 +90,7 @@ const DragAndContentClient = ({
                 {activeFeature ? (
                     <div
                         style={{
-                            opacity: 0.8, 
+                            opacity: 0.8,
                             cursor: 'grabbing',
                             // transform: 'rotate(2deg)', // حركة احترافية زيادة
                         }}
