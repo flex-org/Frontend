@@ -1,19 +1,23 @@
+'use client';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { Button } from '@/components/ui/button';
-import { getTranslation } from '@/i18n/server';
 import Link from 'next/link';
 import { Github, LogIn } from 'lucide-react';
 import { navLinks } from '../lib/constants';
 import MobileMenu from './MobileMenu';
-import { auth } from '@/auth';
 
 import LogoutButton from './LogoutButton';
+import { useTranslation } from '@/i18n/client';
+import { useSession } from 'next-auth/react';
+import { usePathname } from 'next/navigation';
 
-const OnBoardingNavbar = async ({ lng }: { lng: string }) => {
-    const { t } = await getTranslation(lng, 'common');
-    const session = await auth();
+const OnBoardingNavbar = ({ lng }: { lng: string }) => {
+    const pathname = usePathname();
+    const { t } = useTranslation(lng, 'common');
+    const { data: session } = useSession();
     const isAuthenticated = session?.user.isAuthenticated;
+    if (pathname === `/${lng}/signin` || pathname === `/${lng}/signup`) return;
     return (
         <nav className="sticky top-6 z-50 mx-auto w-full rounded-[20px] border border-gray-300 bg-white shadow-md backdrop-blur-2xl dark:border-gray-900 dark:bg-neutral-950">
             <div className="container mx-auto flex items-center justify-between px-6 py-3 md:px-12 md:py-4">

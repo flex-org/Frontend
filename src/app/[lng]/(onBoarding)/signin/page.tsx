@@ -20,7 +20,7 @@ export const generateMetadata = async ({
 const SignInPage = async ({ params }: { params: Promise<{ lng: string }> }) => {
     const { lng } = await params;
     return (
-        <div className="relative">
+        <div>
             <AuthHeader lng={lng} />
             <div className="mx-auto mt-28 grid grid-cols-3 gap-6">
                 <AuthInfoPart signin={true} lng={lng} />

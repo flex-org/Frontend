@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { Features } from '../types';
-
+// const [availableFeatures, setAvailableFeatures] =
+//     useState<Features[]>(features);
 interface Props {
     count: number;
     increment: () => void;
