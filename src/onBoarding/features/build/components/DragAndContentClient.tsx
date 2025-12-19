@@ -5,6 +5,10 @@ import DraggableArea from './DraggableArea';
 import DroppableArea from './DroppableArea';
 import FeatureItem from './FeatureItem';
 import useDragDrop from '../hooks/useDragDrop';
+import { Button } from '@/components/ui/button';
+import { useGlobalStore } from '@/onBoarding/store/globalStore';
+import { usePathname } from 'next/navigation';
+import { useEffect } from 'react';
 
 const DragAndContentClient = ({
     features,
@@ -13,6 +17,12 @@ const DragAndContentClient = ({
     features: Features[];
     lng: string;
 }) => {
+    const pathname = usePathname();
+    const { activeItems, initializeAvailableFeatures } = useGlobalStore();
+
+    useEffect(() => {
+        initializeAvailableFeatures(features);
+    }, [features, initializeAvailableFeatures]);
     const {
         returnFeatureToFeaturesColumn,
         activeFeature,
@@ -20,35 +30,43 @@ const DragAndContentClient = ({
         handleDragEnd,
         sensors,
         availableFeatures,
-    } = useDragDrop(lng, features);
+    } = useDragDrop(lng);
+
     return (
-        <DndContext
-            sensors={sensors}
-            onDragStart={handleDragStart}
-            onDragEnd={handleDragEnd}
-        >
-            <div className="grid grid-cols-4 gap-6">
-                <DraggableArea lng={lng} features={availableFeatures} />
-                <DroppableArea
-                    lng={lng}
-                    onRemove={returnFeatureToFeaturesColumn}
-                />
+        <div>
+            <div className="mb-8 flex justify-between">
+                {pathname !== `/${lng}/build` && (
+                    <Button variant={'outline'}>Back</Button>
+                )}
+                <Button
+                    disabled={activeItems.length === 0}
+                    variant={null}
+                    className="bg-green-800 text-white hover:bg-green-900 active:bg-green-950"
+                >
+                    Continue
+                </Button>
             </div>
-            <DragOverlay dropAnimation={null}>
-                {activeFeature ? (
-                    <div
-                        style={{
-                            opacity: 0.8,
-                            cursor: 'grabbing',
-                            // transform: 'rotate(2deg)', // حركة احترافية زيادة
-                        }}
-                        className="shadow-xl"
-                    >
-                        <FeatureItem feature={activeFeature} />
-                    </div>
-                ) : null}
-            </DragOverlay>
-        </DndContext>
+            <DndContext
+                sensors={sensors}
+                onDragStart={handleDragStart}
+                onDragEnd={handleDragEnd}
+            >
+                <div className="grid grid-cols-4 gap-6">
+                    <DraggableArea lng={lng} features={availableFeatures} />
+                    <DroppableArea
+                        lng={lng}
+                        onRemove={returnFeatureToFeaturesColumn}
+                    />
+                </div>
+                <DragOverlay dropAnimation={null}>
+                    {activeFeature ? (
+                        <div className="mb-1.5 cursor-grabbing touch-none rounded-md border border-green-400 p-2.5 opacity-100 transition-opacity dark:border-green-900">
+                            <FeatureItem feature={activeFeature} />
+                        </div>
+                    ) : null}
+                </DragOverlay>
+            </DndContext>
+        </div>
     );
 };
 

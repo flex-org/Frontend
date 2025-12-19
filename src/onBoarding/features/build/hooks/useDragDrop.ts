@@ -12,13 +12,17 @@ import {
 import { useState } from 'react';
 import { toast } from 'sonner';
 
-const useDragDrop = (lng: string, features: Features[]) => {
+const useDragDrop = (lng: string) => {
     const [activeFeature, setActiveFeature] = useState<Features | null>(null);
-    const [availableFeatures, setAvailableFeatures] =
-        useState<Features[]>(features);
-    const { activeItems, addActiveItem } = useGlobalStore();
+    const {
+        activeItems,
+        availableFeatures,
+        addActiveItem,
+        removeAvailableFeature,
+        addAvailableFeature,
+    } = useGlobalStore();
     const { t } = useTranslation(lng, 'drag-drop');
-    
+
     const sensors = useSensors(
         useSensor(PointerSensor, {
             activationConstraint: {
@@ -57,15 +61,13 @@ const useDragDrop = (lng: string, features: Features[]) => {
                 instanceId: crypto.randomUUID(),
             };
             addActiveItem(newItem);
-            setAvailableFeatures((prev) =>
-                prev.filter((f) => f.id !== activeFeature.id),
-            );
+            removeAvailableFeature(activeFeature.id);
         }
         setActiveFeature(null);
     };
 
     const returnFeatureToFeaturesColumn = (feature: Features) => {
-        setAvailableFeatures((prev) => [...prev, feature]);
+        addAvailableFeature(feature);
     };
 
     return {

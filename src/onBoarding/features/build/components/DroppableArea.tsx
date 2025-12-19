@@ -20,6 +20,9 @@ const DroppableArea = ({
     const { setNodeRef, isOver } = useDroppable({
         id: 'droppable-area',
     });
+    const price = useMemo(() => {
+        return activeItems.reduce((acc, item) => acc + Number(item.price), 0);
+    }, [activeItems]);
     const handleRemove = (item: Features) => {
         const filteredItems = activeItems.filter((i) => i.id !== item.id);
         setActiveItems(filteredItems);
@@ -32,9 +35,6 @@ const DroppableArea = ({
         border: '2px dashed #097f0d',
         padding: '20px',
     };
-    const price = useMemo(() => {
-        return activeItems.reduce((acc, item) => acc + Number(item.price), 0);
-    }, [activeItems]);
 
     return (
         <div
@@ -61,7 +61,7 @@ const DroppableArea = ({
             </div>
             {activeItems.length === 0 && (
                 <div className="flex h-full w-full flex-col items-center justify-center space-y-4">
-                    <div className="rounded-md bg-green-200 p-2 dark:bg-green-900">
+                    <div className="rounded-md bg-green-900 p-2 text-white">
                         <Plus />
                     </div>
                     <p>{t('drag-drop-here')}</p>
@@ -72,7 +72,7 @@ const DroppableArea = ({
                     <FeatureItem
                         key={item.id}
                         feature={item}
-                        classNames="border p-2 border-green-900 dark:border-green-900 rounded-md relative"
+                        classNames="border p-2 border-green-400 dark:border-green-900 rounded-md relative"
                     >
                         <ToolTipComponent
                             label={lng == 'ar' ? 'ازالة ' : 'remove '}

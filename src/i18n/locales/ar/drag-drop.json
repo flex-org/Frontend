@@ -5,5 +5,6 @@
     "chosen-features-number": "عدد الميزات المختارة",
     "chosen-features-price": "السعر",
     "drag-drop-here": "أسحب وأفلت المميزات هنا",
-    "feature-already-exist": "هذه الخاصية موجودة بالفعل"
+    "feature-already-exist": "هذه الخاصية موجودة بالفعل",
+    "picked-all":"لقد قمت بإختيار جميع الميزات!"
 }

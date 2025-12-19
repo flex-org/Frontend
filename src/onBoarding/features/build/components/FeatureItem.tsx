@@ -15,8 +15,6 @@ const FeatureItem = ({
     children?: ReactNode;
     DragBox?: boolean;
 }) => {
-    // const { activeItems } = useGlobalStore();
-    // const isSelected = activeItems.some((item) => item.id === feature.id);
     return (
         <div className={cn('flex items-center gap-2', classNames)}>
             <div className="flex items-center gap-2">
@@ -33,13 +31,6 @@ const FeatureItem = ({
                     {feature.description}
                 </p>
             </div>
-            {/* {isSelected && DragBox && (
-                <div
-                    className={`absolute top-1 ${lng === 'ar' ? 'left-0' : 'right-0'}`}
-                >
-                    <CheckCircle className="size-3 text-green-500" />
-                </div>
-            )} */}
             {children}
         </div>
     );
