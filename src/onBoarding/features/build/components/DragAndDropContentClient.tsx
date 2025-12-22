@@ -5,10 +5,11 @@ import DraggableArea from './DraggableArea';
 import DroppableArea from './DroppableArea';
 import FeatureItem from './FeatureItem';
 import useDragDrop from '../hooks/useDragDrop';
-import { Button } from '@/components/ui/button';
-import { useGlobalStore } from '@/onBoarding/store/globalStore';
-import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
+import { useTranslation } from '@/i18n/client';
+import { useDragDropStore } from '@/onBoarding/store/DragDropStore';
+import { AlertCircle } from 'lucide-react';
+import BackAndForwardButtons from '@/onBoarding/components/BackAndForwardButtons';
 
 const DragAndContentClient = ({
     features,
@@ -17,9 +18,8 @@ const DragAndContentClient = ({
     features: Features[];
     lng: string;
 }) => {
-    const pathname = usePathname();
-    const { activeItems, initializeAvailableFeatures } = useGlobalStore();
-
+    const { activeItems, initializeAvailableFeatures } = useDragDropStore();
+    const { t } = useTranslation(lng, 'drag-drop');
     useEffect(() => {
         initializeAvailableFeatures(features);
     }, [features, initializeAvailableFeatures]);
@@ -33,18 +33,10 @@ const DragAndContentClient = ({
     } = useDragDrop(lng);
 
     return (
-        <div>
-            <div className="mb-8 flex justify-between">
-                {pathname !== `/${lng}/build` && (
-                    <Button variant={'outline'}>Back</Button>
-                )}
-                <Button
-                    disabled={activeItems.length === 0}
-                    variant={null}
-                    className="bg-green-800 text-white hover:bg-green-900 active:bg-green-950"
-                >
-                    Continue
-                </Button>
+        <div className="space-y-2">
+            <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                <AlertCircle className="size-3" />
+                <p className="text-xs sm:text-sm">{t('do-not-refresh')}</p>
             </div>
             <DndContext
                 sensors={sensors}
@@ -66,6 +58,11 @@ const DragAndContentClient = ({
                     ) : null}
                 </DragOverlay>
             </DndContext>
+            <BackAndForwardButtons
+                disabled={!activeItems || activeItems.length===0}
+                lng={lng}
+                nextPage="preferences"
+            />
         </div>
     );
 };

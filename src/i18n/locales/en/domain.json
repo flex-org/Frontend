@@ -1,0 +1,9 @@
+{
+    "domain-page-title": "Domain",
+    "domain-page-description": "Own your brand with a custom domain.",
+    "write-domain": "Write your domain...",
+    "only-english-domain": "Domain must be in english only, with no numbers or special characters except (-)",
+    "domain-available": "This domain is available",
+    "domain-not-available": "This domain is not available",
+    "domain-error": "Error occurred while checking the domain, please try again"
+}

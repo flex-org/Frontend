@@ -4,6 +4,7 @@
     "error-boundary-try-again": "Try again",
     "error-boundary-go-home": "Go to home page",
     "error-boundary-warning-word": "warning",
-    "error-boundary-warning-description": "if this problem continues, please report it immediately",
-    "error-boundary-warning-from-here": "from here"
+    "error-boundary-warning-description": "If this problem continues, please report it immediately",
+    "error-boundary-warning-from-here": "from here",
+    "error-boundary-network-error": "This issue might be due to a network error. Please check your internet connection and try again."
 }

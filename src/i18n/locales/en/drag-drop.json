@@ -5,6 +5,9 @@
     "chosen-features-number": "Chosen Features Number",
     "chosen-features-price": "Price",
     "drag-drop-here": "Drag & Drop the features here",
-    "feature-already-exist":"this feature already exist",
-    "picked-all":"You have picked all the features!"
+    "feature-already-exist": "this feature already exist",
+    "picked-all": "You have picked all the features!",
+    "continue": "Continue",
+    "back": "Back",
+    "do-not-refresh": "Please, don't refresh the page so that you don't lose any progress"
 }

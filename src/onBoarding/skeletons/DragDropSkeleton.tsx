@@ -2,16 +2,12 @@ import { Skeleton } from '@/components/ui/skeleton';
 const DragDropSkeleton = () => {
     return (
         <div className="w-full">
-            <div className="mb-8 flex justify-between">
-                <Skeleton className="h-9 w-21 bg-green-800" />
-            </div>
             <div className="grid w-full grid-cols-4 gap-6">
                 <div className="col-span-4 flex flex-col rounded-lg border border-gray-200 bg-white shadow-md md:col-span-2 lg:col-span-1 dark:border-green-800 dark:bg-green-950">
                     {/* Header List */}
                     <div className="border-b border-gray-300 p-4 dark:border-green-700">
                         <Skeleton className="h-5 w-24 bg-gray-300 dark:bg-green-800" />
                     </div>
-
                     {/* Features List items */}
                     <div className="flex flex-col gap-4 p-4">
                         {[...Array(8)].map((_, i) => (
@@ -35,7 +31,6 @@ const DragDropSkeleton = () => {
                         ))}
                     </div>
                 </div>
-
                 <div className="col-span-4 min-h-[500px] rounded-lg border-2 border-dashed border-green-700 bg-gray-50/50 p-6 md:col-span-2 lg:col-span-3 dark:bg-green-950/20">
                     {/* Top Bar Stats */}
                     <div className="mb-8 border-b border-gray-300 pb-6 dark:border-green-800">
@@ -61,6 +56,9 @@ const DragDropSkeleton = () => {
                         <Skeleton className="h-4 w-56 bg-gray-200 dark:bg-green-900" />
                     </div>
                 </div>
+            </div>
+            <div className="mb-8 flex justify-end mt-2">
+                <Skeleton className="h-10 w-25 bg-green-800" />
             </div>
         </div>
     );

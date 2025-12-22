@@ -1,14 +1,14 @@
-import DragAndContentClient from './DragAndContentClient';
+import DragAndContentClient from './DragAndDropContentClient';
 import { getFeatures } from '@/onBoarding/actions/onBoardingActions';
 import ErrorFallback from '@/components/ErrorFallback';
-import { revalidateTag } from 'next/cache';
+import { revalidatePath } from 'next/cache';
 
 const DragAndDropContent = async ({ lng }: { lng: string }) => {
     const features = await getFeatures(lng);
     if (features.error) {
         const handleReset = async () => {
             'use server';
-            revalidateTag('building-features', 'max');
+            revalidatePath(`/${lng}/build`);
         };
         return (
             <ErrorFallback

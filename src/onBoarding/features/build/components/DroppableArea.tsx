@@ -4,9 +4,9 @@ import { Plus, X } from 'lucide-react';
 import { memo, useMemo } from 'react';
 import FeatureItem from './FeatureItem';
 import ToolTipComponent from '@/components/ToolTipComponent';
-import { useGlobalStore } from '@/onBoarding/store/globalStore';
 import { useTranslation } from '@/i18n/client';
 import { Features } from '@/onBoarding/types';
+import { useDragDropStore } from '@/onBoarding/store/DragDropStore';
 
 const DroppableArea = ({
     lng,
@@ -16,7 +16,7 @@ const DroppableArea = ({
     onRemove: (f: Features) => void;
 }) => {
     const { t } = useTranslation(lng, 'drag-drop');
-    const { activeItems, setActiveItems } = useGlobalStore();
+    const { activeItems, setActiveItems } = useDragDropStore();
     const { setNodeRef, isOver } = useDroppable({
         id: 'droppable-area',
     });

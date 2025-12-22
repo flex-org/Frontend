@@ -1,5 +1,5 @@
 'use client';
-import { ArrowLeft, CheckCircle, Copy, TriangleAlert } from 'lucide-react';
+import { ArrowLeft, CheckCircle, CircleAlert, Copy, TriangleAlert } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from './ui/button';
 import { useTranslation } from '@/i18n/client';
@@ -50,6 +50,10 @@ const ErrorFallback = ({ error, reset, lng }: ErrorFallbackProps) => {
             <p className="mb-6 max-w-md text-gray-500 dark:text-gray-400">
                 {t('error-boundary-description')}
             </p>
+            <div className="mb-6 flex max-w-xl items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+                <TriangleAlert className="size-4" />
+                {t('error-boundary-network-error')}
+            </div>
             <div className="mb-6 flex w-full max-w-md justify-between overflow-hidden rounded-md border border-gray-200 bg-gray-100 p-3 text-left dark:border-gray-700 dark:bg-gray-800">
                 <ToolTipComponent
                     label={
@@ -60,7 +64,7 @@ const ErrorFallback = ({ error, reset, lng }: ErrorFallbackProps) => {
                         <CheckCircle className="size-4 text-green-500" />
                     ) : (
                         <Copy
-                            className="size-4 cursor-pointer m-2"
+                            className="size-4 cursor-pointer"
                             onClick={() => handleCopyError(error.message)}
                         />
                     )}
@@ -73,6 +77,14 @@ const ErrorFallback = ({ error, reset, lng }: ErrorFallbackProps) => {
                     {error.message || 'Unknown Error Occurred'}
                 </p>
             </div>
+            <div className="mb-6 flex max-w-xl items-center gap-2 text-xs text-red-500 dark:text-red-400">
+                <CircleAlert className="size-4" />
+                {t('error-boundary-warning-description')}{' '}
+                <Link href={`${lng}/contact-us`} className="underline">
+                    {' '}
+                    {t('error-boundary-warning-from-here')}
+                </Link>
+            </div>
             <div className="flex flex-col gap-3 sm:flex-row">
                 <Button variant={'outline'} onClick={handleReset}>
                     {t('error-boundary-try-again')}
@@ -80,7 +92,7 @@ const ErrorFallback = ({ error, reset, lng }: ErrorFallbackProps) => {
                 <Link href={`/${lng}`}>
                     <Button
                         variant={null}
-                        className="bg-green-700 text-white hover:bg-green-800 active:bg-green-900"
+                        className="bg-green-800 text-white transition-colors hover:bg-green-900 active:bg-green-950"
                     >
                         {t('error-boundary-go-home')}
                         <ArrowLeft

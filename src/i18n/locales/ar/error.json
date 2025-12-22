@@ -5,5 +5,6 @@
     "error-boundary-go-home": "الصفحة الرئيسية",
     "error-boundary-warning-word": "تحذير",
     "error-boundary-warning-description": "اذا استمرت هذه المشكلة الرجاء الابلاغ عنها فورا",
-    "error-boundary-warning-from-here": "من هنا"
+    "error-boundary-warning-from-here": "من هنا",
+    "error-boundary-network-error": "قد يعود السبب إلى عطل في الاتصال، يرجى التحقق من حالة الإنترنت ثم المحاولة مرة أخرى."
 }

@@ -22,7 +22,7 @@ const Build = async ({ params }: { params: Promise<{ lng: string }> }) => {
     const { lng } = await params;
     const { t } = await getTranslation(lng, 'drag-drop');
     return (
-        <div className="mt-24 px-2 sm:px-0">
+        <div className="mt-24 px-2 pb-20 sm:px-0">
             <div className="flex flex-col items-center justify-center space-y-6 sm:space-y-12">
                 <div className="space-y-4 text-center">
                     <p className="text-2xl font-bold sm:text-6xl">

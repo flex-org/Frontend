@@ -57,3 +57,20 @@ export interface Features {
 export interface DraggedFeatures extends Features {
     instanceId: string;
 }
+
+export interface SellingSystem {
+    description: string;
+    id: number;
+    name: string;
+}
+
+export interface SliderInputProps {
+    value: number;
+    setValue: (val: number) => void;
+    min: number;
+    max: number;
+    step: number;
+    lng: string;
+    title: string;
+    label: string;
+}

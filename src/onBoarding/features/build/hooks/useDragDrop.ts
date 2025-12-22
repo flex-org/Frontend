@@ -1,5 +1,5 @@
 import { useTranslation } from '@/i18n/client';
-import { useGlobalStore } from '@/onBoarding/store/globalStore';
+import { useDragDropStore } from '@/onBoarding/store/DragDropStore';
 import { DraggedFeatures, Features } from '@/onBoarding/types';
 import {
     DragEndEvent,
@@ -20,7 +20,7 @@ const useDragDrop = (lng: string) => {
         addActiveItem,
         removeAvailableFeature,
         addAvailableFeature,
-    } = useGlobalStore();
+    } = useDragDropStore();
     const { t } = useTranslation(lng, 'drag-drop');
 
     const sensors = useSensors(
