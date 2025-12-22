@@ -40,7 +40,7 @@ const DomainContentClient = ({ lng }: { lng: string }) => {
                     placeholder={t('write-domain')}
                     value={domain}
                     onChange={handleInputChange}
-                    className={`h-11 w-full rounded-md border bg-white ring transition-all outline-none focus:shadow-md ${lng === 'ar' ? 'pr-2 pl-33' : 'pr-33 pl-2'} ${showError ? 'border-red-500 ring-red-500' : ''} ${showSuccess ? 'border-green-500 ring-green-500' : ''}`}
+                    className={`h-11 w-full rounded-md border bg-white ring transition-all outline-none focus:shadow-md dark:bg-green-950 dark:text-gray-200 ${lng === 'ar' ? 'pr-2 pl-33' : 'pr-33 pl-2'} ${showError ? 'border-red-500 ring-red-500' : ''} ${showSuccess ? 'border-green-500 ring-green-500' : ''}`}
                 />
                 <div
                     className={`absolute top-[50%] ${lng === 'ar' ? 'left-0 pl-2' : 'right-0 pr-2'} -translate-y-[50%]`}
@@ -54,7 +54,7 @@ const DomainContentClient = ({ lng }: { lng: string }) => {
                     )}
                 </div>
                 <div
-                    className={`absolute top-0 flex h-full items-center ${lng === 'ar' ? 'left-[24%] -translate-x-[50%] sm:left-[20%]' : 'right-[24%] translate-x-[50%] sm:right-[20%]'}`}
+                    className={`absolute top-0 flex h-full items-center font-bold dark:text-gray-300 ${lng === 'ar' ? 'left-[24%] -translate-x-[50%] sm:left-[20%]' : 'right-[24%] translate-x-[50%] sm:right-[20%]'}`}
                 >
                     .platme.com
                 </div>
