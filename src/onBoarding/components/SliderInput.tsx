@@ -52,7 +52,6 @@ const SliderInput = ({
                             max={max}
                             name="slider"
                             step={step}
-                            onBoarding={true}
                             aria-label={label}
                             onValueChange={handleSliderChange}
                         />

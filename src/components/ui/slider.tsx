@@ -11,7 +11,6 @@ function Slider({
     value,
     min = 0,
     max = 100,
-    onBoarding = false,
     ...props
 }: React.ComponentProps<typeof SliderPrimitive.Root>) {
     const _values = React.useMemo(
@@ -39,14 +38,16 @@ function Slider({
         >
             <SliderPrimitive.Track
                 data-slot="slider-track"
+                // original was bg-muted instead of `${onBoarding ? 'bg-muted dark:bg-green-300/20' : 'bg-muted'} that currently is bg-muted dark:bg-green-300/20
                 className={cn(
-                    `${onBoarding ? 'bg-muted dark:bg-green-300/20' : 'bg-muted'} relative grow overflow-hidden rounded-full data-[orientation=horizontal]:h-1.5 data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-1.5`,
+                    `bg-muted relative grow overflow-hidden rounded-full data-[orientation=horizontal]:h-1.5 data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-1.5 dark:bg-green-300/20`,
                 )}
             >
                 <SliderPrimitive.Range
                     data-slot="slider-range"
+                    // original was bg-primary instead of ${onBoarding ? 'bg-green-700' : 'bg-primary'}
                     className={cn(
-                        ` ${onBoarding ? 'bg-green-700' : 'bg-primary'} absolute data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full`,
+                        `absolute bg-green-700 data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full`,
                     )}
                 />
             </SliderPrimitive.Track>
