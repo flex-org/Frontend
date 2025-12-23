@@ -1,21 +1,22 @@
-
 const BASE_URL = process.env.BASE_URL;
-
 export const fetchAPI = async (url: string, options: RequestInit) => {
     const response = await fetch(`${BASE_URL}${url}`, {
+        ...options,
         headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
             ...options.headers,
         },
-        ...options,
     });
+    const contentType = response.headers.get('content-type');
     if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        const errorMessage =
-            errorData.message ||
-            `HTTP Error: ${response.statusText} ${response.status}`;
-        throw new Error(errorMessage);
+        if (contentType?.includes('application/json')) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Request failed');
+        }
+        const text = await response.text();
+        throw new Error(text || `HTTP Error ${response.status}`);
     }
-    return response.json();
+    if (contentType?.includes('application/json')) {
+        return response.json();
+    }
+    return response.text();
 };

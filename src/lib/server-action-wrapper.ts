@@ -23,11 +23,6 @@ export async function createSafeAction<T>(
         } else {
             finalError = new Error('An unexpected error occurred.');
         }
-
-        /* NOTE: In Production, Next.js may strip the 'stack' property 
-           from Error objects passed from Server to Client for security.
-           However, 'message' and 'name' will remain intact.
-        */
         return { data: null, error: finalError };
     }
 }

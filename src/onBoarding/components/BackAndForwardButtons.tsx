@@ -19,15 +19,16 @@ const BackAndForwardButtons = ({
     return (
         <div className="mb-8 flex justify-between">
             <div className="flex justify-start">
-                {pathname !== `/${lng}/build` && (
-                    <Button
-                        size="lg"
-                        variant={'outline'}
-                        onClick={() => router.back()}
-                    >
-                        {t('back')}
-                    </Button>
-                )}
+                {pathname !== `/${lng}/build` ||
+                    (pathname !== `/${lng}/gomaa` && (
+                        <Button
+                            size="lg"
+                            variant={'outline'}
+                            onClick={() => router.back()}
+                        >
+                            {t('back')}
+                        </Button>
+                    ))}
             </div>
             <div className="flex justify-end">
                 <Button

@@ -1,6 +1,6 @@
 import { getTranslation } from '@/i18n/server';
 import PreferencesContent from '@/onBoarding/features/preferences/components/PreferencesContent';
-import PreferencesSkeleton from '@/onBoarding/skeletons/PreferencesSkeleton';
+import PreferencesSkeleton from '@/onBoarding/features/preferences/components/PreferencesSkeleton';
 import { AlertCircle } from 'lucide-react';
 import { Suspense } from 'react';
 

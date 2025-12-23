@@ -1,6 +1,6 @@
 import { getTranslation } from '@/i18n/server';
 import DragAndDropContent from '@/onBoarding/features/build/components/DragAndDropContent';
-import DragDropSkeleton from '@/onBoarding/skeletons/DragDropSkeleton';
+import DragDropSkeleton from '@/onBoarding/features/build/components/DragDropSkeleton';
 import { Suspense } from 'react';
 
 export const generateMetadata = async ({

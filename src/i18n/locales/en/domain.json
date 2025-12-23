@@ -5,5 +5,15 @@
     "only-english-domain": "Domain must be in english only, with no numbers or special characters except (-)",
     "domain-available": "This domain is available",
     "domain-not-available": "This domain is not available",
-    "domain-error": "Error occurred while checking the domain, please try again"
+    "domain-error": "Error occurred while checking the domain, please try again",
+    "do-not-refresh": "Please, don't refresh the page so that you don't lose any progress",
+    "smart-assistant": "Smart assistant",
+    "ai-help": "Let AI help you build your platform",
+    "ask-ai": "Ask Gomaa...",
+    "platme-assistant": "Platme Assistant",
+    "powered-by": "Powered by Gomaa",
+    "gomaa-error": "An error occurred, please try again",
+    "welcome-message": "Hello, I'm Gomaa, your smart platform engineer from Platme 👋<br> To design the perfect platform for you, tell me: What is the primary type of content you plan to offer? (Recorded videos, live sessions, or files and articles?)",
+    "completed": "This chat has ended, please move to the next step",
+    "auto-redirect":"You will be redirected to the next step in "
 }

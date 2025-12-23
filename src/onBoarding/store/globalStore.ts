@@ -6,6 +6,10 @@ interface Props {
     resetCount: () => void;
     domain: string;
     setDomain: (domain: string) => void;
+    isYearly: boolean;
+    toggleYearly: () => void;
+    period: string;
+    setPeriod: (key: string) => void;
 }
 
 export const useGlobalStore = create<Props>((set) => ({
@@ -14,4 +18,8 @@ export const useGlobalStore = create<Props>((set) => ({
     resetCount: () => set({ count: 0 }),
     domain: '',
     setDomain: (domain: string) => set({ domain: domain }),
+    isYearly: false,
+    toggleYearly: () => set((state) => ({ isYearly: !state.isYearly })),
+    period: 'monthly',
+    setPeriod: (key: string) => set({ period: key }),
 }));

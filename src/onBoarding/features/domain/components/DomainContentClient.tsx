@@ -4,7 +4,7 @@ import { Spinner } from '@/components/ui/spinner';
 import { useTranslation } from '@/i18n/client';
 import BackAndForwardButtons from '@/onBoarding/components/BackAndForwardButtons';
 import { useGlobalStore } from '@/onBoarding/store/globalStore';
-import { CircleAlert, CircleCheck } from 'lucide-react';
+import { AlertCircle, CircleAlert, CircleCheck } from 'lucide-react';
 import useCheckDomain from '../hooks/useCheckDomain';
 import { ChangeEvent, useState } from 'react';
 import Messages from './Messages';
@@ -23,6 +23,7 @@ const DomainContentClient = ({ lng }: { lng: string }) => {
     const showSuccess = !isPending && result?.success === true;
     const showError =
         !isPending && result !== null && result?.success === false;
+
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const val = e.target.value;
         const cleanValue = val.replace(/[^a-zA-Z-]/g, '').toLowerCase();
@@ -35,6 +36,10 @@ const DomainContentClient = ({ lng }: { lng: string }) => {
     };
     return (
         <div className="mt-24 flex h-full w-full max-w-sm flex-col gap-2">
+            <div className="mb-4 flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                <AlertCircle className="size-3" />
+                <p className="text-xs">{t('do-not-refresh')}</p>
+            </div>
             <div className="relative flex w-full items-center justify-center">
                 <input
                     placeholder={t('write-domain')}

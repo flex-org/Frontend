@@ -74,3 +74,24 @@ export interface SliderInputProps {
     title: string;
     label: string;
 }
+
+export interface BotResponse {
+    bot: string;
+    features: Features[];
+    status: string;
+    user: string;
+}
+
+export interface Message {
+    role: 'user' | 'bot';
+    content: string;
+}
+
+export interface createPlatformData {
+    billing_cycle: string;
+    domain: string;
+    features: number[];
+    selling_system: number[];
+    storage: number;
+    capacity: number;
+}

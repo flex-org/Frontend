@@ -23,8 +23,7 @@ const FormSchema = z.object({
 });
 const VerifyEmail = ({ lng }: { lng: string }) => {
     const { t } = useTranslation(lng, 'onBoarding-auth');
-    const { email, token, clearUserData, user } = useAuthStore();
-    console.log(user, token);
+    const { email, token, clearUserData } = useAuthStore();
     const [isPending, startTransition] = useTransition();
     const router = useRouter();
     const {

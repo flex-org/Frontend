@@ -31,7 +31,7 @@ const AiCard = async ({ lng }: { lng: string }) => {
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                <Link href={`/${lng}/chat`}>
+                <Link href={`/${lng}/gomaa`}>
                     <Button
                         variant={null}
                         className="w-full bg-gray-100 font-bold text-black hover:bg-gray-300 active:bg-gray-400"

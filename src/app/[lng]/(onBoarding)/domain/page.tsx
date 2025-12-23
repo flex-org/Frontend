@@ -1,6 +1,21 @@
 import { getTranslation } from '@/i18n/server';
 import DomainContent from '@/onBoarding/features/domain/components/DomainContent';
 
+export const generateMetadata = async ({
+    params,
+}: {
+    params: Promise<{ lng: string }>;
+}) => {
+    const { lng } = await params;
+    return {
+        title: lng === 'ar' ? 'إعداد الدومين' : 'Domain Setup',
+        description:
+            lng === 'ar'
+                ? 'اختر اسم النطاق (الدومين) الخاص بأكاديميتك لتعزيز علامتك التجارية. يمكنك استخدام نطاق فرعي مجاني من بلاتمي لتبدو أكثر احترافية أمام طلابك. خطوة أساسية لبناء هوية رقمية قوية.'
+                : 'Choose your academy domain name to strengthen your brand identity. You can use a free subdomain from Platme for a professional look. A crucial step in building a strong digital presence.',
+    };
+};
+
 const DomainPage = async ({ params }: { params: Promise<{ lng: string }> }) => {
     const { lng } = await params;
     const { t } = await getTranslation(lng, 'domain');
