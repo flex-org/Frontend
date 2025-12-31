@@ -1,4 +1,5 @@
 import HeroSection from '@/onBoarding/features/landing/components/HeroSection';
+import PlatmeNumbers from '@/onBoarding/features/landing/components/PlatmeNumbers';
 import TrustedBy from '@/onBoarding/features/landing/components/TrustedBy';
 
 export const generateMetadata = async ({
@@ -25,6 +26,7 @@ export default async function Home({
         <div>
             <HeroSection lng={lng} />
             <TrustedBy lng={lng} />
+            <PlatmeNumbers lng={lng} />
         </div>
     );
 }
