@@ -9,7 +9,7 @@ const HeroSection = async ({ lng }: { lng: string }) => {
     const session = await auth();
     const isAuthenticated = session?.user.isAuthenticated;
     return (
-        <div className="mt-40 flex flex-col items-center justify-center px-8 lg:px-0">
+        <div className="mx-10 mt-40 flex flex-col items-center justify-center px-8 lg:px-0">
             <div className="grid w-full grid-cols-3">
                 <div className="col-span-3 flex max-w-3xl flex-col justify-center lg:col-span-2">
                     <p className="text-2xl leading-10 font-semibold sm:text-4xl sm:leading-15 md:text-6xl md:leading-23">
