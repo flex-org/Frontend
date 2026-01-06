@@ -10,5 +10,21 @@
     "courses": "Recorded courses",
     "instructors": "Expert Instructors",
     "students": "students enrolled",
-    "numbers-bg-text": "Platme Numbers"
+    "numbers-bg-text": "Platme Numbers",
+    "features-main-title": "Why platme our project?",
+    "features-main-description": "Track progress, create engaging lessons, and share materials instantly — all in one place.",
+    "features": {
+        "insights": {
+            "title": "Insights That Improve Outcomes",
+            "description": "Monitor progress with real-time data to personalize every lesson."
+        },
+        "engage": {
+            "title": "Engage Students Effortlessly",
+            "description": "Design lessons with quizzes, polls, and activities in just a few clicks."
+        },
+        "share": {
+            "title": "Share Any Material, Instantly",
+            "description": "Upload documents, videos, slides, and more. All are instantly supported and ready to share."
+        }
+    }
 }

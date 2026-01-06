@@ -1,4 +1,5 @@
 import HeroSection from '@/onBoarding/features/landing/components/HeroSection';
+import PlatmeFeatures from '@/onBoarding/features/landing/components/PlatmeFeatures';
 import PlatmeNumbers from '@/onBoarding/features/landing/components/PlatmeNumbers';
 import TrustedBy from '@/onBoarding/features/landing/components/TrustedBy';
 
@@ -27,6 +28,7 @@ export default async function Home({
             <HeroSection lng={lng} />
             <TrustedBy lng={lng} />
             <PlatmeNumbers lng={lng} />
+            <PlatmeFeatures lng={lng} />
         </div>
     );
 }
