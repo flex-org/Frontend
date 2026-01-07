@@ -26,5 +26,29 @@
             "title": "Share Any Material, Instantly",
             "description": "Upload documents, videos, slides, and more. All are instantly supported and ready to share."
         }
+    },
+    "whyChoose": {
+        "title": "Why choose platme and the benefits it offers?",
+        "subtitle": "From lesson prep to student engagement, manage everything in one simple platform.",
+        "teachMore": {
+            "title": "Teach More, Prep Less",
+            "description": "One upload. Instant access for every student."
+        },
+        "simplify": {
+            "title": "Simplify Your Workflow",
+            "description": "Organize classes, materials, and students all in one place."
+        },
+        "interactive": {
+            "title": "Make Learning Interactive",
+            "description": "Help every learner stay involved with fun, engaging activities."
+        },
+        "uploads": {
+            "title": "Effortless Uploads for Every Format",
+            "description": "Share documents, videos, presentations, and more — all instantly supported and ready for your students."
+        },
+        "customize": {
+            "title": "Customize Your Look, Instantly",
+            "description": "Switch between themes in one click to match your brand style — no coding needed."
+        }
     }
 }

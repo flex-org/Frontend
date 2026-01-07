@@ -2,6 +2,7 @@ import HeroSection from '@/onBoarding/features/landing/components/HeroSection';
 import PlatmeFeatures from '@/onBoarding/features/landing/components/PlatmeFeatures';
 import PlatmeNumbers from '@/onBoarding/features/landing/components/PlatmeNumbers';
 import TrustedBy from '@/onBoarding/features/landing/components/TrustedBy';
+import WhyChoosePlatme from '@/onBoarding/features/landing/components/WhyChoosePlatme';
 
 export const generateMetadata = async ({
     params,
@@ -29,6 +30,7 @@ export default async function Home({
             <TrustedBy lng={lng} />
             <PlatmeNumbers lng={lng} />
             <PlatmeFeatures lng={lng} />
+            <WhyChoosePlatme lng={lng} />
         </div>
     );
 }
