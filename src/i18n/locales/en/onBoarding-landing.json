@@ -103,5 +103,27 @@
             "messagePlaceholder": "Write down hint about your idea",
             "button": "Send message"
         }
+    },
+    "footer": {
+        "description": "We help your business grow to an international scale.",
+        "company": {
+            "title": "Company",
+            "features": "Features",
+            "pricing": "Pricing",
+            "team": "Team",
+            "about": "About"
+        },
+        "legal": {
+            "title": "Legal Links",
+            "terms": "Terms of Service",
+            "privacy": "Privacy Policy",
+            "cookies": "Cookies Policy"
+        },
+        "resources": {
+            "title": "Resources",
+            "blog": "Blog",
+            "help": "Help"
+        },
+        "copyright": "© 2026 Platmy. All rights reserved."
     }
 }
