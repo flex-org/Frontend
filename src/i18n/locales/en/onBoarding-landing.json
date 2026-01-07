@@ -50,5 +50,25 @@
             "title": "Customize Your Look, Instantly",
             "description": "Switch between themes in one click to match your brand style — no coding needed."
         }
+    },
+    "startingPoint": {
+        "title": "Choose Your Starting Point",
+        "subtitle": "Build from scratch with our drag-and-drop editor, or let our AI create the perfect platform for you.",
+        "build": {
+            "title": "Build by Yourself",
+            "description": "Take full control and drag-and-drop features to create your custom platform layout.",
+            "button": "Start Building",
+            "feature1": "Drag and drop features",
+            "feature2": "Real-time preview",
+            "feature3": "Complete customization"
+        },
+        "ai": {
+            "title": "Let AI Help You",
+            "description": "Answer a few simple questions and let AI design the perfect platform for your needs.",
+            "button": "Start With AI",
+            "feature1": "Step-by-step guidance",
+            "feature2": "Smart recommendations",
+            "feature3": "Personalized setup"
+        }
     }
 }
