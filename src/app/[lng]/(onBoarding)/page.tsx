@@ -4,6 +4,7 @@ import PlatmeNumbers from '@/onBoarding/features/landing/components/PlatmeNumber
 import TrustedBy from '@/onBoarding/features/landing/components/TrustedBy';
 import WhyChoosePlatme from '@/onBoarding/features/landing/components/WhyChoosePlatme';
 import StartingPoint from '@/onBoarding/features/landing/components/StartingPoint';
+import FAQ from '@/onBoarding/features/landing/components/FAQ';
 
 export const generateMetadata = async ({
     params,
@@ -33,7 +34,9 @@ export default async function Home({
             <PlatmeFeatures lng={lng} />
             <WhyChoosePlatme lng={lng} />
             <StartingPoint lng={lng} />
+            <FAQ lng={lng} />
         </div>
     );
 }
+
 

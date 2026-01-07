@@ -70,5 +70,38 @@
             "feature2": "Smart recommendations",
             "feature3": "Personalized setup"
         }
+    },
+    "faq": {
+        "title": "Frequently asked questions",
+        "items": {
+            "switchPlans": {
+                "question": "Can I switch plans later?",
+                "answer": "Yes, you can upgrade or downgrade your plan at any time. Changes will take effect at the start of your next billing cycle."
+            },
+            "freeTrial": {
+                "question": "Do you offer a free trial?",
+                "answer": "Yes, we offer a 14-day free trial with full access to all features. No credit card required to get started."
+            },
+            "exceedLimit": {
+                "question": "What if I exceed my student or storage limit?",
+                "answer": "If you exceed your limits, we'll notify you and give you options to upgrade your plan or manage your resources accordingly."
+            },
+            "billing": {
+                "question": "Is billing monthly or yearly?",
+                "answer": "We offer both monthly and yearly billing options. Yearly plans come with a significant discount compared to monthly billing."
+            },
+            "customized": {
+                "question": "What's included in the Customized plan?",
+                "answer": "The Customized plan includes unlimited students, priority support, custom branding, advanced analytics, and dedicated account management."
+            }
+        },
+        "contact": {
+            "title": "Do you have a question?",
+            "description": "Contact our support team to get answers to your questions or to customize a website.",
+            "namePlaceholder": "Full name",
+            "emailPlaceholder": "Email",
+            "messagePlaceholder": "Write down hint about your idea",
+            "button": "Send message"
+        }
     }
 }
