@@ -1,13 +1,17 @@
 import { getTranslation } from '@/i18n/server';
-import Image from 'next/image';
+import Image, { StaticImageData } from 'next/image';
 
-// Temp placeholder images - replace with actual images later
-const PLACEHOLDER_IMAGE = 'https://placehold.co/200x160/d1d5db/d1d5db';
+import TeachMoreImage from '../../../../../public/images/onBoarding/teachMore.png';
+import SimplifyImage from '../../../../../public/images/onBoarding/simplify_your_workflow.png';
+import InteractiveImage from '../../../../../public/images/onBoarding/make_learning_interactive.png';
+import UploadsImage from '../../../../../public/images/onBoarding/effortless_uploading_of_every_format.png';
+import CustomizeImage from '../../../../../public/images/onBoarding/customize_your_look.png';
 
 interface Benefit {
     title: string;
     description: string;
     imagePosition: 'left' | 'right';
+    image: StaticImageData;
 }
 
 const WhyChoosePlatme = async ({ lng }: { lng: string }) => {
@@ -18,26 +22,31 @@ const WhyChoosePlatme = async ({ lng }: { lng: string }) => {
             title: t('whyChoose.teachMore.title'),
             description: t('whyChoose.teachMore.description'),
             imagePosition: 'left',
+            image: TeachMoreImage,
         },
         {
             title: t('whyChoose.simplify.title'),
             description: t('whyChoose.simplify.description'),
             imagePosition: 'right',
+            image: SimplifyImage,
         },
         {
             title: t('whyChoose.interactive.title'),
             description: t('whyChoose.interactive.description'),
             imagePosition: 'left',
+            image: InteractiveImage,
         },
         {
             title: t('whyChoose.uploads.title'),
             description: t('whyChoose.uploads.description'),
             imagePosition: 'right',
+            image: UploadsImage,
         },
         {
             title: t('whyChoose.customize.title'),
             description: t('whyChoose.customize.description'),
             imagePosition: 'left',
+            image: CustomizeImage,
         },
     ];
 
@@ -64,16 +73,15 @@ const WhyChoosePlatme = async ({ lng }: { lng: string }) => {
                                     : 'md:flex-row-reverse'
                                 } items-center gap-6 md:gap-10`}
                         >
-                            {/* Image Placeholder */}
+                            {/* Image */}
                             <div className="flex-shrink-0">
-                                <div className="w-40 h-32 md:w-48 md:h-36 lg:w-52 lg:h-40 bg-gray-300 dark:bg-neutral-700 rounded-lg overflow-hidden">
+                                <div className="w-40 h-32 md:w-48 md:h-36 lg:w-52 lg:h-40 rounded-lg overflow-hidden">
                                     <Image
-                                        src={PLACEHOLDER_IMAGE}
+                                        src={benefit.image}
                                         alt={benefit.title}
                                         width={200}
                                         height={160}
                                         className="w-full h-full object-cover"
-                                        unoptimized
                                     />
                                 </div>
                             </div>
