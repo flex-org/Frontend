@@ -1,19 +1,14 @@
 'use server';
 
-import { LoginFormValues, SignedUpUser, SignupFormValues } from '../types';
+import { LoginFormValues, SignupFormValues } from '../types';
 import { AuthError } from 'next-auth';
 import { auth, signIn, signOut } from '@/auth';
 import { getServerSideToken } from '@/lib/server-auth';
 import { revalidatePath } from 'next/cache';
 
 const BASE_URL = process.env.BASE_URL;
-type SignupSuccess = {
-    user: SignedUpUser;
-    token: string;
-};
-export const signup = async (
-    formData: SignupFormValues,
-): Promise<SignupSuccess> => {
+
+export const signup = async (formData: SignupFormValues) => {
     try {
         const response = await fetch(`${BASE_URL}/signup`, {
             method: 'POST',

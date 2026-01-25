@@ -29,10 +29,7 @@ export interface SignedUpUser {
     phone: string;
     updated_at: string;
 }
-export interface SignedUserData {
-    user: SignedUpUser;
-    token: string;
-}
+
 export interface Features {
     id: number;
     icon: string;
