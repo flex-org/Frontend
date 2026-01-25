@@ -1,43 +1,46 @@
 'use client';
-import { Features } from '@/onBoarding/types';
+import { initialPlatformData } from '@/onBoarding/types';
 import { DndContext, DragOverlay } from '@dnd-kit/core';
 import DraggableArea from './DraggableArea';
 import DroppableArea from './DroppableArea';
 import FeatureItem from './FeatureItem';
 import useDragDrop from '../hooks/useDragDrop';
 import { useEffect } from 'react';
-import { useTranslation } from '@/i18n/client';
 import { useDragDropStore } from '@/onBoarding/store/DragDropStore';
-import { AlertCircle } from 'lucide-react';
 import BackAndForwardButtons from '@/onBoarding/components/BackAndForwardButtons';
 
 const DragAndContentClient = ({
-    features,
     lng,
+    storedData,
 }: {
-    features: Features[];
     lng: string;
+    storedData: initialPlatformData;
 }) => {
-    const { activeItems, initializeAvailableFeatures } = useDragDropStore();
-    const { t } = useTranslation(lng, 'drag-drop');
-    useEffect(() => {
-        initializeAvailableFeatures(features);
-    }, [features, initializeAvailableFeatures]);
-    const {
-        returnFeatureToFeaturesColumn,
-        activeFeature,
-        handleDragStart,
-        handleDragEnd,
-        sensors,
-        availableFeatures,
-    } = useDragDrop(lng);
+    const activeItems = useDragDropStore((state) => state.activeItems);
+    const initializeFromAPI = useDragDropStore(
+        (state) => state.initializeFromAPI,
+    );
+    const addAvailableFeature = useDragDropStore(
+        (state) => state.addAvailableFeature,
+    );
+    const availableFeatures = useDragDropStore(
+        (state) => state.availableFeatures,
+    );
+    const { activeFeature, handleDragStart, handleDragEnd, sensors } =
+        useDragDrop();
 
+    useEffect(() => {
+        if (storedData) {
+            const selectedIds = storedData.selected_features.map((item) =>
+                Number(item.id),
+            );
+            initializeFromAPI(storedData.features, selectedIds, lng);
+        }
+    }, [initializeFromAPI, storedData, lng]);
+    const storedFeatures = activeItems.map((item) => Number(item.id));
+    const finalData = { features: storedFeatures };
     return (
         <div className="space-y-2">
-            <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
-                <AlertCircle className="size-3" />
-                <p className="text-xs sm:text-sm">{t('do-not-refresh')}</p>
-            </div>
             <DndContext
                 sensors={sensors}
                 onDragStart={handleDragStart}
@@ -45,10 +48,7 @@ const DragAndContentClient = ({
             >
                 <div className="grid grid-cols-4 gap-6">
                     <DraggableArea lng={lng} features={availableFeatures} />
-                    <DroppableArea
-                        lng={lng}
-                        onRemove={returnFeatureToFeaturesColumn}
-                    />
+                    <DroppableArea lng={lng} onRemove={addAvailableFeature} />
                 </div>
                 <DragOverlay dropAnimation={null}>
                     {activeFeature ? (
@@ -59,9 +59,11 @@ const DragAndContentClient = ({
                 </DragOverlay>
             </DndContext>
             <BackAndForwardButtons
-                disabled={!activeItems || activeItems.length===0}
+                disabled={!activeItems || activeItems.length === 0}
                 lng={lng}
                 nextPage="preferences"
+                storedData={finalData}
+                endPoint="features"
             />
         </div>
     );

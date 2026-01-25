@@ -22,8 +22,9 @@ const SignInPage = async ({ params }: { params: Promise<{ lng: string }> }) => {
     return (
         <div>
             <AuthHeader lng={lng} />
-            <div className="mx-auto mt-28 grid grid-cols-3 gap-6">
+            <div className="mx-auto mt-12 grid max-w-6xl grid-cols-1 gap-4 rounded-3xl border border-green-300 lg:grid-cols-2 dark:border-green-800">
                 <AuthInfoPart signin={true} lng={lng} />
+                {/* <div className='absolute w-4 h-100 rounded-full dark:bg-green-800 bg-white top-[50%] -translate-y-[50%] left-[50%] -translate-x-[50%]' /> */}
                 <SignInForm lng={lng} />
             </div>
         </div>

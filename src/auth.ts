@@ -17,8 +17,29 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             clientSecret: process.env.AUTH_GITHUB_SECRET,
         }),
         Credentials({
+            credentials: {
+                email: { label: 'Email', type: 'text' },
+                password: { label: 'Password', type: 'password' },
+                token: { label: 'Token', type: 'text' },
+                user: { label: 'User', type: 'text' },
+            },
             // takes all the data of the user and store them in a user object that will be used later in callbacks
             async authorize(credentials) {
+                // this part for successful verify email, no need to login, i already pass the user & token directly to next auth
+                if (credentials?.token && credentials?.user) {
+                    try {
+                        const userData = JSON.parse(credentials.user as string);
+                        return {
+                            ...userData, // id, name, phone, etc.
+                            accessToken: credentials.token,
+                            isAuthenticated: true,
+                        };
+                    } catch (error) {
+                        console.error('Failed to parse user data', error);
+                        return null;
+                    }
+                }
+                // this part for login
                 const parsedCredentials = z
                     .object({
                         email: z.string().email({
@@ -44,6 +65,8 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
                                 ...result.data.user,
                                 accessToken: result.data.access_token,
                                 isAuthenticated: !!result.data.access_token,
+                                isVerified:
+                                    !!result.data.user.email_verified_at,
                             };
                         }
                         return null;
@@ -77,7 +100,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
                     });
                     if (!response.ok) {
                         console.error('Backend refused social login');
-                        return false; 
+                        return false;
                     }
                     const result = await response.json();
                     user.accessToken = result.data.access_token;
@@ -99,6 +122,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
                 token.phone = user.phone;
                 token.accessToken = user.accessToken;
                 token.isAuthenticated = user.isAuthenticated;
+                token.isVerified = user.isVerified;
             }
             // for providers TODO later
             if (account && account.access_token) {
@@ -110,8 +134,9 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         async session({ session, token }) {
             session.user.id = token.id;
             session.user.phone = token.phone;
-            session.user.accessToken = token.accessToken;
             session.user.isAuthenticated = token.isAuthenticated;
+            session.user.isVerified = token.isVerified;
+            // session.user.name = token.name;
             return session;
         },
     },

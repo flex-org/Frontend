@@ -1,10 +1,9 @@
-import { getTranslation } from '@/i18n/server';
+import { TFunction } from 'i18next';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { toast } from 'sonner';
 
-const ErrorBoundaryWarning = async (lng: string) => {
-    const { t } = await getTranslation(lng, 'error');
+const ErrorBoundaryWarning = (t: TFunction, lng: string) => {
     toast.warning(t('error-boundary-warning-word'), {
         description: (
             <div className="space-y-2">
@@ -13,14 +12,12 @@ const ErrorBoundaryWarning = async (lng: string) => {
                     href={`${lng}/contact-us`}
                     className="flex items-center justify-start underline"
                 >
-                    {' '}
                     {t('error-boundary-warning-from-here')}
-                    <ArrowLeft
-                        className={`${lng === 'en' ? 'rotate-180' : ''} size-3`}
-                    />
+                    <ArrowLeft className={`size-3 ltr:rotate-180`} />
                 </Link>
             </div>
         ),
+        duration: 5000,
     });
 };
 

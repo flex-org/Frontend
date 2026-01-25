@@ -1,16 +1,19 @@
 import { Input } from '@/components/ui/input';
 import { FormFieldProps } from '../types';
-import { FieldValues, get } from 'react-hook-form';
+import { get, useFormContext, FieldValues } from 'react-hook-form';
 
-function FormField<TFormValues extends FieldValues>({
-    register,
-    errors,
+function FormField<T extends FieldValues = FieldValues>({
     name,
     label,
     placeholder,
     type = 'text',
     suffix,
-}: FormFieldProps<TFormValues>) {
+    autoComplete,
+}: FormFieldProps<T>) {
+    const {
+        formState: { errors },
+        register,
+    } = useFormContext();
     const error = errors ? get(errors, name as string) : undefined;
 
     return (
@@ -24,10 +27,13 @@ function FormField<TFormValues extends FieldValues>({
                     type={type}
                     placeholder={placeholder}
                     {...register(name)}
-                    className={`rounded-sm border border-gray-400 bg-white p-2 transition-[color,box-shadow] focus-visible:ring-2 focus-visible:ring-green-600/40 dark:border-gray-600 ${suffix ? 'pr-10' : ''}`}
+                    autoComplete={autoComplete}
+                    className={`h-11 rounded-sm border border-gray-400 bg-white p-2 transition-[color,box-shadow] focus-visible:ring-2 focus-visible:ring-green-600/40 dark:border-gray-600 ${suffix ? 'pe-10' : ''}`}
                 />
                 {suffix && (
-                    <div className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-500">
+                    <div
+                        className={`absolute end-3 top-1/2 -translate-y-1/2 text-gray-500`}
+                    >
                         {suffix}
                     </div>
                 )}

@@ -1,174 +1,257 @@
 'use client';
+
 import { useTranslation } from '@/i18n/client';
-import { useDragDropStore } from '@/onBoarding/store/DragDropStore';
-import { useGlobalStore } from '@/onBoarding/store/globalStore';
-import { usePreferencesStore } from '@/onBoarding/store/preferencesStore';
-import { useEffect } from 'react';
+import CustomSliderButton from '@/onBoarding/components/CustomSliderButton';
+import { dynamicDataProps, initialPlatformData } from '@/onBoarding/types';
+import {
+    Check,
+    Database,
+    Globe,
+    Users,
+    ShieldCheck,
+    ShoppingCart,
+    Smartphone,
+    CircleCheck,
+    CircleX,
+} from 'lucide-react';
+import { useState } from 'react';
 
-const PaymentDetailsColumn = ({ lng }: { lng: string }) => {
+const PaymentDetailsColumn = ({
+    lng,
+    finalData,
+    dynamicData,
+}: {
+    lng: string;
+    finalData: initialPlatformData;
+    dynamicData: dynamicDataProps;
+}) => {
     const { t } = useTranslation(lng, 'payment');
-    const { activeItems } = useDragDropStore();
-    const { studentsValue, storageValue } = usePreferencesStore();
-    const { domain, isYearly, toggleYearly, setPeriod } = useGlobalStore();
+    const [isYearly, setIsYearly] = useState(false);
 
-    useEffect(() => {
+    const activeItems = finalData.selected_features || [];
+    const sellingSystems = finalData.selected_selling_systems || [];
+    const studentsCount = finalData.capacity;
+    const storageCount = finalData.storage;
+    const hasMobileApp = finalData.mobile_app;
+    const domain = finalData.domain;
+
+    const featuresPrices = activeItems.reduce(
+        (acc, item) => acc + Number(item.price),
+        0,
+    );
+    const mobileAppPrice = dynamicData.mobile_app.price;
+    const studentsPrice = dynamicData.capacity.price * studentsCount;
+    const storagePrice = dynamicData.storage.price * storageCount;
+
+    const totalBeforeDiscount =
+        Number(mobileAppPrice) +
+        Number(studentsPrice) +
+        Number(storagePrice) +
+        Number(featuresPrices);
+
+    const discount = isYearly ? totalBeforeDiscount * 0.2 : 0;
+    const total = totalBeforeDiscount - discount;
+
+    const handlePlanChange = () => {
         if (isYearly) {
-            setPeriod('yearly');
+            setIsYearly(false);
         } else {
-            setPeriod('monthly');
+            setIsYearly(true);
         }
-    }, [isYearly, setPeriod]);
+    };
     return (
-        <div className="animate-in fade-in slide-in-from-bottom-2 col-span-1 h-fit overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-xl shadow-gray-200/50 transition-all duration-300 sm:col-span-2 md:col-span-3 lg:col-span-3 dark:border-green-800 dark:bg-green-950 dark:shadow-green-900/20">
-            {/* Header Section */}
-            <div className="bg-gray-50/50 p-6 dark:bg-green-900/20">
-                <div className="flex items-center justify-between">
-                    <h2 className="text-xl font-bold text-gray-900 dark:text-green-50">
-                        {t('payment-details')}
-                    </h2>
+        <div className="animate-in fade-in slide-in-from-top-2 relative col-span-1 h-fit overflow-hidden rounded-3xl border border-green-100 bg-white tracking-widest shadow-xl shadow-green-900/5 duration-300 sm:col-span-2 md:col-span-3 lg:col-span-3 dark:border-green-800 dark:bg-linear-to-r dark:from-neutral-950 dark:to-green-950 dark:shadow-green-900/20">
+            {/* Top Green Bar */}
+            <div className="absolute top-0 left-0 h-2 w-full bg-linear-to-r from-green-500 to-green-700" />
 
-                    {/* Toggle Button Container */}
-                    <div className="flex items-center gap-3 rounded-full bg-white px-3 py-1.5 shadow-sm ring-1 ring-gray-200 dark:bg-green-900 dark:ring-green-800">
-                        <span
-                            className={`text-xs font-medium ${isYearly ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-green-300/70'}`}
-                        >
-                            {t('pay-yearly')}{' '}
-                            <span className="hidden sm:inline">
-                                ({t('off')})
-                            </span>
-                        </span>
-                        <button
-                            type="button"
-                            title="pay yearly"
-                            onClick={toggleYearly}
-                            className={`relative h-6 w-11 cursor-pointer rounded-full transition-colors duration-300 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:outline-none dark:focus:ring-offset-green-900 ${
-                                isYearly
-                                    ? 'bg-green-600'
-                                    : 'bg-gray-300 dark:bg-green-800'
-                            }`}
-                        >
-                            <span
-                                className={`absolute top-0.5 left-0.5 inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition duration-300 ease-in-out ${
-                                    isYearly ? 'translate-x-5' : 'translate-x-0'
-                                }`}
-                            />
-                        </button>
-                    </div>
+            {/* Header Section */}
+            <div className="space-y-6 p-6 pb-4">
+                <div className="flex items-center justify-between">
+                    <h2 className="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+                        {t('platform-summary')}
+                    </h2>
                 </div>
+
+                {/* Toggle (Green Themed) */}
+                <CustomSliderButton
+                    lng={lng}
+                    onChange={handlePlanChange}
+                    value={isYearly}
+                    yesLabel={t('pay-yearly')}
+                    noLabel={t('pay-monthly')}
+                    classNames="w-[70%] mx-auto h-12"
+                    payment={true}
+                    buttonsClassNames="py-2"
+                />
             </div>
 
-            <div className="p-6">
-                {/* Features List */}
-                <div className="mb-6">
-                    <h3 className="mb-4 text-sm font-semibold tracking-wider text-gray-500 uppercase dark:text-green-400/80">
-                        {t('features')}
-                    </h3>
-                    <div className="space-y-3">
-                        {activeItems.length > 0 ? (
-                            activeItems.map((item) => (
-                                <div
-                                    key={item.id}
-                                    className="flex items-start justify-between text-sm"
-                                >
-                                    <div className="flex flex-col">
-                                        <span className="font-medium text-gray-700 dark:text-green-100">
-                                            {item.name}
-                                        </span>
-                                    </div>
-                                    <span className="font-semibold text-gray-900 dark:text-green-50">
-                                        {item.price}
-                                    </span>
-                                </div>
-                            ))
-                        ) : (
-                            <p className="text-sm text-gray-400 italic dark:text-green-400/50">
-                                {t('no-selected')}
-                            </p>
-                        )}
+            <div className="px-6">
+                {/* 1. Resources Grid (Green Cards) */}
+                <div className="mb-6 grid grid-cols-2 gap-3">
+                    {/* Students Card */}
+                    <div className="flex items-center justify-between rounded-2xl border border-green-50 bg-green-50/50 p-4 dark:border-green-800/50 dark:bg-green-900/20">
+                        <div className="flex flex-col gap-1">
+                            <div className="flex items-center gap-2 text-xs font-semibold tracking-wide text-green-600/80 uppercase dark:text-green-400">
+                                <Users className="size-4" />
+                                {t('students')}
+                            </div>
+                            <span className="text-xl font-bold text-gray-900 dark:text-white">
+                                {studentsCount}
+                            </span>
+                        </div>
+                        <span className="rounded-md bg-green-200/60 p-1 dark:bg-green-600/40">
+                            {studentsPrice}$
+                        </span>
                     </div>
-                </div>
-
-                {/* Divider with Green Tint */}
-                <div className="my-6 h-px bg-gray-100 dark:bg-green-800/50" />
-
-                {/* Preferences List */}
-                <div className="mb-6">
-                    <h3 className="mb-4 text-sm font-semibold tracking-wider text-gray-500 uppercase dark:text-green-400/80">
-                        {t('preferences')}
-                    </h3>
-                    <div className="space-y-3 text-sm">
-                        <div className="flex items-center justify-between">
-                            <span className="text-gray-600 dark:text-green-200/80">
-                                {t('number-of-students')}{' '}
-                                <span className="font-bold text-gray-900 dark:text-green-100">
-                                    {studentsValue}
+                    {/* Storage Card */}
+                    <div className="flex items-center justify-between rounded-2xl border border-green-50 bg-green-50/50 p-4 dark:border-green-800/50 dark:bg-green-900/20">
+                        <div className="flex flex-col gap-1">
+                            <div className="flex items-center gap-2 text-xs font-semibold tracking-wide text-green-600/80 uppercase dark:text-green-400">
+                                <Database className="size-4" />
+                                {t('storage')}
+                            </div>
+                            <span className="text-xl font-bold text-gray-900 dark:text-white">
+                                {storageCount}
+                                <span className="text-sm font-medium text-gray-500 dark:text-green-200/50">
+                                    {t('gb')}
                                 </span>
                             </span>
-                            <span className="font-semibold text-gray-900 dark:text-green-50">
-                                $14.00
-                            </span>
                         </div>
-                        <div className="flex items-center justify-between">
-                            <span className="text-gray-600 dark:text-green-200/80">
-                                {t('storage')}:{' '}
-                                <span className="font-bold text-gray-900 dark:text-green-100">
-                                    {storageValue}
-                                </span>{' '}
-                                GB
-                            </span>
-                            <span className="font-semibold text-gray-900 dark:text-green-50">
-                                $15.00
-                            </span>
-                        </div>
+                        <span className="rounded-md bg-green-200/60 p-1 dark:bg-green-600/40">
+                            {storagePrice}$
+                        </span>
                     </div>
                 </div>
 
-                {/* Domain Section - Green Card Style */}
-                <div className="mb-6 rounded-xl border border-green-100 bg-green-50/50 p-4 dark:border-green-700/50 dark:bg-green-900/40">
-                    <div className="flex items-center justify-between">
-                        <span className="font-medium text-green-800 dark:text-green-300">
-                            {t('domain')}
+                {/* 2. Domain (Verified Bar Style) */}
+                <div className="mb-6 flex items-center gap-3 rounded-xl border border-green-200 bg-white p-3 shadow-sm ring-1 ring-green-50 dark:border-green-800 dark:bg-green-950 dark:ring-green-900">
+                    <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-green-100 text-green-600 dark:bg-green-900 dark:text-green-400">
+                        <Globe className="size-5" />
+                    </div>
+                    <div className="flex flex-col overflow-hidden">
+                        <span className="text-xs font-bold tracking-wider text-gray-400 uppercase dark:text-green-200/50">
+                            {t('platform-link')}
                         </span>
                         <span
-                            className="font-bold text-green-700 dark:text-green-100"
+                            className="truncate text-sm font-bold text-gray-900 dark:text-green-50"
                             dir="ltr"
                         >
+                            <span className="text-green-600 dark:text-green-400">
+                                https://
+                            </span>
                             {domain}.platme.com
                         </span>
                     </div>
                 </div>
-                <div className="my-6 h-px bg-gray-100 dark:bg-green-800/50" />
-                {/* Totals Section */}
-                <div className="space-y-3">
-                    <div className="flex justify-between text-sm text-gray-600 dark:text-green-200/70">
-                        <span>{t('subtotal')}</span>
-                        <span className="font-medium text-gray-900 dark:text-white">
-                            $49.00
-                        </span>
+
+                {/* 3. Selling Systems Section (New!) */}
+                {sellingSystems.length > 0 && (
+                    <div className="mb-6">
+                        <h3 className="mb-3 flex items-center gap-2 text-xs font-bold tracking-wider text-gray-400 uppercase dark:text-green-200/50">
+                            <ShoppingCart className="size-3.5" />
+                            {t('selling-systems')}
+                        </h3>
+                        <div className="flex flex-wrap gap-2">
+                            {sellingSystems.map((sys) => (
+                                <span
+                                    key={sys.id}
+                                    className="inline-flex items-center rounded-md bg-green-50 px-2.5 py-1.5 text-xs font-medium text-green-700 ring-1 ring-green-600/20 dark:bg-green-900/40 dark:text-green-300 dark:ring-green-500/30"
+                                >
+                                    {sys.name}
+                                </span>
+                            ))}
+                        </div>
                     </div>
-                    <div className="flex justify-between text-sm text-green-600 dark:text-green-400">
-                        <span>{t('discount')} (20%)</span>
-                        <span className="font-medium">-$11.00</span>
+                )}
+                <div className="mb-6">
+                    <h3 className="mb-3 flex items-center gap-2 text-xs font-bold tracking-wider text-gray-400 uppercase dark:text-green-200/50">
+                        <Smartphone className="size-3.5" />
+                        {t('mobile-app')}
+                    </h3>
+                    <div
+                        className={`flex w-full flex-wrap items-center justify-between rounded-md p-2.5 text-sm font-medium ${hasMobileApp ? 'bg-green-50 text-green-700 ring-green-600/20 dark:bg-green-900/40 dark:text-green-300 dark:ring-green-500/30' : 'bg-gray-50 text-gray-500 ring-gray-600/20 dark:bg-gray-900/40 dark:text-gray-400 dark:ring-gray-500/30'} ring-1`}
+                    >
+                        <span className="inline-flex items-center gap-2">
+                            {hasMobileApp ? t('mobile') : t('no-mobile')}
+                            {hasMobileApp ? (
+                                <CircleCheck size={15} />
+                            ) : (
+                                <CircleX size={15} />
+                            )}
+                        </span>
+                        <span>{mobileAppPrice}$</span>
+                    </div>
+                </div>
+
+                {/* 4. Features List */}
+                <div className="mb-6">
+                    <h3 className="mb-3 flex items-center gap-2 text-xs font-bold tracking-wider text-gray-400 uppercase dark:text-green-200/50">
+                        <Check className="size-3.5" />
+                        {t('selected-features')}
+                    </h3>
+                    <div className="space-y-3 rounded-xl bg-gray-50/50 p-4 dark:bg-green-900/10">
+                        {activeItems.length > 0 ? (
+                            activeItems.map((item) => (
+                                <div
+                                    key={item.id}
+                                    className="group flex items-center justify-between text-sm"
+                                >
+                                    <span className="font-medium text-gray-700 transition-colors group-hover:text-green-700 dark:text-gray-300 dark:group-hover:text-green-300">
+                                        {item.name}
+                                    </span>
+                                    <span className="font-mono font-medium text-gray-400 dark:text-gray-500">
+                                        {item.price}$
+                                    </span>
+                                </div>
+                            ))
+                        ) : (
+                            <span className="text-sm text-gray-400 italic">
+                                {t('no-features')}
+                            </span>
+                        )}
+                    </div>
+                </div>
+
+                <div className="my-6 border-t border-dashed border-gray-200 dark:border-green-800" />
+
+                <div className="space-y-3 pb-6">
+                    <div className="flex justify-between text-sm font-medium text-gray-500 dark:text-green-200/60">
+                        <span>{t('subtotal')}</span>
+                        <span>${totalBeforeDiscount.toFixed(2)}</span>
                     </div>
 
-                    <div className="mt-4 flex items-end justify-between border-t border-dashed border-gray-200 pt-4 dark:border-green-800">
-                        <span className="text-lg font-bold text-gray-900 dark:text-green-50">
-                            {t('total')}
-                        </span>
-                        <div className="flex flex-col items-end">
-                            <span className="text-2xl font-extrabold text-green-600 dark:text-green-400">
-                                $38.00
+                    {isYearly && (
+                        <div className="flex justify-between text-sm font-medium text-green-600 dark:text-green-400">
+                            <span>{t('discount')} (20%)</span>
+                            <span>-${discount.toFixed(2)}</span>
+                        </div>
+                    )}
+
+                    <div className="flex items-end justify-between pt-2">
+                        <div className="flex flex-col">
+                            <span className="text-sm font-bold text-gray-900 dark:text-white">
+                                {t('total-due')}
                             </span>
-                            <span className="text-xs text-gray-400 dark:text-green-400/60">
-                                {isYearly ? '/ year' : '/ month'}
+                            <span className="text-xs text-green-600/80 dark:text-green-400/80">
+                                {t('secure-checkout')}
+                            </span>
+                        </div>
+                        <div className="text-right">
+                            <span className="block text-3xl font-extrabold text-green-700 dark:text-green-400">
+                                ${total.toFixed(2)}
+                            </span>
+                            <span className="text-xs font-medium text-gray-400 dark:text-green-200/40">
+                                / {isYearly ? t('year') : t('month')}
                             </span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* Bottom Color Bar */}
-            <div className="h-1.5 w-full bg-linear-to-r from-green-500 to-green-600 dark:from-green-600 dark:to-green-400" />
+            <div className="flex items-center justify-center gap-2 bg-green-50 py-3 text-xs font-semibold text-green-700 dark:bg-green-900 dark:text-green-300">
+                <ShieldCheck className="size-3.5" />
+                {t('encrypted-payment')}
+            </div>
         </div>
     );
 };

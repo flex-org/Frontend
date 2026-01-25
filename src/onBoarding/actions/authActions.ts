@@ -1,13 +1,10 @@
 'use server';
 
-import {
-    ActionResponse,
-    LoginFormValues,
-    SignedUpUser,
-    SignupFormValues,
-} from '../types';
+import { LoginFormValues, SignedUpUser, SignupFormValues } from '../types';
 import { AuthError } from 'next-auth';
 import { auth, signIn, signOut } from '@/auth';
+import { getServerSideToken } from '@/lib/server-auth';
+import { revalidatePath } from 'next/cache';
 
 const BASE_URL = process.env.BASE_URL;
 type SignupSuccess = {
@@ -16,7 +13,7 @@ type SignupSuccess = {
 };
 export const signup = async (
     formData: SignupFormValues,
-): Promise<ActionResponse<SignupSuccess>> => {
+): Promise<SignupSuccess> => {
     try {
         const response = await fetch(`${BASE_URL}/signup`, {
             method: 'POST',
@@ -100,7 +97,7 @@ export const login = async (data: LoginFormValues) => {
             password: data.password,
             redirect: false,
         });
-
+        revalidatePath('/', 'layout');
         return { success: true };
     } catch (error) {
         if (error instanceof AuthError) {
@@ -114,25 +111,12 @@ export const login = async (data: LoginFormValues) => {
         throw error;
     }
 };
-// export const loginWithGoogle = async () => {
-//     try {
-//         await signIn('google', { redirect: false });
-//     } catch (error) {
-//         throw error;
-//     }
-// };
-// export const loginWithGithub = async () => {
-//     try {
-//         await signIn('github', { redirect: false });
-//     } catch (error) {
-//         throw error;
-//     }
-// };
 
 export const logout = async () => {
     const session = await auth();
+    const accessToken = await getServerSideToken();
+    if (!accessToken) throw new Error('Unauthorized');
     const isAuthenticated = session?.user?.isAuthenticated;
-    const accessToken = session?.user?.accessToken;
     if (isAuthenticated) {
         try {
             await fetch(`${BASE_URL}/logout`, {

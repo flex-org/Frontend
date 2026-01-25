@@ -53,6 +53,7 @@ const SliderInput = ({
                             name="slider"
                             step={step}
                             aria-label={label}
+                            dir={`${lng === 'ar' ? 'rtl' : 'ltr'}`}
                             onValueChange={handleSliderChange}
                         />
                     </ToolTipComponent>

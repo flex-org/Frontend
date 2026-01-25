@@ -18,5 +18,12 @@
     "light-mode": "الوضع الفاتح",
     "nav-menu": "القائمة",
     "logged-out": "تم تسجيل الخروج بنجاح",
-    "error-log-out": "حدث خطأ ما"
+    "error-log-out": "حدث خطأ ما",
+    "copy-error-msg": "نسخ رسالة الخطأ",
+    "user-name": "الإسم",
+    "user-email": "البريد الإلكتروني",
+    "user-phone": "رقم الهاتف",
+    "user-verified": "مٌوثق",
+    "account-type": "نوع الحساب",
+    "type": "عادي"
 }

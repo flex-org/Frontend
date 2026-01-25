@@ -10,7 +10,7 @@
     "phone": "Phone Number",
     "password": "Password",
     "confirm-password": "Confirm Password",
-    "submit-btn": "Sign Up Now",
+    "sign-up-btn": "Sign Up",
     "title": "Platme",
     "sign-up-sub-title": "Welcome to Platme: Start Your Learning Journey!",
     "sign-up-description": "Platme is your state-of-the-art, multi-tenant educational platform built for the digital age. Join our scalable environment designed to host, manage, and deliver high-quality learning content. Begin your path to continuous professional and academic growth today through a seamless and personalized user experience.",
@@ -27,8 +27,11 @@
     "no-email": "You need to sign up first",
     "resend-otp": "Didn't receive code?",
     "resend-again": "Send again",
-    "success-verify": "verified successfully please login again",
+    "success-verify": "verified successfully, welcome to Platme",
     "fail-verify": "Something went wrong please try again",
     "success-resend-otp-toast": "Otp sent successfully",
-    "fail-resend-otp-toast": "failed to resend, please try again"
+    "fail-resend-otp-toast": "failed to resend, please try again",
+    "error-otp": "'Your one-time password must be 6 characters.'",
+    "confirm":"Confirm",
+    "cancel":"Cancel"
 }

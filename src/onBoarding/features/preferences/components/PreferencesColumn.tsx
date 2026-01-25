@@ -1,6 +1,7 @@
 'use client';
 
 import { useTranslation } from '@/i18n/client';
+import CustomSliderButton from '@/onBoarding/components/CustomSliderButton';
 import SliderInput from '@/onBoarding/components/SliderInput';
 import { usePreferencesStore } from '@/onBoarding/store/preferencesStore';
 import { SellingSystem } from '@/onBoarding/types';
@@ -13,15 +14,28 @@ const PreferencesColumn = ({
     lng: string;
 }) => {
     const { t } = useTranslation(lng, 'preferences');
-    const {
-        studentsValue,
-        setStudentsValue,
-        storageValue,
-        setStorageValue,
-        sellingSystemValues,
-        addSellingSystemValue,
-        removeSellingSystemValue,
-    } = usePreferencesStore();
+    const studentsValue = usePreferencesStore((state) => state.studentsValue);
+    const setStudentsValue = usePreferencesStore(
+        (state) => state.setStudentsValue,
+    );
+    const storageValue = usePreferencesStore((state) => state.storageValue);
+    const setStorageValue = usePreferencesStore(
+        (state) => state.setStorageValue,
+    );
+    const sellingSystemValues = usePreferencesStore(
+        (state) => state.sellingSystemValues,
+    );
+    const addSellingSystemValue = usePreferencesStore(
+        (state) => state.addSellingSystemValue,
+    );
+    const removeSellingSystemValue = usePreferencesStore(
+        (state) => state.removeSellingSystemValue,
+    );
+    const hasMobileApp = usePreferencesStore((state) => state.hasMobileApp);
+    const setHasMobileApp = usePreferencesStore(
+        (state) => state.setHasMobileApp,
+    );
+
     const handleSellingSystemChange = (id: number) => {
         if (sellingSystemValues.includes(id)) {
             removeSellingSystemValue(id);
@@ -30,11 +44,23 @@ const PreferencesColumn = ({
         }
     };
     return (
-        <div className="h-full w-full rounded-2xl border border-gray-200 bg-white p-6 shadow-sm lg:col-span-1 dark:border-green-800 dark:bg-green-950">
+        <div className="h-full w-full rounded-2xl border border-gray-200 bg-white p-6 shadow-sm lg:col-span-2 xl:col-span-1 dark:border-green-800 dark:bg-green-950">
             <h3 className="mb-6 text-xl font-bold text-gray-800 dark:text-gray-100">
                 {t('website-preferences')}
             </h3>
-
+            <div className="mb-6 flex w-full items-center justify-between">
+                <h3 className="font-semibold text-gray-700 dark:text-gray-300">
+                    {t('need-mobile')}{' '}
+                </h3>
+                <CustomSliderButton
+                    value={hasMobileApp}
+                    onChange={setHasMobileApp}
+                    yesLabel={t('yes')}
+                    noLabel={t('no')}
+                    lng={lng}
+                    classNames="max-w-[120px]"
+                />
+            </div>
             <div className="space-y-8">
                 <SliderInput
                     value={studentsValue}

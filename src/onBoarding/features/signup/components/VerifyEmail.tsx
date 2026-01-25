@@ -3,7 +3,6 @@ import { Button } from '@/components/ui/button';
 import {
     InputOTP,
     InputOTPGroup,
-    InputOTPSeparator,
     InputOTPSlot,
 } from '@/components/ui/input-otp';
 import { Spinner } from '@/components/ui/spinner';
@@ -11,38 +10,67 @@ import { useTranslation } from '@/i18n/client';
 import { resendOtp, verifyAccount } from '@/onBoarding/actions/authActions';
 import { useAuthStore } from '@/onBoarding/store/authStore';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { TFunction } from 'i18next';
+import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { useTransition } from 'react';
+import { useEffect, useMemo, useState, useTransition } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import z from 'zod';
-const FormSchema = z.object({
-    pin: z.string().min(6, {
-        message: 'Your one-time password must be 6 characters.',
-    }),
-});
+
+const FormSchema = (t: TFunction) =>
+    z.object({
+        pin: z.string().min(6, {
+            message: t('error-otp'),
+        }),
+    });
 const VerifyEmail = ({ lng }: { lng: string }) => {
+    const [timeLeft, setTimeLeft] = useState(60);
     const { t } = useTranslation(lng, 'onBoarding-auth');
     const { email, token, clearUserData } = useAuthStore();
     const [isPending, startTransition] = useTransition();
     const router = useRouter();
+    
+    const schema = useMemo(() => FormSchema(t), [t]);
+    const isTimerActive = timeLeft > 0;
+    useEffect(() => {
+        if (!isTimerActive) return;
+        const intervalId = setInterval(() => {
+            setTimeLeft((prev) => prev - 1);
+        }, 1000);
+        return () => clearInterval(intervalId);
+    }, [isTimerActive]);
     const {
         handleSubmit,
         formState: { errors, isSubmitting },
+        setError,
         control,
-    } = useForm<z.infer<typeof FormSchema>>({
-        resolver: zodResolver(FormSchema),
+    } = useForm<z.infer<typeof schema>>({
+        resolver: zodResolver(schema),
         defaultValues: {
             pin: '',
         },
     });
     const onSubmit = async (data: { pin: string }) => {
         try {
-            await verifyAccount(data, token);
+            const result = await verifyAccount(data, token);
             toast.success(t('success-verify'));
-            clearUserData();
-            router.push(`/${lng}/signin`);
+            const loginResult = await signIn('credentials', {
+                redirect: false,
+                token: result.data.access_token,
+                user: JSON.stringify(result.data.user),
+            });
+            if (loginResult?.error) {
+                router.push(`/${lng}/signin`);
+            } else {
+                clearUserData();
+                router.push(`/${lng}/`);
+            }
         } catch (error) {
+            setError('root', {
+                message:
+                    error instanceof Error ? error.message : t('fail-verify'),
+            });
             toast.error(
                 error instanceof Error ? error.message : t('fail-verify'),
             );
@@ -52,8 +80,8 @@ const VerifyEmail = ({ lng }: { lng: string }) => {
         startTransition(async () => {
             try {
                 await resendOtp(email);
-                console.log(email);
                 toast.success(t('success-resend-otp-toast'));
+                setTimeLeft(60);
             } catch (error) {
                 toast.error(
                     error instanceof Error
@@ -64,12 +92,12 @@ const VerifyEmail = ({ lng }: { lng: string }) => {
         });
     };
     return (
-        <div className="col-span-3 flex flex-col items-center justify-start lg:col-span-2 dark:text-gray-200">
-            <div className="flex flex-col flex-wrap items-center justify-center space-y-6">
-                <p className="text-3xl font-semibold sm:text-5xl">
+        <div className="col-span-2 flex flex-col items-center justify-start px-4 py-8 lg:col-span-1 dark:text-gray-200">
+            <div className="flex w-full flex-col flex-wrap items-center justify-center space-y-6">
+                <p className="text-2xl font-semibold sm:text-4xl md:text-5xl">
                     {t('verify')}
                 </p>
-                <p className="text-sm sm:text-xl">
+                <p className="text-center text-sm sm:text-xl">
                     {t('check-inbox')} {'   '}(
                     <span className="text-green-600 hover:underline">
                         {email}
@@ -77,29 +105,25 @@ const VerifyEmail = ({ lng }: { lng: string }) => {
                     )
                 </p>
             </div>
-            <form onSubmit={handleSubmit(onSubmit)} className="mt-18">
+            <form onSubmit={handleSubmit(onSubmit)} className="mt-16">
                 <Controller
                     name="pin"
                     control={control}
                     render={({ field }) => (
-                        <InputOTP autoFocus={true} {...field} maxLength={6}>
-                            <InputOTPGroup className="gap-2">
-                                <InputOTPSlot className="" index={0} />
-                                <InputOTPSlot
-                                    className=""
-                                    dir="rtl"
-                                    index={1}
-                                />
-                            </InputOTPGroup>
-                            <InputOTPSeparator />
-                            <InputOTPGroup className="gap-2">
-                                <InputOTPSlot className="" index={2} />
-                                <InputOTPSlot className="" index={3} />
-                            </InputOTPGroup>
-                            <InputOTPSeparator />
-                            <InputOTPGroup className="gap-2">
-                                <InputOTPSlot className="" index={4} />
-                                <InputOTPSlot className="" index={5} />
+                        <InputOTP
+                            autoComplete="one-time-code"
+                            autoFocus={true}
+                            maxLength={6}
+                            {...field}
+                        >
+                            <InputOTPGroup className="flex flex-wrap justify-center gap-2">
+                                {[...Array(6)].map((_, i) => (
+                                    <InputOTPSlot
+                                        key={i}
+                                        className="size-16 text-2xl"
+                                        index={i}
+                                    />
+                                ))}
                             </InputOTPGroup>
                         </InputOTP>
                     )}
@@ -107,17 +131,37 @@ const VerifyEmail = ({ lng }: { lng: string }) => {
                 {errors?.pin?.message && (
                     <p className="text-red-500/80">{errors?.pin?.message}</p>
                 )}
+                {errors.root?.message && (
+                    <p className="mt-4 text-xs text-red-500 sm:text-sm">
+                        {errors.root.message}
+                    </p>
+                )}
                 <div className="mt-4">
-                    <p className="flex items-center">
+                    <div className="flex items-center">
                         {t('resend-otp')}
                         {''}
-                        <span
+                        <Button
+                            variant={'ghost'}
+                            type="button"
                             onClick={handleResend}
-                            className="ml-2 cursor-pointer transition-colors hover:text-green-600 hover:underline"
+                            disabled={isTimerActive || isPending}
+                            className={`transition-colors ${
+                                isTimerActive
+                                    ? 'cursor-not-allowed text-gray-600 dark:text-gray-300'
+                                    : 'cursor-pointer text-green-800 hover:text-green-600 hover:underline dark:text-green-500'
+                            }`}
                         >
-                            {isPending ? <Spinner /> : t('resend-again')}
-                        </span>
-                    </p>
+                            {isPending ? (
+                                <Spinner />
+                            ) : isTimerActive ? (
+                                <span>
+                                    {t('resend-in')} {timeLeft}s
+                                </span>
+                            ) : (
+                                t('resend-again')
+                            )}
+                        </Button>
+                    </div>
                 </div>
                 <div className="mt-12 flex w-full justify-end">
                     <Button
@@ -127,13 +171,7 @@ const VerifyEmail = ({ lng }: { lng: string }) => {
                         disabled={isSubmitting}
                         className="bg-green-700 text-white hover:bg-green-800"
                     >
-                        {isSubmitting ? (
-                            <Spinner />
-                        ) : lng === 'ar' ? (
-                            'تأكيد'
-                        ) : (
-                            'Submit'
-                        )}
+                        {isSubmitting ? <Spinner /> : t('confirm')}
                     </Button>
                 </div>
             </form>

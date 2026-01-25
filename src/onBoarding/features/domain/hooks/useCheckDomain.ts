@@ -1,5 +1,4 @@
 import { isDomainAvailable } from '@/onBoarding/actions/onBoardingActions';
-import { useGlobalStore } from '@/onBoarding/store/globalStore';
 import { useEffect, useState, useTransition } from 'react';
 import { toast } from 'sonner';
 
@@ -12,8 +11,8 @@ const useCheckDomain = (
     lng: string,
     key: string,
     inputError: string | null,
+    domain: string,
 ) => {
-    const { domain } = useGlobalStore();
     const [isPending, startTransition] = useTransition();
     const [result, setResult] = useState<DomainResult | null>(null);
     const [error, setError] = useState<Error | null>(null);
@@ -34,7 +33,7 @@ const useCheckDomain = (
                                 ? error
                                 : new Error(error as string),
                         );
-                        toast.error(t(key));
+                        toast.error(error.message);
                     } else {
                         setResult(data);
                     }
@@ -44,7 +43,7 @@ const useCheckDomain = (
             });
         }, 2000);
         return () => clearTimeout(timer);
-    }, [domain, lng, t, key,inputError]);
+    }, [domain, lng, t, key, inputError]);
     return { isPending, result, error };
 };
 
