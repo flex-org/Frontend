@@ -1,15 +1,24 @@
 'use client';
-import { ArrowLeft, CheckCircle, CircleAlert, Copy, TriangleAlert } from 'lucide-react';
+import {
+    ArrowLeft,
+    CheckCircle,
+    CircleAlert,
+    Copy,
+    RefreshCw,
+    TriangleAlert,
+} from 'lucide-react';
 import Link from 'next/link';
 import { Button } from './ui/button';
 import { useTranslation } from '@/i18n/client';
 import { useGlobalStore } from '@/onBoarding/store/globalStore';
 import ErrorBoundaryWarning from './ErrorBoundaryWarning';
-import { useState } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 import ToolTipComponent from './ToolTipComponent';
+import { Spinner } from './ui/spinner';
+import { toast } from 'sonner';
 
 interface ErrorFallbackProps {
-    error: Error;
+    error: Error | { message: string };
     reset: () => void;
     lng: string;
 }
@@ -18,20 +27,29 @@ const ErrorFallback = ({ error, reset, lng }: ErrorFallbackProps) => {
     const { t } = useTranslation(lng, 'error');
     const { count, increment, resetCount } = useGlobalStore();
     const [copied, setCopied] = useState(false);
+    const [isPending, startTransition] = useTransition();
     //for sentry if used
     // useEffect(() => {
     //     console.error('Boundary Error:', error);
     // }, [error]);
 
+    useEffect(() => {
+        if (count === 3) {
+            ErrorBoundaryWarning(t, lng);
+            resetCount();
+        }
+    }, [count, lng, resetCount, t]);
     const handleReset = () => {
         increment();
-        reset();
+        startTransition(() => {
+            reset();
+        });
     };
-    if (count === 3) {
-        ErrorBoundaryWarning(lng);
-        resetCount();
-    }
     const handleCopyError = (text: string) => {
+        if (!navigator?.clipboard) {
+            toast.error('Clipboard not supported');
+            return;
+        }
         navigator.clipboard.writeText(text);
         setCopied(true);
         setTimeout(() => {
@@ -54,12 +72,11 @@ const ErrorFallback = ({ error, reset, lng }: ErrorFallbackProps) => {
                 <TriangleAlert className="size-4" />
                 {t('error-boundary-network-error')}
             </div>
-            <div className="mb-6 flex w-full max-w-md justify-between overflow-hidden rounded-md border border-gray-200 bg-gray-100 p-3 text-left dark:border-gray-700 dark:bg-gray-800">
-                <ToolTipComponent
-                    label={
-                        lng === 'ar' ? 'نسخ رسالة الخطأ' : 'copy error message'
-                    }
-                >
+            <div
+                dir="rtl"
+                className="mb-6 flex w-full max-w-md justify-between overflow-hidden rounded-md border border-gray-200 bg-gray-100 p-3 dark:border-gray-700 dark:bg-gray-800"
+            >
+                <ToolTipComponent label={t('copy-error-msg')}>
                     {copied ? (
                         <CheckCircle className="size-4 text-green-500" />
                     ) : (
@@ -86,8 +103,13 @@ const ErrorFallback = ({ error, reset, lng }: ErrorFallbackProps) => {
                 </Link>
             </div>
             <div className="flex flex-col gap-3 sm:flex-row">
-                <Button variant={'outline'} onClick={handleReset}>
+                <Button
+                    variant="outline"
+                    onClick={handleReset}
+                    disabled={isPending}
+                >
                     {t('error-boundary-try-again')}
+                    {isPending ? <Spinner className="" /> : <RefreshCw />}
                 </Button>
                 <Link href={`/${lng}`}>
                     <Button
@@ -95,9 +117,7 @@ const ErrorFallback = ({ error, reset, lng }: ErrorFallbackProps) => {
                         className="bg-green-800 text-white transition-colors hover:bg-green-900 active:bg-green-950"
                     >
                         {t('error-boundary-go-home')}
-                        <ArrowLeft
-                            className={`${lng === 'en' ? 'rotate-180' : ''}`}
-                        />
+                        <ArrowLeft className={`ltr:rotate-180`} />
                     </Button>
                 </Link>
             </div>

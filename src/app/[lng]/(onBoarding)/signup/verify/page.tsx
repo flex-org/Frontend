@@ -23,9 +23,9 @@ export const generateMetadata = async ({
 const Verify = async ({ params }: { params: Promise<{ lng: string }> }) => {
     const { lng } = await params;
     return (
-        <div className="relative">
+        <div className="px-0 sm:px-4">
             <AuthHeader lng={lng} />
-            <div className="mx-auto mt-28 grid grid-cols-3 gap-6">
+            <div className="mx-auto mt-12 grid max-w-6xl grid-cols-1 gap-4 rounded-3xl border border-green-300 lg:grid-cols-2 dark:border-green-800">
                 <AuthInfoPart signin={false} lng={lng} />
                 <VerifyEmail lng={lng} />
             </div>

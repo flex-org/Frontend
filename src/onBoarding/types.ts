@@ -1,18 +1,12 @@
-import {
-    FieldErrors,
-    Path,
-    UseFormRegister,
-    FieldValues,
-} from 'react-hook-form';
+import { Path, FieldValues } from 'react-hook-form';
 
 export interface FormFieldProps<TFormValues extends FieldValues> {
-    register: UseFormRegister<TFormValues>;
-    errors: FieldErrors<TFormValues>;
     name: Path<TFormValues>;
     label: string;
     placeholder?: string;
     type?: string;
     suffix?: React.ReactNode;
+    autoComplete?: string;
 }
 
 export interface SignupFormValues {
@@ -26,12 +20,6 @@ export interface LoginFormValues {
     email: string;
     password: string;
 }
-
-export type ActionResponse<TData> = {
-    data?: TData;
-    error?: string;
-    success?: boolean;
-};
 
 export interface SignedUpUser {
     created_at: string;
@@ -49,7 +37,8 @@ export interface Features {
     id: number;
     icon: string;
     price: string;
-    active: number;
+    default: boolean;
+    active: boolean;
     name: string;
     description: string;
 }
@@ -87,11 +76,40 @@ export interface Message {
     content: string;
 }
 
-export interface createPlatformData {
-    billing_cycle: string;
-    domain: string;
-    features: number[];
+export interface SellingSystems {
     selling_system: number[];
     storage: number;
     capacity: number;
+}
+
+export interface StoredDataProps {
+    storedData: number[] | SellingSystems | string;
+}
+export interface initialPlatformData {
+    features: Features[];
+    selected_features: Features[];
+    selling_systems: SellingSystem[];
+    selected_selling_systems: SellingSystem[];
+    domain: string;
+    capacity: number;
+    storage: number;
+    mobile_app: boolean;
+    step: number;
+}
+export interface FinalSellingSystemData {
+    selling_system: number[];
+    storage: number;
+    capacity: number;
+    mobile_app: boolean;
+}
+export interface ResourceCost {
+    quantity: number;
+    price: number;
+}
+
+export interface dynamicDataProps {
+    storage: ResourceCost;
+    capacity: ResourceCost;
+    mobile_app: ResourceCost;
+
 }

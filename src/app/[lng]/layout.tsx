@@ -169,7 +169,9 @@ export default async function RootLayout({
                 <LayoutWrapper>
                     <ToastWrapper lng={lng} />
                     <div className="min-h-screen bg-[#f2f2f2] from-black to-green-950 dark:bg-linear-to-r">
-                        <main className="container mx-auto px-2 sm:px-0">{children}</main>
+                        <main className="container mx-auto px-2 sm:px-0">
+                            {children}
+                        </main>
                     </div>
                 </LayoutWrapper>
             </body>

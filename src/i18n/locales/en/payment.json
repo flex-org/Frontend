@@ -3,6 +3,7 @@
     "payment-description": " Just one more step to get started.",
     "payment-details": "Payment details",
     "pay-yearly": "Pay Yearly",
+    "pay-monthly": "Pay Monthly",
     "off": "20% Off",
     "features": "Features",
     "no-selected": " No features selected",
@@ -25,5 +26,16 @@
     "pay": "Pay",
     "agree-to-terms": "By clicking pay, you agree to our Terms & Conditions",
     "error-create": "An error occurred while creating your platform, please try again later",
-    "success-create": "Your platform has been created successfully"
+    "success-create": "Your platform has been created successfully",
+    "selling-systems": "Chosen selling systems",
+    "platform-summary": "Your Platform Summary",
+    "students": "Students",
+    "gb": "GB",
+    "selected-features": "Selected Features",
+    "encrypted-payment": "Encrypted Payment",
+    "total-due": "Total Due",
+    "secure-checkout": "Secure Checkout",
+    "mobile-app": "Mobile App",
+    "mobile": "Chosen Mobile App",
+    "no-mobile": "Did not choose mobile app"
 }

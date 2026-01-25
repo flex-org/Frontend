@@ -3,6 +3,7 @@
     "payment-description": "خطوة واحدة فقط متبقية للبدء.",
     "payment-details": "تفاصيل الدفع",
     "pay-yearly": "دفع سنوي",
+    "pay-monthly": "دفع شهري",
     "off": "خصم 20%",
     "features": "المزايا",
     "no-selected": "لا توجد مزايا مٌختارة",
@@ -25,5 +26,16 @@
     "pay": "دفع",
     "agree-to-terms": "بالضغط علي دفع، انت توافق الشروط والأحكام",
     "error-create": "حدث خطأ أثناء إنشاء منصتك، يرجي المحاولة مجددا",
-    "success-create": "تم إنشاء منصتك بنجاح"
+    "success-create": "تم إنشاء منصتك بنجاح",
+    "selling-systems": "أنظمة البيع المٌختارة",
+    "platform-summary": "مٌلخص منصتك",
+    "students": "عدد الطلاب",
+    "gb": "ج.ب",
+    "selected-features": "المزايا المٌختارة",
+    "encrypted-payment": "دفع مٌشفر",
+    "total-due": "المجموع النهائي",
+    "secure-checkout": "ادفع بأمان",
+    "mobile-app": "تطبيق الهاتف المحمول",
+    "mobile":"تم الإختيار",
+    "no-mobile":"لم يتم الاختيار"
 }

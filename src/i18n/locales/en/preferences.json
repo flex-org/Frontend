@@ -7,6 +7,8 @@
     "platform-storage": "Platform Storage",
     "selling-system": "Selling System",
     "student-number-alert": "Please select the correct number that fits your needs",
-    "do-not-refresh": "Please, don't refresh the page so that you don't lose any progress",
-    "sell-by": "Sell By"
+    "sell-by": "Sell By",
+    "need-mobile": "Do you need a mobile app?",
+    "yes": "Yes",
+    "no": "No"
 }

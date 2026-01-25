@@ -3,14 +3,20 @@
 import { Spinner } from '@/components/ui/spinner';
 import { useTranslation } from '@/i18n/client';
 import BackAndForwardButtons from '@/onBoarding/components/BackAndForwardButtons';
-import { useGlobalStore } from '@/onBoarding/store/globalStore';
-import { AlertCircle, CircleAlert, CircleCheck } from 'lucide-react';
+import { CircleAlert, CircleCheck } from 'lucide-react';
 import useCheckDomain from '../hooks/useCheckDomain';
 import { ChangeEvent, useState } from 'react';
 import Messages from './Messages';
+import { Input } from '@/components/ui/input';
 
-const DomainContentClient = ({ lng }: { lng: string }) => {
-    const { domain, setDomain } = useGlobalStore();
+const DomainContentClient = ({
+    lng,
+    selectedDomain,
+}: {
+    lng: string;
+    selectedDomain: string;
+}) => {
+    const [domain, setDomain] = useState<string>(selectedDomain);
     const [inputError, setInputError] = useState<string | null>(null);
     const { t } = useTranslation(lng, 'domain');
     const { isPending, result, error } = useCheckDomain(
@@ -18,6 +24,7 @@ const DomainContentClient = ({ lng }: { lng: string }) => {
         lng,
         'domain-error',
         inputError,
+        domain,
     );
     const showSpinner = isPending;
     const showSuccess = !isPending && result?.success === true;
@@ -34,21 +41,22 @@ const DomainContentClient = ({ lng }: { lng: string }) => {
         }
         setDomain(cleanValue);
     };
+    const finalData = { domain };
     return (
         <div className="mt-24 flex h-full w-full max-w-sm flex-col gap-2">
-            <div className="mb-4 flex items-center gap-2 text-gray-600 dark:text-gray-400">
-                <AlertCircle className="size-3" />
-                <p className="text-xs">{t('do-not-refresh')}</p>
-            </div>
-            <div className="relative flex w-full items-center justify-center">
-                <input
+            <div
+                dir="ltr"
+                className="relative flex w-full items-center justify-center"
+            >
+                <Input
                     placeholder={t('write-domain')}
                     value={domain}
+                    autoFocus
                     onChange={handleInputChange}
-                    className={`h-11 w-full rounded-md border bg-white ring transition-all outline-none focus:shadow-md dark:bg-green-950 dark:text-gray-200 ${lng === 'ar' ? 'pr-2 pl-33' : 'pr-33 pl-2'} ${showError ? 'border-red-500 ring-red-500' : ''} ${showSuccess ? 'border-green-500 ring-green-500' : ''}`}
+                    className={`h-11 w-full pr-33 pl-2 transition-all focus:shadow-md dark:text-gray-200 ${error ? 'border-ring border-none ring-2 ring-red-600/80' : ''} ${showSuccess ? 'border-ring border-none ring-2 ring-green-600/80' : ''}`}
                 />
                 <div
-                    className={`absolute top-[50%] ${lng === 'ar' ? 'left-0 pl-2' : 'right-0 pr-2'} -translate-y-[50%]`}
+                    className={`absolute top-[50%] right-0 -translate-y-[50%] pr-2`}
                 >
                     {showSpinner && <Spinner className="size-4" />}
                     {showSuccess && (
@@ -59,7 +67,7 @@ const DomainContentClient = ({ lng }: { lng: string }) => {
                     )}
                 </div>
                 <div
-                    className={`absolute top-0 flex h-full items-center font-bold dark:text-gray-300 ${lng === 'ar' ? 'left-[24%] -translate-x-[50%] sm:left-[20%]' : 'right-[24%] translate-x-[50%] sm:right-[20%]'}`}
+                    className={`absolute top-0 right-[24%] flex h-full translate-x-[50%] items-center border-l border-black pl-2 font-bold sm:right-[20%] dark:border-gray-400 dark:text-gray-300`}
                 >
                     .platme.com
                 </div>
@@ -82,6 +90,8 @@ const DomainContentClient = ({ lng }: { lng: string }) => {
                         !result.success ||
                         !!inputError
                     }
+                    endPoint="domain"
+                    storedData={finalData}
                 />
             </div>
         </div>

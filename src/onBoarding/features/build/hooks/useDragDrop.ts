@@ -1,4 +1,3 @@
-import { useTranslation } from '@/i18n/client';
 import { useDragDropStore } from '@/onBoarding/store/DragDropStore';
 import { DraggedFeatures, Features } from '@/onBoarding/types';
 import {
@@ -10,18 +9,13 @@ import {
     useSensors,
 } from '@dnd-kit/core';
 import { useState } from 'react';
-import { toast } from 'sonner';
 
-const useDragDrop = (lng: string) => {
+const useDragDrop = () => {
     const [activeFeature, setActiveFeature] = useState<Features | null>(null);
     const {
-        activeItems,
-        availableFeatures,
         addActiveItem,
         removeAvailableFeature,
-        addAvailableFeature,
     } = useDragDropStore();
-    const { t } = useTranslation(lng, 'drag-drop');
 
     const sensors = useSensors(
         useSensor(PointerSensor, {
@@ -47,14 +41,6 @@ const useDragDrop = (lng: string) => {
             setActiveFeature(null);
             return;
         }
-        const isAlreadyAdded = activeItems.some(
-            (item) => item.id === activeFeature.id,
-        );
-        if (isAlreadyAdded) {
-            toast.error(t('feature-already-exist'));
-            setActiveFeature(null);
-            return null;
-        }
         if (over && over.id === 'droppable-area' && activeFeature) {
             const newItem: DraggedFeatures = {
                 ...activeFeature,
@@ -66,17 +52,11 @@ const useDragDrop = (lng: string) => {
         setActiveFeature(null);
     };
 
-    const returnFeatureToFeaturesColumn = (feature: Features) => {
-        addAvailableFeature(feature);
-    };
-
     return {
-        returnFeatureToFeaturesColumn,
         activeFeature,
         handleDragStart,
         handleDragEnd,
         sensors,
-        availableFeatures,
     };
 };
 

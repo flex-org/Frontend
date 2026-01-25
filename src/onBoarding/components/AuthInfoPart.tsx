@@ -11,7 +11,7 @@ const AuthInfoPart = async ({
     const { t } = await getTranslation(lng, 'onBoarding-auth');
     return (
         <div
-            className={`relative col-span-1 hidden h-[700px] w-full max-w-md flex-col justify-between overflow-hidden rounded-3xl bg-[#4CAF50] p-8 text-white shadow-xl md:p-10 lg:flex dark:text-gray-200`}
+            className={`relative col-span-1 hidden w-full flex-col justify-between overflow-hidden ${lng === 'ar' ? 'rounded-tr-3xl rounded-br-3xl' : 'rounded-tl-3xl rounded-bl-3xl'} bg-[#4CAF50] p-8 text-white shadow-xl md:p-10 lg:flex dark:text-gray-200`}
         >
             <div className="flex items-center space-x-3 text-3xl">
                 <Github />

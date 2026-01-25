@@ -43,7 +43,7 @@ const LanguageSwitcher = ({ currentLang }: { currentLang: string }) => {
                     <ChevronDown />
                 </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
+            <DropdownMenuContent align='end'>
                 <DropdownMenuLabel>{t('pick-lang')}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => toggle('en')}>

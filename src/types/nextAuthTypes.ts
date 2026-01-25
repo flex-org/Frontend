@@ -10,6 +10,7 @@ declare module 'next-auth' {
         phone?: string;
         accessToken: string; // We add this manually
         isAuthenticated: boolean;
+        isVerified: boolean;
     }
 
     // 2. The shape of the session object (used in useSession())
@@ -19,6 +20,7 @@ declare module 'next-auth' {
             phone?: string;
             accessToken: string;
             isAuthenticated: boolean;
+            isVerified: boolean;
         } & DefaultSession['user'];
     }
 }
@@ -30,5 +32,6 @@ declare module 'next-auth/jwt' {
         phone?: string;
         accessToken: string;
         isAuthenticated: boolean;
+        isVerified: boolean;
     }
 }

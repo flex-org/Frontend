@@ -7,6 +7,7 @@ import ToolTipComponent from '@/components/ToolTipComponent';
 import { useTranslation } from '@/i18n/client';
 import { Features } from '@/onBoarding/types';
 import { useDragDropStore } from '@/onBoarding/store/DragDropStore';
+import { Button } from '@/components/ui/button';
 
 const DroppableArea = ({
     lng,
@@ -74,16 +75,21 @@ const DroppableArea = ({
                         feature={item}
                         classNames="border p-2 border-green-400 dark:border-green-900 rounded-md relative"
                     >
-                        <ToolTipComponent
-                            label={lng == 'ar' ? 'ازالة ' : 'remove '}
-                        >
-                            <div
-                                onClick={() => handleRemove(item)}
-                                className={`absolute -top-2 ${lng === 'ar' ? '-left-1' : '-right-1'} cursor-pointer rounded-full bg-green-800 p-0.5`}
+                        {!item.default && (
+                            <ToolTipComponent
+                                label={lng == 'ar' ? 'ازالة ' : 'remove '}
                             >
-                                <X className="size-3 text-white" />
-                            </div>
-                        </ToolTipComponent>
+                                <Button
+                                    variant={null}
+                                    onClick={() => handleRemove(item)}
+                                    className={`absolute -top-2 size-6 ${lng === 'ar' ? '-left-1' : '-right-1'} cursor-pointer rounded-full bg-green-800`}
+                                >
+                                    {/* {!item.default && ( */}
+                                    <X className="size-3 text-white" />
+                                    {/* )} */}
+                                </Button>
+                            </ToolTipComponent>
+                        )}
                     </FeatureItem>
                 ))}
             </div>

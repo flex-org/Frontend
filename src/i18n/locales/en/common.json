@@ -18,5 +18,12 @@
     "light-mode": "Light Mode",
     "nav-menu": "Menu",
     "logged-out": "Logged out successfully",
-    "error-log-out": "Something went wrong"
+    "error-log-out": "Something went wrong",
+    "copy-error-msg":"copy error message",
+    "user-name":"Name",
+    "user-email":"Email",
+    "user-phone":"Phone",
+    "user-verified":"Verified",
+    "account-type":"Account Type",
+    "type":"Normal"
 }

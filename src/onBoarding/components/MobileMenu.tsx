@@ -1,6 +1,5 @@
 'use client';
 import { Button } from '@/components/ui/button';
-import { useSession } from 'next-auth/react';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -16,18 +15,14 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Moon, Sun } from 'lucide-react';
-import { LogIn, Menu } from 'lucide-react';
+import { Menu } from 'lucide-react';
 import { navLinks } from '../lib/constants';
 import { useTheme } from 'next-themes';
 import { useTranslation } from '@/i18n/client';
 import { usePathname, useRouter } from 'next/navigation';
-import LogoutButton from './LogoutButton';
-import Link from 'next/link';
 
 const MobileMenu = ({ lng }: { lng: string }) => {
     const { resolvedTheme, setTheme } = useTheme();
-    const { data: session } = useSession();
-    const isAuthenticated = session?.user.isAuthenticated;
     const { t } = useTranslation(lng, 'common');
     const router = useRouter();
     const pathname = usePathname();
@@ -45,7 +40,7 @@ const MobileMenu = ({ lng }: { lng: string }) => {
                     <Menu />
                 </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
+            <DropdownMenuContent align='end'>
                 <DropdownMenuLabel>{t('nav-menu')}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
@@ -101,24 +96,6 @@ const MobileMenu = ({ lng }: { lng: string }) => {
                         </DropdownMenuPortal>
                     </DropdownMenuSub>
                 </DropdownMenuGroup>
-                <DropdownMenuSeparator />
-                {isAuthenticated? (
-                    <DropdownMenuItem>
-                        <LogoutButton dropdown={true} lng={lng} />
-                    </DropdownMenuItem>
-                ) : (
-                    <DropdownMenuItem className="cursor-pointer bg-green-700 text-white transition-colors hover:bg-green-800">
-                        <Link
-                            href={`${lng}/signin`}
-                            className="flex items-center justify-between gap-2"
-                        >
-                            {t('login')}
-                            <DropdownMenuShortcut>
-                                <LogIn className="text-white" />
-                            </DropdownMenuShortcut>
-                        </Link>
-                    </DropdownMenuItem>
-                )}
             </DropdownMenuContent>
         </DropdownMenu>
     );

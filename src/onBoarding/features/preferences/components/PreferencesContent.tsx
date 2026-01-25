@@ -1,26 +1,27 @@
 import ErrorFallback from '@/components/ErrorFallback';
-import { getSellingSystem } from '@/onBoarding/actions/onBoardingActions';
-import { revalidatePath } from 'next/cache';
+import { getStoredData } from '@/onBoarding/actions/onBoardingActions';
+import { revalidateTag } from 'next/cache';
 import PreferencesContentClient from './PreferencesContentClient';
 
 const PreferencesContent = async ({ lng }: { lng: string }) => {
-    const sellingSystem = await getSellingSystem(lng);
+    const storedData = await getStoredData(lng);
 
-    if (sellingSystem.error) {
+    if (storedData.error) {
         const handleReset = async () => {
             'use server';
-            revalidatePath(`/${lng}/preferences`);
+            revalidateTag(`stored-data`, 'days');
         };
         return (
             <ErrorFallback
-                error={sellingSystem.error}
+                error={storedData.error}
                 lng={lng}
                 reset={handleReset}
             />
         );
     }
-
-    return <PreferencesContentClient lng={lng} sellingSystem={sellingSystem.data.data} />;
+    return (
+        <PreferencesContentClient storedData={storedData.data.data} lng={lng} />
+    );
 };
 
 export default PreferencesContent;
