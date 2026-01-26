@@ -1,6 +1,4 @@
 import NextAuth from 'next-auth';
-import Google from 'next-auth/providers/google';
-import GitHub from 'next-auth/providers/github';
 import Credentials from 'next-auth/providers/credentials';
 import { authConfig } from './auth.config';
 import { z } from 'zod';
@@ -8,14 +6,14 @@ const BASE_URL = process.env.BASE_URL;
 export const { auth, handlers, signIn, signOut } = NextAuth({
     ...authConfig,
     providers: [
-        Google({
-            clientId: process.env.AUTH_GOOGLE_ID,
-            clientSecret: process.env.AUTH_GOOGLE_SECRET,
-        }),
-        GitHub({
-            clientId: process.env.AUTH_GITHUB_ID,
-            clientSecret: process.env.AUTH_GITHUB_SECRET,
-        }),
+        // Google({
+        //     clientId: process.env.AUTH_GOOGLE_ID,
+        //     clientSecret: process.env.AUTH_GOOGLE_SECRET,
+        // }),
+        // GitHub({
+        //     clientId: process.env.AUTH_GITHUB_ID,
+        //     clientSecret: process.env.AUTH_GITHUB_SECRET,
+        // }),
         Credentials({
             credentials: {
                 email: { label: 'Email', type: 'text' },

@@ -84,6 +84,12 @@ const getStoredDataCached = async (lng: string, accessToken: string) => {
     'use cache';
     cacheTag('stored-data');
     cacheLife('days');
+
+    // 1. Add a Console Log
+    console.log('🔥 EXECUTING API CALL (If you see this, cache was MISS)');
+
+    // 2. Add a timestamp to the return data (if possible)
+    // or just rely on the console log above.
     const data = await fetchAPI(`/platform/initial?lang=${lng}`, {
         method: 'GET',
         headers: {
@@ -92,7 +98,11 @@ const getStoredDataCached = async (lng: string, accessToken: string) => {
             Accept: 'application/json',
         },
     });
-    return data;
+
+    return {
+        ...data,
+        _cachedAt: new Date().toISOString(), // 👈 Optional: Verify timestamp in UI
+    };
 };
 
 export const getStoredData = async (lng: string) => {
