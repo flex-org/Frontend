@@ -1,6 +1,9 @@
 import { create } from 'zustand';
 
 interface Props {
+    errorCount: number;
+    errorCountIncrement: () => void;
+    resetErrorCountCount: () => void;
     domain: string;
     setDomain: (domain: string) => void;
     isYearly: boolean;
@@ -12,6 +15,10 @@ interface Props {
 }
 
 export const useGlobalStore = create<Props>((set) => ({
+    errorCount: 0,
+    errorCountIncrement: () =>
+        set((state) => ({ errorCount: state.errorCount + 1 })),
+    resetErrorCountCount: () => set({ errorCount: 0 }),
     domain: '',
     setDomain: (domain: string) => set({ domain: domain }),
     isYearly: false,

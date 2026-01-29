@@ -26,18 +26,24 @@ interface ErrorFallbackProps {
 
 const ErrorFallback = ({ error, reset, lng }: ErrorFallbackProps) => {
     const { t } = useTranslation(lng, 'error');
-    const { count, increment, resetCount } = useGlobalStore();
+    const errorCount = useGlobalStore((state) => state.errorCount);
+    const errorCountIncrement = useGlobalStore(
+        (state) => state.errorCountIncrement,
+    );
+    const resetErrorCount = useGlobalStore(
+        (state) => state.resetErrorCountCount,
+    );
     const [copied, setCopied] = useState(false);
     const [isPending, startTransition] = useTransition();
 
     useEffect(() => {
-        if (count === 3) {
+        if (errorCount === 3) {
             ErrorBoundaryWarning(t, lng);
-            resetCount();
+            resetErrorCount();
         }
-    }, [count, lng, resetCount, t]);
+    }, [errorCount, lng, resetErrorCount, t]);
     const handleReset = () => {
-        increment();
+        errorCountIncrement();
         startTransition(() => {
             reset();
         });
