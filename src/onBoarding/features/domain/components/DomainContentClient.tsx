@@ -27,10 +27,10 @@ const DomainContentClient = ({
         domain,
     );
     const showSpinner = isPending;
-    const showSuccess = !isPending && result?.success === true;
-    const showError =
-        !isPending && result !== null && result?.success === false;
-
+    const showSuccess = (!isPending && result?.message) as boolean;
+    const showError = (!isPending &&
+        !result?.message &&
+        result?.message) as boolean;
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const val = e.target.value;
         const cleanValue = val.replace(/[^a-zA-Z-]/g, '').toLowerCase();
@@ -87,7 +87,7 @@ const DomainContentClient = ({
                     disabled={
                         isPending ||
                         result === null ||
-                        !result.success ||
+                        !result.message ||
                         !!inputError
                     }
                     endPoint="domain"

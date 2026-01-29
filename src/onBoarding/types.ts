@@ -93,6 +93,9 @@ export interface initialPlatformData {
     mobile_app: boolean;
     step: number;
 }
+export interface initialDataActionResult {
+    data: initialPlatformData;
+}
 export interface FinalSellingSystemData {
     selling_system: number[];
     storage: number;
@@ -108,5 +111,13 @@ export interface dynamicDataProps {
     storage: ResourceCost;
     capacity: ResourceCost;
     mobile_app: ResourceCost;
-
+}
+export interface dynamicDataActionResult {
+    data: dynamicDataProps;
+}
+export interface isDomainAvailableActionResult {
+    message: string;
+}
+export interface botResponseActionResult {
+    data: BotResponse;
 }

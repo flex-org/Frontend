@@ -34,7 +34,7 @@ const BackAndForwardButtons = ({
     const handleStore = () => {
         startTransition(async () => {
             const data = await storeData(storedData, endPoint);
-            if (data.error) {
+            if (!data.ok) {
                 toast.error(data.error.message);
                 return;
             }

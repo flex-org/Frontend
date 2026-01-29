@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { createJSONStorage, persist } from 'zustand/middleware';
 import { Message } from '../types';
 
 interface gomaaProps {
@@ -10,17 +11,25 @@ interface gomaaProps {
     setIsCompleted: (state: boolean) => void;
 }
 
-export const useChatBotStore = create<gomaaProps>((set) => ({
-    messages: [
+export const useChatBotStore = create<gomaaProps>()(
+    persist(
+        (set) => ({
+            messages: [
+                {
+                    role: 'bot',
+                    content: 'welcome-message',
+                },
+            ],
+            addMessage: (message: Message) =>
+                set((state) => ({ messages: [...state.messages, message] })),
+            botMessage: '',
+            setBotMessage: (msg: string) => set({ botMessage: msg }),
+            isCompleted: false,
+            setIsCompleted: (state: boolean) => set({ isCompleted: state }),
+        }),
         {
-            role: 'bot',
-            content: 'welcome-message',
+            name: 'chatbot-store',
+            storage: createJSONStorage(() => sessionStorage),
         },
-    ],
-    addMessage: (message: Message) =>
-        set((state) => ({ messages: [...state.messages, message] })),
-    botMessage: '',
-    setBotMessage: (msg: string) => set({ botMessage: msg }),
-    isCompleted: false,
-    setIsCompleted: (state: boolean) => set({ isCompleted: state }),
-}));
+    ),
+);

@@ -44,7 +44,7 @@ const PreferencesColumn = ({
         }
     };
     return (
-        <div className="h-full w-full rounded-2xl border border-gray-200 bg-white p-6 shadow-sm lg:col-span-2 xl:col-span-1 dark:border-green-800 dark:bg-green-950">
+        <div className="order-1 w-full rounded-2xl border border-gray-200 bg-white p-6 shadow-sm lg:order-2 lg:col-span-2 xl:col-span-1 dark:border-green-800 dark:bg-green-950">
             <h3 className="mb-6 text-xl font-bold text-gray-800 dark:text-gray-100">
                 {t('website-preferences')}
             </h3>

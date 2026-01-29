@@ -35,9 +35,7 @@ export const useDragDropStore = create<Props>()((set) => ({
                     .filter((f) => f.default)
                     .map((f) => f.id);
             }
-
             const active = allFeatures.filter((f) => activeIds.includes(f.id));
-
             const available = allFeatures
                 .filter((f) => !activeIds.includes(f.id))
                 .sort((a, b) => a.id - b.id);
@@ -56,14 +54,12 @@ export const useDragDropStore = create<Props>()((set) => ({
         set((state) => ({
             activeItems: state.activeItems.filter((item) => item.id !== id),
         })),
-
     removeAvailableFeature: (id) =>
         set((state) => ({
             availableFeatures: state.availableFeatures.filter(
                 (f) => f.id !== id,
             ),
         })),
-
     addAvailableFeature: (feature) =>
         set((state) => {
             const newList = [...state.availableFeatures, feature];
@@ -71,7 +67,6 @@ export const useDragDropStore = create<Props>()((set) => ({
                 availableFeatures: newList.sort((a, b) => a.id - b.id),
             };
         }),
-
     resetStore: () =>
         set({
             activeItems: [],

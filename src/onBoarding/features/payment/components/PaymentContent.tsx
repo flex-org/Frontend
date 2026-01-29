@@ -4,7 +4,7 @@ import {
 } from '@/onBoarding/actions/onBoardingActions';
 import PaymentDetailsColumn from './PaymentDetailsColumn';
 import PaymentMethodColumn from './PaymentMethodColumn';
-import { revalidatePath } from 'next/cache';
+import { revalidateTag } from 'next/cache';
 import ErrorFallback from '@/components/ErrorFallback';
 import BackAndForwardButtons from '@/onBoarding/components/BackAndForwardButtons';
 
@@ -13,24 +13,33 @@ const PaymentContent = async ({ lng }: { lng: string }) => {
         getStoredData(lng),
         getDynamicFeatures(lng),
     ]);
-    if (storedData.error || getDynamicCached.error) {
+    if (!storedData.ok) {
         const retryFeatureFetch = async () => {
             'use server';
-            revalidatePath(`/${lng}/payment`);
+            revalidateTag(`stored-data`, 'days');
         };
         return (
             <ErrorFallback
-                error={
-                    storedData.error ||
-                    getDynamicCached.error || {
-                        message: 'An unknown error occurred',
-                    }
-                }
+                error={storedData.error}
                 lng={lng}
                 reset={retryFeatureFetch}
             />
         );
     }
+    if (!getDynamicCached.ok) {
+        const retryFeatureFetch = async () => {
+            'use server';
+            revalidateTag('dynamic-features', 'weeks');
+        };
+        return (
+            <ErrorFallback
+                error={getDynamicCached.error}
+                lng={lng}
+                reset={retryFeatureFetch}
+            />
+        );
+    }
+
     return (
         <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
             <PaymentDetailsColumn

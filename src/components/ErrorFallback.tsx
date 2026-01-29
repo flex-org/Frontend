@@ -16,9 +16,10 @@ import { useEffect, useState, useTransition } from 'react';
 import ToolTipComponent from './ToolTipComponent';
 import { Spinner } from './ui/spinner';
 import { toast } from 'sonner';
+import { AppError } from '@/types/api';
 
 interface ErrorFallbackProps {
-    error: Error | { message: string };
+    error: AppError;
     reset: () => void;
     lng: string;
 }
@@ -28,10 +29,6 @@ const ErrorFallback = ({ error, reset, lng }: ErrorFallbackProps) => {
     const { count, increment, resetCount } = useGlobalStore();
     const [copied, setCopied] = useState(false);
     const [isPending, startTransition] = useTransition();
-    //for sentry if used
-    // useEffect(() => {
-    //     console.error('Boundary Error:', error);
-    // }, [error]);
 
     useEffect(() => {
         if (count === 3) {
@@ -63,19 +60,26 @@ const ErrorFallback = ({ error, reset, lng }: ErrorFallbackProps) => {
                 <TriangleAlert className="text-red-500" />
             </div>
             <h2 className="mb-2 text-2xl font-bold text-gray-900 dark:text-gray-50">
-                {t('error-boundary-error')}
+                {t('error')}
             </h2>
             <p className="mb-6 max-w-md text-gray-500 dark:text-gray-400">
-                {t('error-boundary-description')}
+                {t('description')}
             </p>
-            <div className="mb-6 flex max-w-xl items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
-                <TriangleAlert className="size-4" />
-                {t('error-boundary-network-error')}
+            <div className="mb-6 flex max-w-xl items-center gap-2 text-gray-500 dark:text-gray-400">
+                <TriangleAlert
+                    className="text-yellow-700 dark:text-yellow-300"
+                    size={16}
+                />
+                <p className="text-xs">{t('network-error')}</p>
             </div>
-            <div
-                dir="rtl"
-                className="mb-6 flex w-full max-w-md justify-between overflow-hidden rounded-md border border-gray-200 bg-gray-100 p-3 dark:border-gray-700 dark:bg-gray-800"
-            >
+            <div className="mb-6 flex w-full max-w-md justify-between overflow-hidden rounded-md border border-gray-200 bg-gray-100 p-3 dark:border-gray-700 dark:bg-gray-800">
+                <p className="font-mono text-xs tracking-widest text-red-600">
+                    <span className="text-black dark:text-gray-100">
+                        {t('error-message')}:
+                    </span>
+                    {'    '}
+                    {error.message || 'Unknown Error Occurred'}
+                </p>
                 <ToolTipComponent label={t('copy-error-msg')}>
                     {copied ? (
                         <CheckCircle className="size-4 text-green-500" />
@@ -86,29 +90,24 @@ const ErrorFallback = ({ error, reset, lng }: ErrorFallbackProps) => {
                         />
                     )}
                 </ToolTipComponent>
-                <p className="wrap-break-words font-mono text-xs text-red-600">
-                    <span className="text-black dark:text-gray-100">
-                        error message:
-                    </span>
-                    {'    '}
-                    {error.message || 'Unknown Error Occurred'}
-                </p>
             </div>
-            <div className="mb-6 flex max-w-xl items-center gap-2 text-xs text-red-500 dark:text-red-400">
-                <CircleAlert className="size-4" />
-                {t('error-boundary-warning-description')}{' '}
+            <div className="mb-6 flex max-w-xl flex-col items-center gap-2 text-xs text-red-500 sm:flex-row dark:text-red-400">
+                <div className="flex items-center gap-2">
+                    <CircleAlert className="size-4" />
+                    {t('warning-description')}{' '}
+                </div>
                 <Link href={`${lng}/contact-us`} className="underline">
                     {' '}
-                    {t('error-boundary-warning-from-here')}
+                    {t('warning-from-here')}
                 </Link>
             </div>
-            <div className="flex flex-col gap-3 sm:flex-row">
+            <div className="flex flex-row gap-2">
                 <Button
                     variant="outline"
                     onClick={handleReset}
                     disabled={isPending}
                 >
-                    {t('error-boundary-try-again')}
+                    {t('try-again')}
                     {isPending ? <Spinner className="" /> : <RefreshCw />}
                 </Button>
                 <Link href={`/${lng}`}>
@@ -116,7 +115,7 @@ const ErrorFallback = ({ error, reset, lng }: ErrorFallbackProps) => {
                         variant={null}
                         className="bg-green-800 text-white transition-colors hover:bg-green-900 active:bg-green-950"
                     >
-                        {t('error-boundary-go-home')}
+                        {t('go-home')}
                         <ArrowLeft className={`ltr:rotate-180`} />
                     </Button>
                 </Link>

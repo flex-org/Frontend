@@ -37,6 +37,7 @@ const UserInfo = ({ lng, children }: { lng: string; children: ReactNode }) => {
                 await update();
                 toast.success(t('logged-out'));
                 router.refresh();
+                // router.push(`/${lng}/signin`);
             } catch (error) {
                 toast.error(
                     error instanceof Error ? error.message : t('error-log-out'),

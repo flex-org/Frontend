@@ -1,15 +1,32 @@
 'use server';
+
+import { getServerSideToken } from '@/lib/server-auth';
+import { cacheLife, cacheTag, revalidateTag } from 'next/cache';
+import { ActionResult } from '@/types/api';
+import {
+    botResponseActionResult,
+    dynamicDataActionResult,
+    FinalSellingSystemData,
+    initialDataActionResult,
+    isDomainAvailableActionResult,
+} from '../types';
 import { createSafeAction } from '@/lib/server-action-wrapper';
 import { fetchAPI } from '../utils/helper';
-import { FinalSellingSystemData } from '../types';
-import { cacheLife, cacheTag, revalidateTag } from 'next/cache';
-import { getServerSideToken } from '@/lib/server-auth';
 
-export const isDomainAvailable = async (lng: string, domain: string) => {
+const unauthorizedError = () => ({
+    ok: false as const,
+    error: { message: 'Unauthorized', status: 401, code: 'AUTH_ERROR' },
+});
+
+export const isDomainAvailable = async (
+    lng: string,
+    domain: string,
+): Promise<ActionResult<isDomainAvailableActionResult>> => {
     const accessToken = await getServerSideToken();
-    if (!accessToken) throw new Error('Unauthorized');
+    if (!accessToken) return unauthorizedError();
+
     return createSafeAction(async () => {
-        const data = await fetchAPI(
+        return await fetchAPI<isDomainAvailableActionResult>(
             `/domain-available?lang=${lng}&domain=${domain}`,
             {
                 method: 'POST',
@@ -20,29 +37,34 @@ export const isDomainAvailable = async (lng: string, domain: string) => {
                 },
             },
         );
-        return data;
     });
 };
-export const chatBot = async (message: string, lng: string) => {
+export const chatBot = async (
+    message: string,
+    lng: string,
+): Promise<ActionResult<botResponseActionResult>> => {
+    const accessToken = await getServerSideToken();
+    if (!accessToken) return unauthorizedError();
+
     const formData = new FormData();
     formData.append('message', message);
 
-    const accessToken = await getServerSideToken();
-    if (!accessToken) throw new Error('Unauthorized');
     return createSafeAction(async () => {
-        const data = await fetchAPI(`/bot/message?lang=${lng}`, {
+        return await fetchAPI<botResponseActionResult>(`/bot/message?lang=${lng}`, {
             method: 'POST',
             headers: { Authorization: `Bearer ${accessToken}` },
             body: formData,
         });
-        return data;
     });
 };
-export const createPlatform = async (createData: { billing_cycle: string }) => {
+export const createPlatform = async (createData: {
+    billing_cycle: string;
+}): Promise<ActionResult<unknown>> => {
     const accessToken = await getServerSideToken();
-    if (!accessToken) throw new Error('Unauthorized');
+    if (!accessToken) return unauthorizedError();
+
     return createSafeAction(async () => {
-        const data = await fetchAPI(`/platform/create`, {
+        const result = await fetchAPI<unknown>(`/platform/create`, {
             method: 'POST',
             headers: {
                 Authorization: `Bearer ${accessToken}`,
@@ -51,89 +73,99 @@ export const createPlatform = async (createData: { billing_cycle: string }) => {
             },
             body: JSON.stringify(createData),
         });
-        revalidateTag('stored-data', 'days');
-        return data;
+
+        if (result.ok) {
+            revalidateTag('stored-data', 'days');
+        }
+        return result;
     });
 };
+type StoredDataPayload =
+    | { features: number[] }
+    | FinalSellingSystemData
+    | { domain: string }
+    | undefined;
 
 export const storeData = async (
-    storedData:
-        | { features: number[] }
-        | FinalSellingSystemData
-        | { domain: string }
-        | undefined,
+    storedData: StoredDataPayload,
     endPoint: string | undefined,
-) => {
+): Promise<ActionResult<unknown>> => {
     const accessToken = await getServerSideToken();
-    if (!accessToken) throw new Error('Unauthorized');
+    if (!accessToken) return unauthorizedError();
+
     return createSafeAction(async () => {
-        const data = await fetchAPI(`/platform/initial/${endPoint}`, {
-            method: 'POST',
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
+        const result = await fetchAPI<unknown>(
+            `/platform/initial/${endPoint}`,
+            {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                },
+                body: JSON.stringify(storedData),
             },
-            body: JSON.stringify(storedData),
-        });
-        revalidateTag('stored-data', 'days');
-        return data;
+        );
+
+        if (result.ok) {
+            revalidateTag('stored-data', 'days');
+        }
+        return result;
     });
 };
 const getStoredDataCached = async (lng: string, accessToken: string) => {
     'use cache';
     cacheTag('stored-data');
     cacheLife('days');
-
-    // 1. Add a Console Log
-    console.log('🔥 EXECUTING API CALL (If you see this, cache was MISS)');
-
-    // 2. Add a timestamp to the return data (if possible)
-    // or just rely on the console log above.
-    const data = await fetchAPI(`/platform/initial?lang=${lng}`, {
-        method: 'GET',
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-        },
-    });
-
-    return {
-        ...data,
-        _cachedAt: new Date().toISOString(), // 👈 Optional: Verify timestamp in UI
-    };
-};
-
-export const getStoredData = async (lng: string) => {
-    const accessToken = await getServerSideToken();
-    if (!accessToken) throw new Error('Unauthorized');
-    return createSafeAction(async () => {
-        return await getStoredDataCached(lng, accessToken);
-    });
-};
-
-export const getDynamicFeatures = async (lng: string) => {
-    const accessToken = await getServerSideToken();
-    if (!accessToken) throw new Error('Unauthorized');
-    return getDynamicCached(lng, accessToken);
-};
-
-const getDynamicCached = async (lng: string, accessToken: string) => {
-    'use cache';
-    cacheLife('weeks');
-    return createSafeAction(async () => {
-        const data = await fetchAPI(`/dynamic-features?lang=${lng}`, {
-            next: {
-                tags: ['dynamic-features'],
-            },
+    return await fetchAPI<initialDataActionResult>(
+        `/platform/initial?lang=${lng}`,
+        {
             method: 'GET',
             headers: {
                 Authorization: `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
             },
-        });
-        return data;
+        },
+    );
+};
+
+export const getStoredData = async (
+    lng: string,
+): Promise<ActionResult<initialDataActionResult>> => {
+    const accessToken = await getServerSideToken();
+    if (!accessToken) return unauthorizedError();
+
+    return createSafeAction(async () => {
+        return await getStoredDataCached(lng, accessToken);
+    });
+};
+
+const getDynamicCached = async (lng: string, accessToken: string) => {
+    'use cache';
+    cacheLife('weeks');
+    cacheTag('dynamic-features');
+
+    return await fetchAPI<dynamicDataActionResult>(
+        `/dynamic-features?lang=${lng}`,
+        {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+            },
+        },
+    );
+};
+
+export const getDynamicFeatures = async (
+    lng: string,
+): Promise<ActionResult<dynamicDataActionResult>> => {
+    const accessToken = await getServerSideToken();
+    if (!accessToken) return unauthorizedError();
+
+    return createSafeAction(async () => {
+        return await getDynamicCached(lng, accessToken);
     });
 };

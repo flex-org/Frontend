@@ -45,7 +45,11 @@ const CustomSliderButton = ({
                     buttonsClassNames,
                 )}
             >
-                <span className="relative z-20">{noLabel}</span>
+                <span
+                    className={`relative z-20 ${payment && 'text-xs sm:text-sm'}`}
+                >
+                    {noLabel}
+                </span>
                 {!value && (
                     <motion.div
                         layoutId="active-pill"
@@ -69,11 +73,11 @@ const CustomSliderButton = ({
                     buttonsClassNames,
                 )}
             >
-                <span className="relative z-20 dark:text-white">
+                <span className={`relative z-20 dark:text-white ${payment && 'text-xs sm:text-sm'}`}>
                     {yesLabel}
                 </span>
                 {payment && (
-                    <span className="z-50 ml-1.5 inline-block rounded bg-green-100 px-1.5 py-0.5 text-[10px] font-bold text-green-700 dark:text-black">
+                    <span className={`z-50 mr-1 sm:mr-2 ml-1.5 inline-block rounded bg-green-100 px-1.5 py-0.5 text-[10px] font-bold text-green-700 dark:text-black`}>
                         -20%
                     </span>
                 )}

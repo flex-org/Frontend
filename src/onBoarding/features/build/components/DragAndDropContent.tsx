@@ -5,7 +5,7 @@ import { revalidateTag } from 'next/cache';
 
 const DragAndDropContent = async ({ lng }: { lng: string }) => {
     const storedData = await getStoredData(lng);
-    if (storedData.error) {
+    if (!storedData.ok) {
         const retryFeatureFetch = async () => {
             'use server';
             revalidateTag(`stored-data`, 'days');

@@ -39,7 +39,7 @@ const PaymentDetailsColumn = ({
         (acc, item) => acc + Number(item.price),
         0,
     );
-    const mobileAppPrice = dynamicData.mobile_app.price;
+    const mobileAppPrice = hasMobileApp ? dynamicData.mobile_app.price : 0;
     const studentsPrice = dynamicData.capacity.price * studentsCount;
     const storagePrice = dynamicData.storage.price * storageCount;
 
@@ -79,7 +79,7 @@ const PaymentDetailsColumn = ({
                     value={isYearly}
                     yesLabel={t('pay-yearly')}
                     noLabel={t('pay-monthly')}
-                    classNames="w-[70%] mx-auto h-12"
+                    classNames="w-[100%] sm:w-[70%] mx-auto h-12"
                     payment={true}
                     buttonsClassNames="py-2"
                 />
@@ -87,7 +87,7 @@ const PaymentDetailsColumn = ({
 
             <div className="px-6">
                 {/* 1. Resources Grid (Green Cards) */}
-                <div className="mb-6 grid grid-cols-2 gap-3">
+                <div className="mb-6 grid sm:grid-cols-2 grid-cols-1 gap-3">
                     {/* Students Card */}
                     <div className="flex items-center justify-between rounded-2xl border border-green-50 bg-green-50/50 p-4 dark:border-green-800/50 dark:bg-green-900/20">
                         <div className="flex flex-col gap-1">
@@ -129,7 +129,7 @@ const PaymentDetailsColumn = ({
                         <Globe className="size-5" />
                     </div>
                     <div className="flex flex-col overflow-hidden">
-                        <span className="text-xs font-bold tracking-wider text-gray-400 uppercase dark:text-green-200/50">
+                        <span className="text-xs font-bold tracking-wider text-gray-400 uppercase dark:text-green-200">
                             {t('platform-link')}
                         </span>
                         <span
@@ -147,7 +147,7 @@ const PaymentDetailsColumn = ({
                 {/* 3. Selling Systems Section (New!) */}
                 {sellingSystems.length > 0 && (
                     <div className="mb-6">
-                        <h3 className="mb-3 flex items-center gap-2 text-xs font-bold tracking-wider text-gray-400 uppercase dark:text-green-200/50">
+                        <h3 className="mb-3 flex items-center gap-2 text-xs font-bold tracking-wider text-gray-400 uppercase dark:text-green-200">
                             <ShoppingCart className="size-3.5" />
                             {t('selling-systems')}
                         </h3>
@@ -164,12 +164,12 @@ const PaymentDetailsColumn = ({
                     </div>
                 )}
                 <div className="mb-6">
-                    <h3 className="mb-3 flex items-center gap-2 text-xs font-bold tracking-wider text-gray-400 uppercase dark:text-green-200/50">
+                    <h3 className="mb-3 flex items-center gap-2 text-xs font-bold tracking-wider text-gray-400 uppercase dark:text-green-200">
                         <Smartphone className="size-3.5" />
                         {t('mobile-app')}
                     </h3>
                     <div
-                        className={`flex w-full flex-wrap items-center justify-between rounded-md p-2.5 text-sm font-medium ${hasMobileApp ? 'bg-green-50 text-green-700 ring-green-600/20 dark:bg-green-900/40 dark:text-green-300 dark:ring-green-500/30' : 'bg-gray-50 text-gray-500 ring-gray-600/20 dark:bg-gray-900/40 dark:text-gray-400 dark:ring-gray-500/30'} ring-1`}
+                        className={`flex w-full flex-wrap items-center justify-between rounded-md p-2.5 text-sm font-medium ${hasMobileApp ? 'bg-green-50 text-green-700 ring-green-600/20 dark:bg-green-900/40 dark:text-green-300 dark:ring-green-500/30' : 'bg-gray-50 text-gray-500 ring-gray-600/20 dark:bg-gray-900/40 dark:text-gray-200 dark:ring-gray-500/30'} ring-1`}
                     >
                         <span className="inline-flex items-center gap-2">
                             {hasMobileApp ? t('mobile') : t('no-mobile')}
@@ -185,7 +185,7 @@ const PaymentDetailsColumn = ({
 
                 {/* 4. Features List */}
                 <div className="mb-6">
-                    <h3 className="mb-3 flex items-center gap-2 text-xs font-bold tracking-wider text-gray-400 uppercase dark:text-green-200/50">
+                    <h3 className="mb-3 flex items-center gap-2 text-xs font-bold tracking-wider text-gray-400 uppercase dark:text-green-200">
                         <Check className="size-3.5" />
                         {t('selected-features')}
                     </h3>
@@ -215,7 +215,7 @@ const PaymentDetailsColumn = ({
                 <div className="my-6 border-t border-dashed border-gray-200 dark:border-green-800" />
 
                 <div className="space-y-3 pb-6">
-                    <div className="flex justify-between text-sm font-medium text-gray-500 dark:text-green-200/60">
+                    <div className="flex justify-between text-sm font-medium text-gray-500 dark:text-green-200/50">
                         <span>{t('subtotal')}</span>
                         <span>${totalBeforeDiscount.toFixed(2)}</span>
                     </div>

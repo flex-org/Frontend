@@ -1,28 +1,29 @@
-import { isRedirectError } from 'next/dist/client/components/redirect-error';
-export type ActionResult<T> = {
-    data: T | null;
-    error: Error | null;
-};
+import { ActionResult, FetchResult } from "@/types/api";
 
 export async function createSafeAction<T>(
-    action: () => Promise<T>,
+    action: () => Promise<FetchResult<T>>,
 ): Promise<ActionResult<T>> {
     try {
-        const data = await action();
-        return { data, error: null };
+        const result = await action();
+        if (result.ok) {
+            return { ok: true, data: result.data };
+        }
+        return {
+            ok: false,
+            error: {
+                message: result.message,
+                status: result.status,
+                code: 'API_ERROR',
+            },
+        };
     } catch (error) {
-        if (isRedirectError(error)) {
-            throw error;
-        }
-        let finalError;
-
-        if (error instanceof Error) {
-            finalError = error;
-        } else if (typeof error === 'string') {
-            finalError = new Error(error);
-        } else {
-            finalError = new Error('An unexpected error occurred.');
-        }
-        return { data: null, error: finalError };
+        console.error('Action Crash:', error);
+        return {
+            ok: false,
+            error: {
+                message: 'Unexpected server error',
+                code: 'INTERNAL_ERROR',
+            },
+        };
     }
 }

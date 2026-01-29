@@ -8,30 +8,20 @@ import { chatBot } from '@/onBoarding/actions/onBoardingActions';
 import { useDragDropStore } from '@/onBoarding/store/DragDropStore';
 import { toast } from 'sonner';
 import { useChatBotStore } from '@/onBoarding/store/chatBotStore';
-import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
+import { AppError } from '@/types/api';
 
-const responses = (lng: string) => [
-    lng === 'ar' ? 'نعم، اريد ذلك' : 'Yes, i will',
-    lng === 'ar' ? 'لا اريد ذلك' : "No, i won't",
-];
 const ChatBotContentClient = ({ lng }: { lng: string }) => {
     const [value, setValue] = useState('');
     const [countdown, setCountdown] = useState(3);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const router = useRouter();
-    const [error, setError] = useState<Error | null>(null);
+    const [error, setError] = useState<AppError | null>(null);
     const [isPending, startTransition] = useTransition();
     const { t } = useTranslation(lng, 'domain');
     const { setActiveItems } = useDragDropStore();
-    const {
-        messages,
-        addMessage,
-        botMessage,
-        setBotMessage,
-        isCompleted,
-        setIsCompleted,
-    } = useChatBotStore();
+    const { messages, addMessage, setBotMessage, isCompleted, setIsCompleted } =
+        useChatBotStore();
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     };
@@ -59,31 +49,37 @@ const ChatBotContentClient = ({ lng }: { lng: string }) => {
         setError(null);
         setBotMessage('');
         startTransition(async () => {
-            const { data, error } = await chatBot(messageContent, lng);
-            if (error) {
-                setError(error);
-                toast.error(t('gomaa-error'));
+            const data = await chatBot(messageContent, lng);
+            if (!data.ok) {
+                setError(data.error);
+                if (data.error.status === 500) {
+                    toast.error(
+                        'Internal Server Error, You exceeded your current quota, please check your plan and billing details',
+                    );
+                } else {
+                    toast.error(t('gomaa-error'));
+                }
                 return;
             }
-            if (data?.data?.bot) {
+            if (data?.data?.data.bot) {
                 addMessage({
                     role: 'bot',
-                    content: data.data.bot,
+                    content: data.data.data.bot,
                 });
-                setBotMessage(data?.data?.bot);
+                setBotMessage(data?.data?.data.bot);
             }
-            if (data?.data?.status === 'completed') {
-                setActiveItems(data?.data?.features);
+            if (data?.data?.data.status === 'completed') {
+                setActiveItems(data?.data?.data.features);
                 setIsCompleted(true);
             } else {
                 setIsCompleted(false);
             }
         });
     };
-    const showQuickReplies = !isPending && botMessage && !isCompleted;
+    // const showQuickReplies = !isPending && botMessage && !isCompleted;
     return (
         <>
-            <div className="flex h-[600px] w-full max-w-3xl flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg dark:border-green-800 dark:bg-green-950/40">
+            <div className="flex h-[700px] w-full max-w-4xl flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg dark:border-green-800 dark:bg-green-950/40">
                 <div className="flex items-center gap-3 border-b bg-gray-50 p-4 dark:border-green-800 dark:bg-green-900/20">
                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 text-green-600 dark:bg-green-800 dark:text-green-100">
                         <Bot size={24} />
@@ -98,28 +94,18 @@ const ChatBotContentClient = ({ lng }: { lng: string }) => {
                     </div>
                 </div>
 
-                <div className="flex-1 space-y-4 overflow-y-auto bg-gray-50/50 p-4 dark:bg-transparent">
+                <div className="slider flex-1 space-y-4 overflow-y-auto bg-gray-50/50 p-4 dark:bg-transparent">
                     {messages.map((msg, i) => (
-                        <MessageBubble lng={lng} key={i} msg={msg} />
+                        <MessageBubble
+                            isLastMsg={messages.length - 1 === i}
+                            lng={lng}
+                            key={i}
+                            msg={msg}
+                        />
                     ))}
                     {isPending && (
                         <div className="flex w-fit animate-pulse justify-start rounded-md p-2">
                             <Bot className="size-6 text-green-500" />
-                        </div>
-                    )}
-                    {showQuickReplies && (
-                        <div className="animate-in flex items-center justify-start gap-2">
-                            {responses(lng).map((res) => (
-                                <Button
-                                    key={res}
-                                    variant={null}
-                                    size="sm"
-                                    className="border border-gray-300 bg-gray-200 transition-colors hover:bg-gray-300 active:bg-gray-400 dark:border-green-800 dark:bg-green-800/40 dark:hover:bg-green-900/40 dark:active:bg-green-950/40"
-                                    onClick={() => handleSendMessage(res)}
-                                >
-                                    {res}
-                                </Button>
-                            ))}
                         </div>
                     )}
                     {error?.message && (

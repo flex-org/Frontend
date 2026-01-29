@@ -37,5 +37,6 @@
     "secure-checkout": "Secure Checkout",
     "mobile-app": "Mobile App",
     "mobile": "Chosen Mobile App",
-    "no-mobile": "Did not choose mobile app"
+    "no-mobile": "Did not choose mobile app",
+    "platform-link":"Platform Link"
 }

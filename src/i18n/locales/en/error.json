@@ -1,10 +1,11 @@
 {
-    "error-boundary-error": "Something went wrong",
-    "error-boundary-description": "We encountered an unexpected error while trying to load this content.",
-    "error-boundary-try-again": "Try again",
-    "error-boundary-go-home": "Go to home page",
-    "error-boundary-warning-word": "warning",
-    "error-boundary-warning-description": "If this problem continues, please report it immediately",
-    "error-boundary-warning-from-here": "from here",
-    "error-boundary-network-error": "This issue might be due to a network error. Please check your internet connection and try again."
+    "error": "Something went wrong",
+    "description": "We encountered an unexpected error while trying to load this content.",
+    "try-again": "Try again",
+    "go-home": "Go to home page",
+    "warning-word": "warning",
+    "warning-description": "If this problem continues, please report it immediately",
+    "warning-from-here": "from here",
+    "network-error": "This issue might be due to a network error. Please check your internet connection and try again.",
+    "error-message":"error message"
 }

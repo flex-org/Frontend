@@ -6,7 +6,7 @@ import PreferencesContentClient from './PreferencesContentClient';
 const PreferencesContent = async ({ lng }: { lng: string }) => {
     const storedData = await getStoredData(lng);
 
-    if (storedData.error) {
+    if (!storedData.ok) {
         const handleReset = async () => {
             'use server';
             revalidateTag(`stored-data`, 'days');

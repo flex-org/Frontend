@@ -29,19 +29,11 @@ const DroppableArea = ({
         setActiveItems(filteredItems);
         onRemove(item);
     };
-    const style = {
-        minHeight: '400px',
-        // height:'600px',
-        width: '100%',
-        border: '2px dashed #097f0d',
-        padding: '20px',
-    };
 
     return (
         <div
             ref={setNodeRef}
-            style={style}
-            className={`col-span-4 rounded-lg shadow-md md:col-span-2 lg:col-span-3 ${isOver ? 'bg-green-200/40 dark:bg-green-800/40' : ''}`}
+            className={`col-span-4 min-h-[400px] w-full rounded-lg border-2 border-dashed border-[#097f0d] p-5 shadow-md md:col-span-2 lg:col-span-3 ${isOver ? 'bg-green-200/40 dark:bg-green-800/40' : ''}`}
         >
             <div className="inset-x-0 border-b border-gray-300 p-4 dark:border-green-700">
                 <div className="flex items-center justify-between">
@@ -82,6 +74,9 @@ const DroppableArea = ({
                                 <Button
                                     variant={null}
                                     onClick={() => handleRemove(item)}
+                                    aria-label={
+                                        lng == 'ar' ? 'ازالة ' : 'remove '
+                                    }
                                     className={`absolute -top-2 size-6 ${lng === 'ar' ? '-left-1' : '-right-1'} cursor-pointer rounded-full bg-green-800`}
                                 >
                                     {/* {!item.default && ( */}

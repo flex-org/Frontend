@@ -20,19 +20,18 @@ const PaymentMethodColumn = ({ lng }: { lng: string }) => {
 
     const { period } = useGlobalStore();
 
-    // console.log(period);
     const handleSubmit = () => {
         const createData = {
             billing_cycle: period,
         };
         startTransition(async () => {
-            const { error } = await createPlatform(createData);
-            if (error) {
+            const data = await createPlatform(createData);
+            if (!data.ok) {
                 toast.error(t('error-create'));
-                console.log(error);
+                console.log(data);
             } else {
+                console.log(data);
                 toast.success(t('success-create'));
-
             }
         });
     };

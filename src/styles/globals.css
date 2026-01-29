@@ -136,3 +136,8 @@
         }
     }
 }
+@layer components {
+    .slider {
+        @apply [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-green-300 [&::-webkit-scrollbar-thumb]:hover:bg-green-500 dark:[&::-webkit-scrollbar-thumb]:bg-green-700 [&::-webkit-scrollbar-track]:bg-white dark:[&::-webkit-scrollbar-track]:bg-green-950;
+    }
+}

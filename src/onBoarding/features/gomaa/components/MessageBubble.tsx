@@ -1,14 +1,94 @@
-'use client'
+'use client';
+import { motion } from 'motion/react';
 import { useTranslation } from '@/i18n/client';
 import { Message } from '@/onBoarding/types';
-import parse from 'html-react-parser';
+import parse, { DOMNode, Element, domToReact, Text } from 'html-react-parser';
+import { useState } from 'react';
 
-const MessageBubble =  ({ lng, msg }: { lng: string; msg: Message }) => {
-    const { t } =  useTranslation(lng, 'domain');
+const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.04,
+        },
+    },
+};
+
+const wordVariants = {
+    hidden: { opacity: 0, y: 3 },
+    visible: { opacity: 1, y: 0 },
+};
+
+const MessageBubble = ({
+    lng,
+    msg,
+    isLastMsg,
+}: {
+    lng: string;
+    msg: Message;
+    isLastMsg: boolean;
+}) => {
+    const [isLast, setIsLast] = useState(false);
+    const { t } = useTranslation(lng, 'domain');
     const contentToShow =
-        msg.content === 'welcome-message'
-            ? t('welcome-message')
-            : msg.content;
+        msg.content === 'welcome-message' ? t('welcome-message') : msg.content;
+    if (msg.role === 'bot' && isLastMsg) {
+        setIsLast(true);
+    }
+    // console.log(isLastMsg);
+    // ⚡ FIX: Define the replacer function separately so it handles NODES, not strings
+    const replaceNode = (domNode: DOMNode) => {
+        // CASE A: It's a TEXT node -> Split into words
+        if (domNode.type === 'text' && domNode instanceof Text) {
+            const textContent = domNode.data;
+            if (!textContent.trim()) return;
+            const words = textContent.split(/(\s+)/);
+            return (
+                <>
+                    {words.map((word, index) => (
+                        <motion.span
+                            key={index}
+                            variants={wordVariants}
+                            className="inline-block whitespace-pre"
+                        >
+                            {word}
+                        </motion.span>
+                    ))}
+                </>
+            );
+        }
+        // CASE B: It's an ELEMENT (p, ul, li) -> Wrap in Motion
+        if (domNode instanceof Element && domNode.attribs) {
+            const tagName = domNode.name as keyof typeof motion;
+            const Tag = motion[tagName] as any;
+            const isVoid = ['br', 'img', 'hr'].includes(tagName);
+            if (Tag) {
+                if (isVoid) {
+                    return (
+                        <Tag
+                            variants={isLast && wordVariants}
+                            className={domNode.attribs.class}
+                            {...domNode.attribs}
+                        />
+                    );
+                }
+
+                return (
+                    <Tag
+                        variants={containerVariants}
+                        className={domNode.attribs.class}
+                    >
+                        {/* ⚡ FIX: Pass 'replaceNode' (the callback), NOT 'transformContent' */}
+                        {domToReact(domNode.children as DOMNode[], {
+                            replace: replaceNode,
+                        })}
+                    </Tag>
+                );
+            }
+        }
+    };
+
     return (
         <div
             className={`flex w-full ${msg.role === 'user' ? 'justify-end' : 'justify-start'} mb-4`}
@@ -20,7 +100,15 @@ const MessageBubble =  ({ lng, msg }: { lng: string; msg: Message }) => {
                         : `rounded-2xl ${lng === 'ar' ? 'rounded-tr-none' : 'rounded-tl-none'} bg-gray-200 text-gray-800 dark:bg-emerald-800 dark:text-gray-100`
                 } [&_li]:mb-1 [&_li]:marker:text-current [&_ol]:list-decimal [&_ol]:ps-6 [&_ul]:list-disc [&_ul]:ps-6`}
             >
-                <div>{parse(contentToShow)}</div>
+                <motion.div
+                    initial="hidden"
+                    animate="visible"
+                    variants={containerVariants}
+                >
+                    {msg.role === 'bot'
+                        ? parse(contentToShow, { replace: replaceNode }) // ⚡ Call parse once here
+                        : parse(contentToShow)}
+                </motion.div>
             </div>
         </div>
     );

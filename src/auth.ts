@@ -6,14 +6,6 @@ const BASE_URL = process.env.BASE_URL;
 export const { auth, handlers, signIn, signOut } = NextAuth({
     ...authConfig,
     providers: [
-        // Google({
-        //     clientId: process.env.AUTH_GOOGLE_ID,
-        //     clientSecret: process.env.AUTH_GOOGLE_SECRET,
-        // }),
-        // GitHub({
-        //     clientId: process.env.AUTH_GITHUB_ID,
-        //     clientSecret: process.env.AUTH_GITHUB_SECRET,
-        // }),
         Credentials({
             credentials: {
                 email: { label: 'Email', type: 'text' },
@@ -80,38 +72,37 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     callbacks: {
         async signIn({ user, account }) {
             if (account?.provider === 'credentials') return true;
-            if (
-                account?.provider === 'google' ||
-                account?.provider === 'github'
-            ) {
-                try {
-                    const response = await fetch(`${BASE_URL}/provider-login`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            email: user.email,
-                            name: user.name,
-                            provider: account.provider,
-                            provider_id: account.providerAccountId,
-                            image: user.image,
-                        }),
-                    });
-                    if (!response.ok) {
-                        console.error('Backend refused social login');
-                        return false;
-                    }
-                    const result = await response.json();
-                    user.accessToken = result.data.access_token;
-                    user.id = result.data.user.id;
-                    user.isAuthenticated = true;
-                } catch (error) {
-                    console.error('Social Login Error:', error);
-                    return false;
-                }
-            }
+            // if (
+            //     account?.provider === 'google' ||
+            //     account?.provider === 'github'
+            // ) {
+            //     try {
+            //         const response = await fetch(`${BASE_URL}/provider-login`, {
+            //             method: 'POST',
+            //             headers: { 'Content-Type': 'application/json' },
+            //             body: JSON.stringify({
+            //                 email: user.email,
+            //                 name: user.name,
+            //                 provider: account.provider,
+            //                 provider_id: account.providerAccountId,
+            //                 image: user.image,
+            //             }),
+            //         });
+            //         if (!response.ok) {
+            //             console.error('Backend refused social login');
+            //             return false;
+            //         }
+            //         const result = await response.json();
+            //         user.accessToken = result.data.access_token;
+            //         user.id = result.data.user.id;
+            //         user.isAuthenticated = true;
+            //     } catch (error) {
+            //         console.error('Social Login Error:', error);
+            //         return false;
+            //     }
+            // }
             return true;
         },
-        // executed on every login & request & refresh
         // transform user object that comes from authorize into JWT Token stored inside a cookie
         async jwt({ token, user, account }) {
             // first time login only

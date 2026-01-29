@@ -1,9 +1,9 @@
 import { isDomainAvailable } from '@/onBoarding/actions/onBoardingActions';
+import { AppError } from '@/types/api';
 import { useEffect, useState, useTransition } from 'react';
 import { toast } from 'sonner';
 
 interface DomainResult {
-    success: boolean;
     message: string;
 }
 const useCheckDomain = (
@@ -15,30 +15,21 @@ const useCheckDomain = (
 ) => {
     const [isPending, startTransition] = useTransition();
     const [result, setResult] = useState<DomainResult | null>(null);
-    const [error, setError] = useState<Error | null>(null);
+    const [error, setError] = useState<AppError | null>(null);
     useEffect(() => {
         const timer = setTimeout(async () => {
             setResult(null);
             setError(null);
             if (!domain || inputError) return;
             startTransition(async () => {
-                try {
-                    const { data, error } = await isDomainAvailable(
-                        lng,
-                        domain,
-                    );
-                    if (error) {
-                        setError(
-                            error instanceof Error
-                                ? error
-                                : new Error(error as string),
-                        );
-                        toast.error(error.message);
-                    } else {
-                        setResult(data);
-                    }
-                } catch (err) {
-                    setError(err as Error);
+                const data = await isDomainAvailable(lng, domain);
+                if (!data.ok) {
+                    setError(data.error);
+                    console.log(data.error);
+                    toast.error(data.error.message);
+                } else {
+                    console.log(data.data.message);
+                    setResult({ message: data.data.message });
                 }
             });
         }, 2000);

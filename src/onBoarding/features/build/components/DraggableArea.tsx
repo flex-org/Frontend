@@ -13,7 +13,7 @@ const DraggableArea = ({
 }) => {
     const { t } = useTranslation(lng, 'drag-drop');
     return (
-        <div className="col-span-4 flex h-[700px] flex-col overflow-y-auto rounded-lg border bg-white shadow-md md:col-span-2 lg:col-span-1 dark:border-green-800 dark:bg-green-950 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-green-300 [&::-webkit-scrollbar-thumb]:hover:bg-green-500 dark:[&::-webkit-scrollbar-thumb]:bg-green-700 [&::-webkit-scrollbar-track]:bg-white dark:[&::-webkit-scrollbar-track]:bg-green-950">
+        <div className="slider col-span-4 flex h-[700px] flex-col overflow-y-auto rounded-lg border bg-white shadow-md md:col-span-2 lg:col-span-1 dark:border-green-800 dark:bg-green-950">
             <div className="border-b border-gray-300 p-4 dark:border-green-700">
                 <p>{t('list')}</p>
             </div>

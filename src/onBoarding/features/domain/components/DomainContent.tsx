@@ -6,7 +6,7 @@ import ErrorFallback from '@/components/ErrorFallback';
 const DomainContent = async ({ lng }: { lng: string }) => {
     const storedData = await getStoredData(lng);
 
-    if (storedData.error) {
+    if (!storedData.ok) {
         const retryFeatureFetch = async () => {
             'use server';
             revalidateTag(`stored-data`, 'days');
@@ -19,6 +19,7 @@ const DomainContent = async ({ lng }: { lng: string }) => {
             />
         );
     }
+    
     const { domain } = storedData.data.data;
     return <DomainContentClient selectedDomain={domain} lng={lng} />;
 };

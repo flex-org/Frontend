@@ -1,10 +1,11 @@
+import { AppError } from '@/types/api';
 import { AlertCircle, CheckCircle2 } from 'lucide-react';
 
 interface Props {
     showSuccess: boolean;
     showError: boolean;
     inputError: string | null;
-    error: Error | null;
+    error: AppError | null;
     isPending: boolean;
     t: (key: string) => string;
 }
@@ -17,6 +18,7 @@ const Messages = ({
     isPending,
     t,
 }: Props) => {
+    console.log(error);
     return (
         <div className="mb-10 flex h-6 justify-start">
             {showSuccess && (
@@ -38,7 +40,7 @@ const Messages = ({
             )}
             {error && !isPending && (
                 <p className="text-xs text-red-700 sm:text-sm dark:text-red-500">
-                    {t('domain-error')}
+                    {error.status === 422 ? t('domain-error') : error.message}
                 </p>
             )}
         </div>

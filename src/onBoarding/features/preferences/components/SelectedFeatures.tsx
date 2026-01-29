@@ -26,7 +26,7 @@ const SelectedFeatures = ({
     }
 
     return (
-        <div className="w-full lg:col-span-2 xl:col-span-3">
+        <div className="order-2 w-full lg:order-1 lg:col-span-2 xl:col-span-3">
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
                 {features.map((item) => (
                     <div
@@ -37,9 +37,9 @@ const SelectedFeatures = ({
                             {iconsMap(item.icon, 'size-4')}
                         </div>
                         <div>
-                            <h4 className="font-bold text-gray-900 dark:text-gray-100">
+                            <p className="font-bold text-gray-900 dark:text-gray-100">
                                 {item.name}
-                            </h4>
+                            </p>
                             <p className="mt-1 text-sm leading-relaxed text-gray-500 dark:text-gray-400">
                                 {item.description}
                             </p>
