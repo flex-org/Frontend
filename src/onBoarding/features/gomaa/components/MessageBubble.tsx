@@ -32,10 +32,9 @@ const MessageBubble = ({
     const contentToShow =
         msg.content === 'welcome-message' ? t('welcome-message') : msg.content;
     const replaceNode = (domNode: DOMNode) => {
-        // CASE A: It's a TEXT node -> Split into words
         if (domNode.type === 'text' && domNode instanceof Text) {
             const textContent = domNode.data;
-            if (!textContent.trim()) return;
+            if (!textContent.trim()) return null;
             const words = textContent.split(/(\s+)/);
             return (
                 <>
@@ -51,34 +50,25 @@ const MessageBubble = ({
                 </>
             );
         }
-        // CASE B: It's an ELEMENT (p, ul, li) -> Wrap in Motion
-        if (domNode instanceof Element && domNode.attribs) {
-            const tagName = domNode.name as keyof typeof motion;
-            const Tag = motion[tagName] as (typeof motion)[keyof typeof motion];
-            const isVoid = ['br', 'img', 'hr'].includes(tagName);
-            if (Tag) {
-                if (isVoid) {
-                    return (
-                        <Tag
-                            variants={wordVariants}
-                            className={domNode.attribs.class}
-                            {...domNode.attribs}
-                        />
-                    );
-                }
 
-                return (
-                    <Tag
-                        variants={containerVariants}
-                        className={domNode.attribs.class}
-                    >
-                        {/* ⚡ FIX: Pass 'replaceNode' (the callback), NOT 'transformContent' */}
-                        {domToReact(domNode.children as DOMNode[], {
-                            replace: replaceNode,
-                        })}
-                    </Tag>
-                );
+        if (domNode.type === 'tag' && domNode instanceof Element) {
+            const isVoid = ['br', 'img', 'hr'].includes(domNode.name);
+            if (isVoid) {
+                return <motion.div {...domNode.attribs} />;
             }
+
+            return (
+                <motion.div variants={containerVariants} {...domNode.attribs}>
+                    {domToReact(
+                        domNode.children.filter(
+                            (child): child is DOMNode =>
+                                child.type !== 'comment' &&
+                                child.type !== 'cdata',
+                        ),
+                        { replace: replaceNode },
+                    )}
+                </motion.div>
+            );
         }
     };
 
