@@ -11,11 +11,8 @@ import {
 import { useState } from 'react';
 
 const useDragDrop = () => {
-    const [activeFeature, setActiveFeature] = useState<Features | null>(null);
-    const {
-        addActiveItem,
-        removeAvailableFeature,
-    } = useDragDropStore();
+    const [draggedFeature, setDraggedFeature] = useState<Features | null>(null);
+    const { addActiveItem, removeAvailableFeature } = useDragDropStore();
 
     const sensors = useSensors(
         useSensor(PointerSensor, {
@@ -32,28 +29,28 @@ const useDragDrop = () => {
     );
 
     const handleDragStart = (e: DragStartEvent) => {
-        setActiveFeature(e.active.data.current as Features);
+        setDraggedFeature(e.active.data.current as Features);
     };
 
     const handleDragEnd = (e: DragEndEvent) => {
         const { over } = e;
-        if (!over || over.id !== 'droppable-area' || !activeFeature) {
-            setActiveFeature(null);
+        if (!over || over.id !== 'droppable-area' || !draggedFeature) {
+            setDraggedFeature(null);
             return;
         }
-        if (over && over.id === 'droppable-area' && activeFeature) {
+        if (over && over.id === 'droppable-area' && draggedFeature) {
             const newItem: DraggedFeatures = {
-                ...activeFeature,
+                ...draggedFeature,
                 instanceId: crypto.randomUUID(),
             };
             addActiveItem(newItem);
-            removeAvailableFeature(activeFeature.id);
+            removeAvailableFeature(draggedFeature.id);
         }
-        setActiveFeature(null);
+        setDraggedFeature(null);
     };
 
     return {
-        activeFeature,
+        draggedFeature,
         handleDragStart,
         handleDragEnd,
         sensors,

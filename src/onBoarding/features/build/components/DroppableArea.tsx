@@ -9,25 +9,24 @@ import { Features } from '@/onBoarding/types';
 import { useDragDropStore } from '@/onBoarding/store/DragDropStore';
 import { Button } from '@/components/ui/button';
 
-const DroppableArea = ({
-    lng,
-    onRemove,
-}: {
-    lng: string;
-    onRemove: (f: Features) => void;
-}) => {
+const DroppableArea = ({ lng }: { lng: string }) => {
+    const addAvailableFeature = useDragDropStore(
+        (state) => state.addAvailableFeature,
+    );
+    const activeItems = useDragDropStore((state) => state.activeItems);
+    const setActiveItems = useDragDropStore((state) => state.setActiveItems);
     const { t } = useTranslation(lng, 'drag-drop');
-    const { activeItems, setActiveItems } = useDragDropStore();
     const { setNodeRef, isOver } = useDroppable({
         id: 'droppable-area',
     });
     const price = useMemo(() => {
         return activeItems.reduce((acc, item) => acc + Number(item.price), 0);
     }, [activeItems]);
+    
     const handleRemove = (item: Features) => {
         const filteredItems = activeItems.filter((i) => i.id !== item.id);
         setActiveItems(filteredItems);
-        onRemove(item);
+        addAvailableFeature(item);
     };
 
     return (

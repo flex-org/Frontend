@@ -4,6 +4,7 @@ import { useDraggable } from '@dnd-kit/core';
 import { memo } from 'react';
 import FeatureItem from './FeatureItem';
 
+// the ghost effect
 const DraggableFeature = ({ feature }: { feature: Features }) => {
     const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
         id: feature.id,

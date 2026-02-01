@@ -3,7 +3,6 @@ import { motion } from 'motion/react';
 import { useTranslation } from '@/i18n/client';
 import { Message } from '@/onBoarding/types';
 import parse, { DOMNode, Element, domToReact, Text } from 'html-react-parser';
-import { useState } from 'react';
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -23,21 +22,15 @@ const wordVariants = {
 const MessageBubble = ({
     lng,
     msg,
-    isLastMsg,
+    LastMsg,
 }: {
     lng: string;
     msg: Message;
-    isLastMsg: boolean;
+    LastMsg: boolean;
 }) => {
-    const [isLast, setIsLast] = useState(false);
     const { t } = useTranslation(lng, 'domain');
     const contentToShow =
         msg.content === 'welcome-message' ? t('welcome-message') : msg.content;
-    if (msg.role === 'bot' && isLastMsg) {
-        setIsLast(true);
-    }
-    // console.log(isLastMsg);
-    // ⚡ FIX: Define the replacer function separately so it handles NODES, not strings
     const replaceNode = (domNode: DOMNode) => {
         // CASE A: It's a TEXT node -> Split into words
         if (domNode.type === 'text' && domNode instanceof Text) {
@@ -61,13 +54,13 @@ const MessageBubble = ({
         // CASE B: It's an ELEMENT (p, ul, li) -> Wrap in Motion
         if (domNode instanceof Element && domNode.attribs) {
             const tagName = domNode.name as keyof typeof motion;
-            const Tag = motion[tagName] as any;
+            const Tag = motion[tagName] as (typeof motion)[keyof typeof motion];
             const isVoid = ['br', 'img', 'hr'].includes(tagName);
             if (Tag) {
                 if (isVoid) {
                     return (
                         <Tag
-                            variants={isLast && wordVariants}
+                            variants={wordVariants}
                             className={domNode.attribs.class}
                             {...domNode.attribs}
                         />
@@ -101,7 +94,7 @@ const MessageBubble = ({
                 } [&_li]:mb-1 [&_li]:marker:text-current [&_ol]:list-decimal [&_ol]:ps-6 [&_ul]:list-disc [&_ul]:ps-6`}
             >
                 <motion.div
-                    initial="hidden"
+                    initial={LastMsg && 'hidden'}
                     animate="visible"
                     variants={containerVariants}
                 >

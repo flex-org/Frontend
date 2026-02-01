@@ -1,4 +1,5 @@
 'use client';
+import { AnimatePresence, motion } from 'motion/react';
 import SendInput from './SendInput';
 import MessageBubble from './MessageBubble';
 import { useEffect, useRef, useState, useTransition } from 'react';
@@ -8,38 +9,42 @@ import { chatBot } from '@/onBoarding/actions/onBoardingActions';
 import { useDragDropStore } from '@/onBoarding/store/DragDropStore';
 import { toast } from 'sonner';
 import { useChatBotStore } from '@/onBoarding/store/chatBotStore';
-import { useRouter } from 'next/navigation';
 import { AppError } from '@/types/api';
+import {
+    chatContainerVariants,
+    featuresContainerVariants,
+} from '@/onBoarding/animations/variants';
+import { useMediaQuery } from 'react-responsive';
+import { Button } from '@/components/ui/button';
+import FeaturesBox from './FeaturesBox';
+
+const MotionButton = motion(Button);
 
 const ChatBotContentClient = ({ lng }: { lng: string }) => {
+    const [open, setOpen] = useState(false);
+    const isLarge = useMediaQuery({ minWidth: '1024px' });
     const [value, setValue] = useState('');
-    const [countdown, setCountdown] = useState(3);
     const messagesEndRef = useRef<HTMLDivElement>(null);
-    const router = useRouter();
     const [error, setError] = useState<AppError | null>(null);
     const [isPending, startTransition] = useTransition();
     const { t } = useTranslation(lng, 'domain');
     const { setActiveItems } = useDragDropStore();
-    const { messages, addMessage, setBotMessage, isCompleted, setIsCompleted } =
-        useChatBotStore();
+
+    const messages = useChatBotStore((state) => state.messages);
+    const addMessage = useChatBotStore((state) => state.addMessage);
+    const setBotMessage = useChatBotStore((state) => state.setBotMessage);
+    const isCompleted = useChatBotStore((state) => state.isCompleted);
+    const selectedFeatures = useChatBotStore((state) => state.selectedFeatures);
+    const setSelectedFeatures = useChatBotStore(
+        (state) => state.setSelectedFeatures,
+    );
+    const setIsCompleted = useChatBotStore((state) => state.setIsCompleted);
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     };
     useEffect(() => {
         scrollToBottom();
     }, [messages, isPending]);
-
-    useEffect(() => {
-        if (!isCompleted) return;
-        if (countdown === 0) {
-            router.push(`/${lng}/preferences`);
-            return;
-        }
-        const timer = setTimeout(() => {
-            setCountdown((prev) => prev - 1);
-        }, 1000);
-        return () => clearTimeout(timer);
-    }, [isCompleted, countdown, router, lng]);
 
     const handleSendMessage = async (textOverride?: string) => {
         const messageContent = textOverride || value;
@@ -62,11 +67,13 @@ const ChatBotContentClient = ({ lng }: { lng: string }) => {
                 return;
             }
             if (data?.data?.data.bot) {
+                setSelectedFeatures(data?.data?.data?.features);
                 addMessage({
                     role: 'bot',
                     content: data.data.data.bot,
                 });
                 setBotMessage(data?.data?.data.bot);
+                setSelectedFeatures(data?.data?.data?.features);
             }
             if (data?.data?.data.status === 'completed') {
                 setActiveItems(data?.data?.data.features);
@@ -76,10 +83,62 @@ const ChatBotContentClient = ({ lng }: { lng: string }) => {
             }
         });
     };
-    // const showQuickReplies = !isPending && botMessage && !isCompleted;
     return (
-        <>
-            <div className="flex h-[700px] w-full max-w-4xl flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg dark:border-green-800 dark:bg-green-950/40">
+        <div className="flex max-w-7xl">
+            {isLarge ? (
+                <motion.div
+                    initial="hidden"
+                    animate="visible"
+                    variants={featuresContainerVariants}
+                    className="slider z-20 size-96 space-y-2 overflow-y-auto rounded-xl border border-green-400 bg-white p-2 shadow-lg dark:border-green-800 dark:bg-green-950/40"
+                >
+                    <div className="border-b p-2 text-lg font-semibold">
+                        <p>{t('feature-list')}</p>
+                    </div>
+                    <AnimatePresence>
+                        <FeaturesBox lng={lng} />
+                    </AnimatePresence>
+                </motion.div>
+            ) : (
+                <AnimatePresence>
+                    {open && (
+                        <motion.div
+                            initial={{ y: '100%' }}
+                            animate={{ y: 0 }}
+                            exit={{ y: '100%' }}
+                            transition={{ type: 'spring', damping: 25 }}
+                            className="fixed inset-x-0 bottom-0 z-50 h-[70vh] rounded-t-2xl bg-white p-4 dark:bg-green-950"
+                        >
+                            <div className="mb-4 flex items-center justify-between">
+                                <h3 className="font-bold">Features</h3>
+                                <Button
+                                    variant="outline"
+                                    onClick={() => setOpen(false)}
+                                >
+                                    ✕
+                                </Button>
+                            </div>
+                            <FeaturesBox lng={lng} />
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            )}
+            {!isLarge && (
+                <MotionButton
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setOpen((prev) => !prev)}
+                    className="fixed top-30 right-7 z-50"
+                >
+                    {t('features')} ({selectedFeatures.length})
+                </MotionButton>
+            )}
+            <motion.div
+                initial="hidden"
+                animate={isLarge ? 'visible' : 'hidden'}
+                variants={chatContainerVariants(lng)}
+                className="flex h-[700px] w-full max-w-4xl flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg dark:border-green-800 dark:bg-green-950/40"
+            >
                 <div className="flex items-center gap-3 border-b bg-gray-50 p-4 dark:border-green-800 dark:bg-green-900/20">
                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 text-green-600 dark:bg-green-800 dark:text-green-100">
                         <Bot size={24} />
@@ -97,7 +156,9 @@ const ChatBotContentClient = ({ lng }: { lng: string }) => {
                 <div className="slider flex-1 space-y-4 overflow-y-auto bg-gray-50/50 p-4 dark:bg-transparent">
                     {messages.map((msg, i) => (
                         <MessageBubble
-                            isLastMsg={messages.length - 1 === i}
+                            LastMsg={
+                                i === messages.length - 1 && msg.role === 'bot'
+                            }
                             lng={lng}
                             key={i}
                             msg={msg}
@@ -127,17 +188,8 @@ const ChatBotContentClient = ({ lng }: { lng: string }) => {
                     lng={lng}
                     disabled={isPending || isCompleted}
                 />
-            </div>
-            {isCompleted && (
-                <div className="flex items-center justify-start gap-3">
-                    <p className="text-xs sm:text-sm">
-                        {t('auto-redirect')}
-                        {'  '}
-                    </p>
-                    <span className="text-green-300">{countdown}</span>
-                </div>
-            )}
-        </>
+            </motion.div>
+        </div>
     );
 };
 

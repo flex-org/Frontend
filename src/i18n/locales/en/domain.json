@@ -15,5 +15,8 @@
     "gomaa-error": "An error occurred, please try again",
     "welcome-message": "Hello, I'm Gomaa, your smart platform engineer from Platme 👋<br> To design the perfect platform for you, tell me: What is the primary type of content you plan to offer? (Recorded videos, live sessions, or files and articles?)",
     "completed": "This chat has ended, please move to the next step",
-    "auto-redirect":"You will be redirected to the next step in "
+    "auto-redirect": "You will be redirected to the next step in ",
+    "feature-list": "Feature List",
+    "empty-list": "Feature list is empty",
+    "features": "Features"
 }

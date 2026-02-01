@@ -20,23 +20,19 @@ const DragAndContentClient = ({
     const initializeFromAPI = useDragDropStore(
         (state) => state.initializeFromAPI,
     );
-    const addAvailableFeature = useDragDropStore(
-        (state) => state.addAvailableFeature,
-    );
-    const availableFeatures = useDragDropStore(
-        (state) => state.availableFeatures,
-    );
-    const { activeFeature, handleDragStart, handleDragEnd, sensors } =
-        useDragDrop();
 
+    const { draggedFeature, handleDragStart, handleDragEnd, sensors } =
+        useDragDrop();
+    const { selected_features, features } = storedData;
     useEffect(() => {
-        if (storedData) {
-            const selectedIds = storedData.selected_features.map((item) =>
+        if (selected_features) {
+            const selectedIds = selected_features.map((item) =>
                 Number(item.id),
             );
-            initializeFromAPI(storedData.features, selectedIds, lng);
+            initializeFromAPI(features, selectedIds, lng);
         }
-    }, [initializeFromAPI, storedData, lng]);
+    }, [initializeFromAPI, selected_features, features, lng]);
+    // data that will be sent to api to be stored
     const storedFeatures = activeItems.map((item) => Number(item.id));
     const finalData = { features: storedFeatures };
     return (
@@ -47,13 +43,13 @@ const DragAndContentClient = ({
                 onDragEnd={handleDragEnd}
             >
                 <div className="grid grid-cols-4 gap-6">
-                    <DraggableArea lng={lng} features={availableFeatures} />
-                    <DroppableArea lng={lng} onRemove={addAvailableFeature} />
+                    <DraggableArea lng={lng} />
+                    <DroppableArea lng={lng} />
                 </div>
                 <DragOverlay dropAnimation={null}>
-                    {activeFeature ? (
+                    {draggedFeature ? (
                         <div className="mb-1.5 cursor-grabbing touch-none rounded-md border border-green-400 p-2.5 opacity-100 transition-opacity dark:border-green-900">
-                            <FeatureItem feature={activeFeature} />
+                            <FeatureItem feature={draggedFeature} />
                         </div>
                     ) : null}
                 </DragOverlay>
