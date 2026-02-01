@@ -1,8 +1,9 @@
 'use client';
-import { motion } from 'motion/react';
+import { motion, HTMLMotionProps } from 'motion/react';
 import { useTranslation } from '@/i18n/client';
 import { Message } from '@/onBoarding/types';
 import parse, { DOMNode, Element, domToReact, Text } from 'html-react-parser';
+import { ComponentType } from 'react';
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -31,6 +32,7 @@ const MessageBubble = ({
     const { t } = useTranslation(lng, 'domain');
     const contentToShow =
         msg.content === 'welcome-message' ? t('welcome-message') : msg.content;
+
     const replaceNode = (domNode: DOMNode) => {
         if (domNode.type === 'text' && domNode instanceof Text) {
             const textContent = domNode.data;
@@ -51,24 +53,33 @@ const MessageBubble = ({
             );
         }
 
-        if (domNode.type === 'tag' && domNode instanceof Element) {
-            const isVoid = ['br', 'img', 'hr'].includes(domNode.name);
-            if (isVoid) {
-                return <motion.div {...domNode.attribs} />;
+        if (domNode instanceof Element && domNode.attribs) {
+            const tagName = domNode.name as keyof typeof motion;
+            const Tag = motion[tagName] as ComponentType<
+                HTMLMotionProps<'div'>
+            >;
+            const isVoid = ['br', 'img', 'hr'].includes(tagName);
+            if (Tag) {
+                if (isVoid) {
+                    return (
+                        <Tag
+                            variants={wordVariants}
+                            className={domNode.attribs.class}
+                            {...domNode.attribs}
+                        />
+                    );
+                }
+                return (
+                    <Tag
+                        variants={containerVariants}
+                        className={domNode.attribs.class}
+                    >
+                        {domToReact(domNode.children as DOMNode[], {
+                            replace: replaceNode,
+                        })}
+                    </Tag>
+                );
             }
-
-            return (
-                <motion.div variants={containerVariants} {...domNode.attribs}>
-                    {domToReact(
-                        domNode.children.filter(
-                            (child): child is DOMNode =>
-                                child.type !== 'comment' &&
-                                child.type !== 'cdata',
-                        ),
-                        { replace: replaceNode },
-                    )}
-                </motion.div>
-            );
         }
     };
 
@@ -84,12 +95,12 @@ const MessageBubble = ({
                 } [&_li]:mb-1 [&_li]:marker:text-current [&_ol]:list-decimal [&_ol]:ps-6 [&_ul]:list-disc [&_ul]:ps-6`}
             >
                 <motion.div
-                    initial={LastMsg && 'hidden'}
+                    initial={LastMsg ? 'hidden' : 'visible'}
                     animate="visible"
                     variants={containerVariants}
                 >
                     {msg.role === 'bot'
-                        ? parse(contentToShow, { replace: replaceNode }) // ⚡ Call parse once here
+                        ? parse(contentToShow, { replace: replaceNode })
                         : parse(contentToShow)}
                 </motion.div>
             </div>
