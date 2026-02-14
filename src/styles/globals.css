@@ -43,6 +43,8 @@
     --radius-md: calc(var(--radius) - 2px);
     --radius-lg: var(--radius);
     --radius-xl: calc(var(--radius) + 4px);
+    --color-scroll-thumb: var(--scroll-thumb);
+    --color-scroll-track: var(--scroll-track);
 }
 
 :root {
@@ -79,6 +81,9 @@
     --sidebar-accent-foreground: oklch(0.205 0 0);
     --sidebar-border: oklch(0.922 0 0);
     --sidebar-ring: oklch(0.708 0 0);
+    /* custom variables */
+    --scroll-thumb: oklch(87.1% 0.15 154.449);
+    --scroll-track: oklch(98.5% 0.002 247.839);
 }
 
 .dark {
@@ -114,6 +119,10 @@
     --sidebar-accent-foreground: oklch(0.985 0 0);
     --sidebar-border: oklch(1 0 0 / 10%);
     --sidebar-ring: oklch(0.556 0 0);
+
+    /* custom variables */
+    --scroll-thumb: oklch(52.7% 0.154 150.069);
+    --scroll-track: oklch(26.6% 0.065 152.934);
 }
 
 @layer base {
@@ -138,6 +147,9 @@
 }
 @layer components {
     .slider {
-        @apply [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-green-300 [&::-webkit-scrollbar-thumb]:hover:bg-green-500 dark:[&::-webkit-scrollbar-thumb]:bg-green-700 [&::-webkit-scrollbar-track]:bg-white dark:[&::-webkit-scrollbar-track]:bg-green-950;
+        @apply [&::-webkit-scrollbar-thumb]:bg-scroll-thumb [&::-webkit-scrollbar-track]:bg-scroll-track [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:hover:bg-green-400;
+    }
+    .primary-btn {
+        @apply bg-green-800 text-white transition-colors hover:bg-green-900 active:bg-green-950/90;
     }
 }

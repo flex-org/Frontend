@@ -93,12 +93,11 @@ const SignupForm = ({ lng }: { lng: string }) => {
                         label="confirm-password"
                         autoComplete="new-password"
                     />
-
                     <div className="flex w-full justify-end">
                         <Button
                             disabled={isSubmitting}
                             variant={null}
-                            className="h-10 w-full bg-green-600 text-lg text-white hover:bg-green-700"
+                            className="primary-btn h-10 w-full text-lg"
                             type="submit"
                         >
                             {isSubmitting ? <Spinner /> : t('sign-up-btn')}

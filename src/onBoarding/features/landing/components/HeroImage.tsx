@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import Image from 'next/image';
 import { useMediaQuery } from 'react-responsive';
 import AboNawaf from '../../../../../public/images/onBoarding/abo-nawaf.webp';

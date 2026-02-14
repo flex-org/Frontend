@@ -22,6 +22,7 @@ const SignInForm = ({ lng }: { lng: string }) => {
     const LoginSchema = useMemo(() => createLoginSchema(t), [t]);
     const methods = useForm<LoginFormValues>({
         resolver: zodResolver(LoginSchema),
+        reValidateMode:'onChange',
         defaultValues: {
             email: '',
             password: '',
@@ -82,10 +83,11 @@ const SignInForm = ({ lng }: { lng: string }) => {
                         <Button
                             variant={null}
                             disabled={isSubmitting}
-                            className="h-10 w-full bg-green-600 text-lg text-white hover:bg-green-700"
+                            className="primary-btn h-10 w-full text-lg"
                             type="submit"
                         >
-                            {isSubmitting ? <Spinner /> : t('login')}
+                            {t('login')}
+                            <div>{isSubmitting && <Spinner />}</div>
                         </Button>
                     </div>
                     <div className="text-xl font-semibold">

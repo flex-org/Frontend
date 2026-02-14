@@ -37,7 +37,7 @@ const LoginButtonWithAvatar = async ({ lng }: { lng: string }) => {
                     <Button
                         variant={null}
                         size="sm"
-                        className="bg-green-800 text-white hover:bg-green-900 active:bg-green-950"
+                        className="primary-btn"
                     >
                         <p className="hidden lg:block">{t('login')}</p>
                         <LogIn className="block h-4 w-4" />

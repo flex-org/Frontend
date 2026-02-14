@@ -6,7 +6,8 @@ import { languages } from '@/i18n/settings';
 import ToastWrapper from '@/components/ToastWrapper';
 const cairo = Cairo({
     variable: '--font-cairo',
-    subsets: ['latin', 'arabic'],
+    subsets: ['arabic'],
+    display: 'swap',
     weight: ['400', '600', '700'],
 });
 const baseUrl = 'https://platme.vercel.app';

@@ -30,7 +30,7 @@ const VerifyEmail = ({ lng }: { lng: string }) => {
     const { email, token, clearUserData } = useAuthStore();
     const [isPending, startTransition] = useTransition();
     const router = useRouter();
-    
+
     const schema = useMemo(() => FormSchema(t), [t]);
     const isTimerActive = timeLeft > 0;
     useEffect(() => {
@@ -59,6 +59,7 @@ const VerifyEmail = ({ lng }: { lng: string }) => {
                 redirect: false,
                 token: result.data.access_token,
                 user: JSON.stringify(result.data.user),
+                isVerified: !!result.data.user.email_verified_at,
             });
             if (loginResult?.error) {
                 router.push(`/${lng}/signin`);
@@ -169,7 +170,7 @@ const VerifyEmail = ({ lng }: { lng: string }) => {
                         size={'lg'}
                         type="submit"
                         disabled={isSubmitting}
-                        className="bg-green-700 text-white hover:bg-green-800"
+                        className="primary-btn text-lg"
                     >
                         {isSubmitting ? <Spinner /> : t('confirm')}
                     </Button>

@@ -39,7 +39,7 @@ const PaymentMethodColumn = ({ lng }: { lng: string }) => {
     const inputClasses =
         'w-full bg-gray-50 px-4 text-sm text-gray-900 placeholder-gray-400 outline-none transition-all dark:bg-green-900/20 dark:text-gray-100 dark:placeholder-gray-500 ';
     return (
-        <div className="animate-in fade-in slide-in-from-top-2 col-span-1 h-fit rounded-3xl border border-gray-100 bg-white p-6 tracking-widest shadow-xl shadow-gray-200/50 duration-300 sm:col-span-2 md:col-span-3 lg:col-span-2 dark:border-green-800 dark:bg-green-950 dark:bg-linear-to-r dark:from-green-950 dark:to-neutral-950 dark:shadow-green-900/20">
+        <div className=" col-span-1 h-fit rounded-3xl border border-gray-100 bg-white p-6 tracking-widest shadow-xl shadow-gray-200/50 duration-300 sm:col-span-2 md:col-span-3 lg:col-span-2 dark:border-green-800 dark:bg-green-950 dark:bg-linear-to-r dark:from-green-950 dark:to-neutral-950 dark:shadow-green-900/20">
             {/* Header */}
             <div className="mb-6 flex items-start justify-between">
                 <div>

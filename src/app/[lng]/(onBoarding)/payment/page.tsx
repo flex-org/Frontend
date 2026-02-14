@@ -1,5 +1,7 @@
+import { Spinner } from '@/components/ui/spinner';
 import { getTranslation } from '@/i18n/server';
 import PaymentContent from '@/onBoarding/features/payment/components/PaymentContent';
+import { Suspense } from 'react';
 
 export const generateMetadata = async ({
     params,
@@ -35,7 +37,9 @@ const PaymentPage = async ({
                         </p>
                     </div>
                 </div>
-                <PaymentContent lng={lng} />
+                <Suspense fallback={<Spinner className='size-12' />}>
+                    <PaymentContent lng={lng} />
+                </Suspense>
             </div>
         </div>
     );

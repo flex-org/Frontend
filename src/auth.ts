@@ -20,7 +20,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
                     try {
                         const userData = JSON.parse(credentials.user as string);
                         return {
-                            ...userData, // id, name, phone, etc.
+                            ...userData,
                             accessToken: credentials.token,
                             isAuthenticated: true,
                         };
@@ -51,6 +51,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
                         if (!response.ok) return null;
                         const result = await response.json();
                         if (result.success && result.data) {
+                            console.log(result.data);
                             return {
                                 ...result.data.user,
                                 accessToken: result.data.access_token,

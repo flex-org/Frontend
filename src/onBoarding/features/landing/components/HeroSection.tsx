@@ -25,7 +25,7 @@ const HeroSection = async ({ lng }: { lng: string }) => {
                                 <Button
                                     variant={null}
                                     size="lg"
-                                    className="bg-green-800 text-white hover:bg-green-900"
+                                    className="primary-btn"
                                 >
                                     {t('sign-up')}
                                 </Button>
